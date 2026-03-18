@@ -468,15 +468,19 @@ button:hover { filter: brightness(.93); }
 <body>
 <div class="container">
 
-  <!-- ══ MASTHEAD ═══════════════════════════════════════ -->
+  <!-- MASTHEAD -->
   <div class="masthead">
-    <div class="masthead-escudo">SF</div>
+    <div class="masthead-escudo" id="masthead-siglas">–</div>
     <div class="masthead-text">
-      <div class="sup-title">Ministerio de Educación – Provincia de Santa Fe</div>
-      <h1>Planificación Anual de Cátedra</h1>
+      <div class="sup-title" id="masthead-jurisdiccion">Ministerio de Educación – Nivel Superior No Universitario</div>
+      <h1 id="masthead-instituto">Planificación Anual de Cátedra</h1>
       <div class="sub">
-        Nivel Superior No Universitario · Régimen Académico Marco (RAM) – Decreto Provincial<br>
-        Plantilla para carga, impresión en A4 apaisado y exportación/importación XML
+        <span id="masthead-carrera" style="font-style:italic;opacity:.85;">Carrera no especificada</span>
+        <span id="masthead-sep1" style="opacity:.5;"> &middot; </span>
+        <span id="masthead-materia">Asignatura no especificada</span><br>
+        <span id="masthead-anio-cursada" style="opacity:.75;"></span>
+        <span id="masthead-sep2" style="opacity:.4;"> &middot; </span>
+        <span id="masthead-modalidad" style="opacity:.75;"></span>
       </div>
     </div>
     <div class="masthead-badge">
@@ -516,6 +520,21 @@ button:hover { filter: brightness(.93); }
               </span></span>
             </label>
             <input id="anio" type="number" placeholder="2026" />
+          </div>
+
+          <div class="field span-2">
+            <label>
+              Jurisdicción / Organismo de supervisión
+              <span class="norm">Encabezado institucional</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Jurisdicción o ministerio supervisor</span>
+                <span class="tt-norm">Completar según el ámbito de supervisión: provincial o nacional</span>
+                Indicar el ministerio o secretaría de educación que supervisa el instituto. Para institutos provinciales de Santa Fe usar la denominación oficial; para institutos de gestión nacional (INET, etc.) usar la denominación federal correspondiente.
+                <span class="tt-eg">Ej. provincial: "Ministerio de Educación – Provincia de Santa Fe – DES" · Ej. nacional: "Ministerio de Educación de la Nación – INET · Secretaría de Educación Técnico Profesional"</span>
+              </span></span>
+            </label>
+            <input id="jurisdiccion" type="text" placeholder="Ministerio de Educación – Provincia de Santa Fe – DES" />
           </div>
 
           <div class="field span-2">
@@ -1500,10 +1519,38 @@ button:hover { filter: brightness(.93); }
 const qs  = (s, ctx=document) => ctx.querySelector(s);
 const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
 
-/* ── Año en masthead ── */
-qs('#anio').addEventListener('input', e => {
-  qs('#anio-display').textContent = e.target.value || '–';
+/* ── MASTHEAD LIVE UPDATE ── */
+function initials(name) {
+  return name.trim().split(/\s+/)
+    .filter(w => w.length > 3)
+    .slice(0, 3)
+    .map(w => w[0].toUpperCase())
+    .join('') || name.slice(0,2).toUpperCase() || '?';
+}
+function updateMasthead() {
+  const anio        = qs('#anio').value.trim();
+  const jurisdiccion= qs('#jurisdiccion').value.trim();
+  const instituto   = qs('#instituto').value.trim();
+  const carrera     = qs('#carrera').value.trim();
+  const materia     = qs('#materia').value.trim();
+  const anioC       = qs('#anio-cursada').value.trim();
+  const modalidad   = qs('#modalidad').value.trim();
+
+  qs('#anio-display').textContent        = anio || '–';
+  qs('#masthead-jurisdiccion').textContent = jurisdiccion || 'Ministerio de Educación – Nivel Superior No Universitario';
+  qs('#masthead-instituto').textContent  = instituto   || 'Planificación Anual de Cátedra';
+  qs('#masthead-carrera').textContent    = carrera     || 'Carrera no especificada';
+  qs('#masthead-materia').textContent    = materia     || 'Asignatura no especificada';
+  qs('#masthead-anio-cursada').textContent = anioC     || '';
+  qs('#masthead-modalidad').textContent  = modalidad   || '';
+  qs('#masthead-siglas').textContent     = instituto ? initials(instituto) : '–';
+  // hide separators when fields are empty
+  qs('#masthead-sep2').style.display = (anioC && modalidad) ? '' : 'none';
+}
+['anio','jurisdiccion','instituto','carrera','materia','anio-cursada','modalidad'].forEach(id => {
+  const el = qs('#'+id); if (el) el.addEventListener('input', updateMasthead);
 });
+qs('#modalidad').addEventListener('change', updateMasthead);
 
 /* ── TABLA UNIDADES ── */
 const tablaBody = qs('#tabla-unidades tbody');
@@ -1586,11 +1633,7 @@ qs('#open-plan-url').addEventListener('click', () => {
 /* ── EXPORT / IMPORT XML ── */
 function formToObject() {
   const o = {};
-  ['anio','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
-   'correl-cursar','correl-final','correl-simult','plan-url',
-   'objgen','competencias','perfil','metodologia',
-   'criterios','instrumentos','ponderaciones',
-   'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(id => o[id] = (qs('#'+id)||{}).value || '');
+  ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
   o['pp-activa'] = qs('#pp-toggle').checked ? 'si' : 'no';
   ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
    'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(id => o[id] = (qs('#'+id)||{}).value || '');
@@ -1619,10 +1662,7 @@ function esc(s) { return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'
 
 function objectToXml(o) {
   let x = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n';
-  ['anio','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
-   'correl-cursar','correl-final','correl-simult','plan-url',
-   'objgen','competencias','perfil','metodologia','criterios','instrumentos','ponderaciones',
-   'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(k => { x += `  <${k}>${esc(o[k])}</${k}>\n`; });
+  ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
   x += `  <pp-activa>${esc(o['pp-activa'])}</pp-activa>\n`;
   x += '  <practica-profesionalizante>\n';
   ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
@@ -1666,7 +1706,7 @@ qs('#import-xml').addEventListener('change', ev => {
     try {
       const doc = new DOMParser().parseFromString(e.target.result, 'application/xml');
       if (doc.querySelector('parsererror')) throw new Error('XML inválido');
-      ['anio','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
+      ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
        'correl-cursar','correl-final','correl-simult','plan-url',
        'objgen','competencias','perfil','metodologia','criterios','instrumentos','ponderaciones',
        'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(id => {
@@ -1684,8 +1724,8 @@ qs('#import-xml').addEventListener('change', ev => {
           const n = ppNode.querySelector(id); const el = qs('#'+id); if (n && el) el.value = n.textContent;
         });
       }
-      // Disparar actualización del año en masthead
-      qs('#anio').dispatchEvent(new Event('input'));
+      // Actualizar masthead completo
+      updateMasthead();
       tablaBody.innerHTML = '';
       doc.querySelectorAll('unidades > unidad').forEach(u => {
         const tr = document.createElement('tr');
@@ -1725,6 +1765,7 @@ qs('#download-sample-xml').addEventListener('click', () => {
   const s = `<?xml version="1.0" encoding="UTF-8"?>
 <planificacion>
   <anio>2026</anio>
+  <jurisdiccion>Ministerio de Educación – Provincia de Santa Fe – DES</jurisdiccion>
   <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</instituto>
   <anio-cursada>1° Año – 2° Cuatrimestre</anio-cursada>
   <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>
@@ -1852,7 +1893,10 @@ qs('#reset-form').addEventListener('click', () => {
   if (!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
   document.querySelectorAll('input,textarea,select').forEach(i => { if(i.type!=='file') i.value=''; });
   tablaBody.innerHTML = ''; fichasContainer.innerHTML = ''; cronoBody.innerHTML = '';
-  qs('#anio-display').textContent = '–';
+  qs('#pp-toggle').checked = false;
+  qs('#pp-body').style.display = 'none';
+  qs('#sec-pp-card').style.opacity = '0.6';
+  updateMasthead();
 });
 
 /* ── INIT con datos de ejemplo ── */
