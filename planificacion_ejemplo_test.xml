@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planificacion>
+  <anio>2026</anio>
+  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello" – Rosario</instituto>
+  <anio-cursada>2° Año – 1° Cuatrimestre</anio-cursada>
+  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>
+  <materia>Programación II – Estructuras de Datos y Algoritmos</materia>
+  <comision>Comisión B – Turno Noche</comision>
+  <docente>Rodríguez, Carlos Ernesto – DNI 25.789.012 – Provisional</docente>
+  <carga>96</carga>
+  <modalidad>Mixta (presencial + virtual)</modalidad>
+  <ram>Decreto N° 4199/2015 – Art. 28 (Acreditación) · Art. 32 (Asistencia mínima 75%) · Art. 35 (Examen final)</ram>
+  <aprob>Aprobada CD el 10/03/2026 – Acta N° 01/2026 – Expte. N° 0042-S-2026</aprob>
+  <correl-cursar>• Programación I (regularizada)
+• Matemática I (aprobada con examen final)
+• Lógica y Estructuras Discretas (regularizada)</correl-cursar>
+  <correl-final>• Programación I (examen final aprobado)
+• Matemática I (examen final aprobado)</correl-final>
+  <correl-simult>• Laboratorio de Programación II (mismo cuatrimestre)
+• Sin otros co-requisitos</correl-simult>
+  <plan-url>https://drive.google.com/file/d/1BxYzEjEmpleoPlanEstudiosProgII/view?usp=sharing</plan-url>
+  <objgen>• Comprender e implementar las principales estructuras de datos (listas, pilas, colas, árboles, grafos) evaluando su eficiencia algorítmica.
+• Aplicar técnicas de análisis de algoritmos (notación O) para seleccionar la solución más adecuada a cada problema.
+• Desarrollar programas de mediana complejidad en lenguaje Java/Python empleando estructuras de datos apropiadas.
+• Fomentar hábitos de documentación, prueba y trabajo colaborativo propios del ejercicio profesional.</objgen>
+  <competencias>Competencia 2 – Análisis y diseño de soluciones algorítmicas eficientes.
+Competencia 3 – Implementación de software con estructuras de datos avanzadas.
+Competencia 5 – Trabajo colaborativo y comunicación técnica en entornos profesionales.</competencias>
+  <perfil>Esta asignatura profundiza la formación del Técnico Superior en Programación dotándolo de herramientas conceptuales y prácticas para diseñar soluciones de software escalables, eficientes y mantenibles, en directa articulación con las Competencias 2 y 3 del perfil de egreso del título habilitante (Res. 2457/19).</perfil>
+  <metodologia>Enfoque constructivista con resolución de problemas incrementales. Se emplea la metodología de clase invertida: los estudiantes acceden al material teórico en la plataforma Moodle antes del encuentro presencial, que se destina íntegramente a la resolución de problemas en parejas (pair programming). El aprendizaje basado en proyectos estructura el último tramo de cada unidad.</metodologia>
+  <criterios>• Asistencia mínima: 75% de los encuentros presenciales (RAM Art. 32)
+• Nota mínima de aprobación: 6 (seis) sobre 10
+• Condición de regular: aprobar el 80% de los trabajos prácticos con nota ≥ 4
+• Condición de libre: podrá presentarse a examen final libre quien no reúna las condiciones de regular</criterios>
+  <instrumentos>• 2 Parciales escritos individuales (Unidades 1-2 y Unidades 3-4)
+• 1 Recuperatorio por parcial desaprobado
+• Trabajos prácticos semanales grupales (parejas)
+• Proyecto integrador final grupal (3-4 integrantes)</instrumentos>
+  <ponderaciones>Parcial 1: 20% · Parcial 2: 20% · Prácticos: 30% · Proyecto integrador: 25% · Participación: 5% = 100%</ponderaciones>
+  <biblio-ob>Cormen, T., Leiserson, C., Rivest, R. y Stein, C. (2009). Introduction to Algorithms (3ª ed.). MIT Press.
+Weiss, M. A. (2013). Data Structures and Algorithm Analysis in Java (3ª ed.). Pearson.
+Cairó, O. y Guardati, S. (2006). Estructuras de Datos. McGraw-Hill.</biblio-ob>
+  <biblio-comp>Visualgo – Visualización interactiva de estructuras de datos (visualgo.net) [Acceso: mar. 2026]
+CS50x – Harvard – Semanas 5-6: Memory y Data Structures (cs50.harvard.edu) [Acceso: mar. 2026]
+Programiz – Data Structures in Python (programiz.com/dsa) [Acceso: mar. 2026]</biblio-comp>
+  <firma-doc>Rodríguez, Carlos Ernesto – DNI 25.789.012 – Provisional</firma-doc>
+  <firma-coord>Fernández, Laura Beatriz – Coordinadora de Carrera TSP</firma-coord>
+  <pp-activa>si</pp-activa>
+  <practica-profesionalizante>
+    <pp-tipo>PP Integrada a la Unidad Curricular</pp-tipo>
+    <pp-carga>28</pp-carga>
+    <pp-norma>Decreto N° 1559/17 – Art. 4 (PP integrada a UC) · Art. 11 (evaluación y acreditación de PP) · Plan Institucional de PP aprobado – Acta CD N° 08/2025</pp-norma>
+    <pp-propositos>• Integrar los conocimientos de estructuras de datos en el desarrollo de un sistema real con impacto en el entorno laboral local.
+• Articular el rol profesional del programador con las demandas concretas de organizaciones del sector productivo o social.
+• Desarrollar la capacidad de documentar y exponer soluciones técnicas ante usuarios y pares no especializados.</pp-propositos>
+    <pp-competencias>• Diseñar e implementar sistemas de software utilizando estructuras de datos apropiadas según el contexto del problema.
+• Gestionar el ciclo completo de desarrollo: relevamiento, diseño, implementación, prueba y entrega documentada.
+• Comunicar soluciones técnicas en lenguaje accesible a distintos destinatarios.
+• Trabajar en equipo con distribución de roles y uso de herramientas de control de versiones (Git).</pp-competencias>
+    <pp-actividades>• Semanas 1-3: relevamiento de necesidades de la organización cliente (entrevistas, análisis de procesos).
+• Semanas 4-8: diseño de la solución (diagrama de clases, selección de estructuras de datos, pseudocódigo).
+• Semanas 9-14: implementación incremental con revisiones semanales en tutoría.
+• Semanas 15-16: pruebas, correcciones y preparación de la presentación final.
+• Semana 17: presentación y entrega formal ante la organización cliente y el tribunal evaluador.</pp-actividades>
+    <pp-contexto>PP en contexto real con cliente externo dentro del instituto (modalidad "cliente visitante").
+Entidad cliente: Asociación Civil Biblioteca Popular "Mariano Moreno" de Rosario.
+Proyecto: sistema de gestión de préstamos y catálogo digital.
+Convenio institucional N° 07/2026 – firmado el 02/03/2026.
+Responsable de supervisión externa: Sra. González, Ana M. (Presidenta de la Asociación).</pp-contexto>
+    <pp-tutoria>Tutorías presenciales: 1 encuentro semanal de 1 hs durante las semanas de implementación (sem. 9-14).
+Instrumento de seguimiento: Bitácora de avance individual en plataforma Moodle (entrada semanal obligatoria).
+Informe de avance: presentación grupal cada 4 semanas ante el docente y la supervisora externa.
+Comunicación con la entidad: reuniones quincenales con la representante de la organización (presencial o videollamada).</pp-tutoria>
+    <pp-productos>• Informe técnico final grupal (PDF, 25-35 pp.) que incluya: relevamiento, diseño, código documentado, manual de usuario y conclusiones.
+• Sistema funcional (ejecutable + código fuente en repositorio Git) entregado formalmente a la organización cliente.
+• Presentación oral ante tribunal evaluador: 20 min. de exposición + 10 min. de preguntas.
+• Bitácora individual completa con todas las entradas semanales.</pp-productos>
+    <pp-criterios-eval>Proceso 35%: asistencia a tutorías, completitud de la bitácora, compromiso y puntualidad en entregas parciales.
+Producto 40%: calidad técnica del sistema (correctitud, uso apropiado de estructuras de datos, documentación del código).
+Presentación 25%: claridad expositiva, manejo de preguntas, calidad del informe técnico escrito.
+Participan en la evaluación: docente tutor (60% del puntaje) + supervisora externa (40% del puntaje).</pp-criterios-eval>
+    <pp-acred>• Nota final ponderada ≥ 6 (seis) sobre 10
+• Entrega completa de todos los productos (informe, sistema, bitácora)
+• Concepto "satisfactorio" o superior en el informe de la supervisora externa (requisito excluyente)
+• Asistencia ≥ 75% a las tutorías presenciales
+• Recuperatorio: reentrega del informe y/o nueva presentación oral en el turno de exámenes inmediato siguiente (julio 2026)</pp-acred>
+  </practica-profesionalizante>
+  <unidades>
+    <unidad>
+      <unidad>1</unidad>
+      <titulo>Complejidad Algorítmica y Estructuras Lineales</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <contenidos>Notación O, listas enlazadas, pilas, colas, deques</contenidos>
+      <instancias>Diagnóstico · Práctico 1 y 2</instancias>
+      <ponderacion>25</ponderacion>
+    </unidad>
+    <unidad>
+      <unidad>2</unidad>
+      <titulo>Árboles y Montículos</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <contenidos>Árboles binarios, BST, AVL, heaps, priority queue</contenidos>
+      <instancias>Parcial 1 · Práctico 3</instancias>
+      <ponderacion>25</ponderacion>
+    </unidad>
+    <unidad>
+      <unidad>3</unidad>
+      <titulo>Tablas Hash y Algoritmos de Ordenamiento</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <contenidos>Hash tables, colisiones, quicksort, mergesort, heapsort</contenidos>
+      <instancias>Práctico 4 · Evaluación formativa</instancias>
+      <ponderacion>25</ponderacion>
+    </unidad>
+    <unidad>
+      <unidad>4</unidad>
+      <titulo>Grafos y Proyecto Integrador</titulo>
+      <duracion>4 sem / 16 hs + 4 sem PP / 24 hs</duracion>
+      <contenidos>Grafos, BFS, DFS, Dijkstra · Proyecto integrador con PP</contenidos>
+      <instancias>Parcial 2 · Entrega proyecto integrador · Presentación PP</instancias>
+      <ponderacion>25</ponderacion>
+    </unidad>
+  </unidades>
+  <fichas>
+    <ficha>
+      <unidad>1</unidad>
+      <titulo>Complejidad Algorítmica y Estructuras Lineales</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <objetivos>• Analizar la eficiencia de algoritmos mediante la notación O grande aplicándola a casos concretos.
+• Implementar listas enlazadas simples, dobles y circulares con sus operaciones fundamentales.
+• Diseñar y utilizar pilas y colas para la resolución de problemas de simulación y parsing.</objetivos>
+      <contenidos>Conceptual: Complejidad temporal y espacial, notación O, Omega, Theta. Listas enlazadas (simple, doble, circular). Pilas (LIFO) y colas (FIFO). Deques.
+Procedimental: Implementación de cada estructura desde cero en Python/Java. Comparación empírica de tiempos de ejecución. Resolución de problemas clásicos (evaluación de expresiones, simulación de cola de impresión).
+Actitudinal: Valoración de la eficiencia computacional como criterio de calidad profesional. Documentación de código como práctica habitual.</contenidos>
+      <actividades>• Resolución de problemas de análisis de complejidad en grupos de 3 (pair programming ampliado).
+• TIC: uso de Python Tutor (pythontutor.com) para visualizar la ejecución paso a paso de las estructuras.
+• TIC: repositorio Git compartido por grupo desde la semana 1.
+• ESI/Inclusión: formación de grupos heterogéneos en género y nivel de conocimiento previo.</actividades>
+      <recursos>• Apuntes de cátedra (PDF en Moodle)
+• Python Tutor – visualizador de código (pythontutor.com)
+• Visualgo – animación de estructuras de datos (visualgo.net)
+• Entorno de desarrollo: VS Code + Python 3.11 (instalación libre)</recursos>
+      <estrategias>Diagnóstica: cuestionario inicial sem. 1 sobre conocimientos previos de Programación I (Moodle, autoevaluativo).
+Formativa: revisión del código de prácticos con rúbrica comentada, devolución en 48 hs (sem. 2-4).
+Sumativa: Prácticos 1 y 2 individuales entregados en sem. 3 y 5 respectivamente.</estrategias>
+      <evidencias>• Práctico 1 resuelto (implementación de lista enlazada doble) – entrega digital en Moodle, sem. 3
+• Práctico 2 resuelto (pilas y colas – simulación) – entrega digital en Moodle, sem. 5
+• Participación en revisión de código grupal (al menos 2 revisiones registradas)</evidencias>
+      <fechas>Sem. 1 (03/03): diagnóstico · Sem. 2 (10/03): introducción a listas · Sem. 3 (17/03): entrega Práctico 1 · Sem. 4 (24/03): pilas y colas · Sem. 5 (31/03): entrega Práctico 2</fechas>
+      <minimos>Estructuras de datos lineales: listas, pilas y colas. Análisis de la complejidad algorítmica. (Res. 2457/19 – Contenidos mínimos UC Programación II)</minimos>
+      <adaptaciones>Estudiante con baja visión (Comisión B): material en fuente mínima 16pt, uso de lector de pantalla compatible con VS Code (extensión accesibilidad activada).
+Para el resto de la comisión: sin adaptaciones específicas previstas al momento de la planificación.</adaptaciones>
+    </ficha>
+    <ficha>
+      <unidad>2</unidad>
+      <titulo>Árboles y Montículos</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <objetivos>• Comprender la estructura jerárquica de los árboles binarios y sus propiedades fundamentales.
+• Implementar operaciones de inserción, búsqueda y eliminación en árboles BST y AVL.
+• Aplicar montículos (heaps) en la implementación de colas de prioridad.</objetivos>
+      <contenidos>Conceptual: Árboles binarios, recorridos (inorden, preorden, postorden). BST (Binary Search Tree), árbol AVL y rotaciones. Heap binario (max-heap, min-heap). Priority Queue.
+Procedimental: Implementación de BST con todas sus operaciones. Implementación de heap con heapify. Resolución del problema de la k-ésima estadística de orden.
+Actitudinal: Rigor en la verificación de invariantes de estructura como práctica de calidad de software.</contenidos>
+      <actividades>• Análisis comparativo BST vs AVL: experimento empírico con conjuntos de datos ordenados y aleatorios.
+• TIC: visualización de rotaciones AVL en Visualgo · Implementación en Python con tests unitarios automatizados (pytest).
+• Inclusión: actividad de tutoría entre pares para estudiantes con dificultades identificadas en Parcial 1.</actividades>
+      <recursos>• Visualgo – árboles y heaps (visualgo.net/en/bst)
+• Apuntes de cátedra Unidad 2 (PDF, Moodle)
+• Repositorio Git de la cátedra con esqueleto de código para los prácticos</recursos>
+      <estrategias>Formativa: revisión de código semanal con devolución escrita por el docente.
+Sumativa: Parcial 1 escrito individual en sem. 10 (abarca Unidades 1 y 2). Práctico 3 grupal entregado sem. 9.</estrategias>
+      <evidencias>• Práctico 3 grupal (BST + AVL + Heap) – entrega en repositorio Git, sem. 9
+• Parcial 1 escrito individual – sem. 10 – nota mínima 4 para mantener regularidad</evidencias>
+      <fechas>Sem. 6 (07/04): árboles binarios · Sem. 7 (14/04): BST · Sem. 8 (28/04): AVL · Sem. 9 (05/05): entrega Práctico 3 · Sem. 10 (12/05): Parcial 1</fechas>
+      <minimos>Árboles binarios de búsqueda. Árboles AVL. Montículos y colas de prioridad. (Res. 2457/19)</minimos>
+      <adaptaciones>Sin adaptaciones específicas previstas al momento de la planificación. Se mantiene la configuración de accesibilidad del estudiante con baja visión.</adaptaciones>
+    </ficha>
+  </fichas>
+  <cronograma>
+    <fila>
+      <fecha>Sem. 1 – 03/03</fecha>
+      <tema>Presentación · Complejidad algorítmica</tema>
+      <actividad>Diagnóstico inicial · Introducción a notación O</actividad>
+      <evaluacion>Evaluación diagnóstica (Moodle)</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 2 – 10/03</fecha>
+      <tema>Unidad 1 – Listas enlazadas simples</tema>
+      <actividad>Clase invertida + laboratorio pair programming</actividad>
+      <evaluacion>—</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 3 – 17/03</fecha>
+      <tema>Unidad 1 – Listas dobles y circulares</tema>
+      <actividad>Resolución de problemas grupales · Revisión de código</actividad>
+      <evaluacion>Entrega Práctico 1</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 4 – 24/03</fecha>
+      <tema>Unidad 1 – Pilas y colas</tema>
+      <actividad>Simulación de problemas reales (parsing, cola impresora)</actividad>
+      <evaluacion>—</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 5 – 31/03</fecha>
+      <tema>Unidad 1 – Deques y cierre</tema>
+      <actividad>Comparación empírica de estructuras · Presentación grupal</actividad>
+      <evaluacion>Entrega Práctico 2</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 6 – 07/04</fecha>
+      <tema>Unidad 2 – Árboles binarios</tema>
+      <actividad>Clase expositiva + visualización Visualgo</actividad>
+      <evaluacion>—</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 7 – 14/04</fecha>
+      <tema>Unidad 2 – BST</tema>
+      <actividad>Implementación BST completo – laboratorio</actividad>
+      <evaluacion>—</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 8 – 28/04</fecha>
+      <tema>Unidad 2 – AVL y rotaciones</tema>
+      <actividad>Análisis comparativo BST vs AVL – experimento empírico</actividad>
+      <evaluacion>—</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 9 – 05/05</fecha>
+      <tema>Unidad 2 – Heaps y Priority Queue</tema>
+      <actividad>Implementación heap + tutoría entre pares</actividad>
+      <evaluacion>Entrega Práctico 3</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Sem. 10 – 12/05</fecha>
+      <tema>Repaso Unidades 1 y 2</tema>
+      <actividad>Clase de repaso y resolución de dudas</actividad>
+      <evaluacion>Parcial 1 (escrito individual)</evaluacion>
+    </fila>
+  </cronograma>
+</planificacion>

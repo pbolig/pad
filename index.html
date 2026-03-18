@@ -1,0 +1,1875 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Planificación Anual – Nivel Superior Santa Fe</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ── PRINT ──────────────────────────────────────────── */
+@page { size: A4 landscape; margin: 14mm 16mm; }
+@media print {
+  body { background: white !important; }
+  .no-print, .hint-btn, .controls-bar { display:none !important; }
+  .container { box-shadow:none !important; margin:0 !important; max-width:100% !important; }
+  .tooltip-box { display:none !important; }
+  .section-card { break-inside: avoid; -webkit-column-break-inside: avoid; }
+  input, textarea, select { border-color: #ccc !important; background: white !important; }
+}
+
+/* ── TOKENS ─────────────────────────────────────────── */
+:root {
+  --sky:       #d6eaf8;
+  --sky-dark:  #aed6f1;
+  --sky-text:  #1a4a6b;
+  --mint:      #d5f5e3;
+  --mint-dark: #a9dfbf;
+  --mint-text: #1a5c35;
+  --lav:       #e8daef;
+  --lav-dark:  #d2b4de;
+  --lav-text:  #4a235a;
+  --peach:     #fdebd0;
+  --peach-dark:#f5cba7;
+  --peach-text:#7d3c07;
+  --rose:      #fce4ec;
+  --rose-dark: #f8bbd0;
+  --rose-text: #7b1a2a;
+  --sand:      #fef9ef;
+  --sand-dark: #f5e6c8;
+  --sand-text: #6b4a10;
+  --neutral-50:  #f8f9fb;
+  --neutral-100: #eef1f6;
+  --neutral-200: #dde3ec;
+  --neutral-300: #c4cedc;
+  --neutral-500: #7a8899;
+  --neutral-700: #3b4a5c;
+  --neutral-900: #1c2635;
+  --white: #ffffff;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.05);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+  --font-head: 'Lora', Georgia, serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', sans-serif;
+}
+
+/* ── BASE ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+html, body {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--neutral-900);
+  background: #e8edf4;
+  background-image: radial-gradient(ellipse at 20% 0%, #d6eaf8 0%, transparent 50%),
+                    radial-gradient(ellipse at 80% 100%, #e8daef 0%, transparent 50%);
+  min-height: 100vh;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ── CONTAINER ──────────────────────────────────────── */
+.container {
+  max-width: 1220px;
+  margin: 24px auto;
+  padding: 0 16px 40px;
+}
+
+/* ── MASTHEAD ───────────────────────────────────────── */
+.masthead {
+  background: linear-gradient(135deg, #1a4a6b 0%, #1d6a8a 50%, #1a5c35 100%);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 4px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+  overflow: hidden;
+}
+.masthead::before {
+  content:'';
+  position: absolute; inset:0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.masthead-escudo {
+  width: 72px; height: 72px;
+  background: rgba(255,255,255,.15);
+  border: 2px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-head);
+  font-size: 22px; font-weight: 700;
+  color: white;
+  letter-spacing: .5px;
+}
+.masthead-text { flex: 1; }
+.masthead-text .sup-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.7);
+  margin-bottom: 4px;
+}
+.masthead-text h1 {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.masthead-text .sub {
+  font-size: 12px;
+  color: rgba(255,255,255,.65);
+  line-height: 1.5;
+}
+.masthead-badge {
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.masthead-badge .badge-label { font-size: 10px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: 1px; }
+.masthead-badge .badge-val { font-family: var(--font-head); font-size: 26px; font-weight: 700; color: white; line-height: 1; }
+
+/* ── SECTION CARDS ──────────────────────────────────── */
+.section-card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--neutral-200);
+  box-shadow: var(--shadow-sm);
+  margin-top: 14px;
+  overflow: visible;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--neutral-100);
+}
+.section-icon {
+  width: 32px; height: 32px;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.section-header h2 {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--neutral-900);
+  flex: 1;
+}
+.section-header .norm-ref {
+  font-size: 11px;
+  color: var(--neutral-500);
+  font-style: italic;
+  text-align: right;
+  line-height: 1.4;
+}
+.section-body { padding: 18px 20px; }
+
+/* Color accents per section */
+.sec-inst .section-header { background: linear-gradient(to right, #edf6fd, white); }
+.sec-inst .section-icon { background: var(--sky); color: var(--sky-text); }
+.sec-curr .section-header { background: linear-gradient(to right, #f0faf5, white); }
+.sec-curr .section-icon { background: var(--mint); color: var(--mint-text); }
+.sec-unit .section-header { background: linear-gradient(to right, #f5eefb, white); }
+.sec-unit .section-icon { background: var(--lav); color: var(--lav-text); }
+.sec-ficha .section-header { background: linear-gradient(to right, #fef6ec, white); }
+.sec-ficha .section-icon { background: var(--peach); color: var(--peach-text); }
+.sec-eval .section-header { background: linear-gradient(to right, #fff0f3, white); }
+.sec-eval .section-icon { background: var(--rose); color: var(--rose-text); }
+.sec-crono .section-header { background: linear-gradient(to right, #fffaee, white); }
+.sec-crono .section-icon { background: var(--sand); color: var(--sand-text); }
+.sec-biblio .section-header { background: linear-gradient(to right, #edf6fd, white); }
+.sec-biblio .section-icon { background: var(--sky); color: var(--sky-text); }
+
+/* ── SUBSECTION dentro de una card ─────────────────── */
+.subsection {
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-100);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  margin-bottom: 14px;
+}
+.subsection:last-child { margin-bottom: 0; }
+.subsection-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: var(--neutral-500);
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--neutral-200);
+}
+
+/* ── GRID ───────────────────────────────────────────── */
+.grid { display: grid; gap: 14px; }
+.g-2  { grid-template-columns: 1fr 1fr; }
+.g-3  { grid-template-columns: 1fr 1fr 1fr; }
+.g-4  { grid-template-columns: 1fr 1fr 1fr 1fr; }
+.g-1-2 { grid-template-columns: 1fr 2fr; }
+.g-2-1 { grid-template-columns: 2fr 1fr; }
+.g-1-1-2 { grid-template-columns: 1fr 1fr 2fr; }
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+.span-full { grid-column: 1 / -1; }
+@media (max-width: 900px) {
+  .g-2,.g-3,.g-4,.g-1-2,.g-2-1,.g-1-1-2 { grid-template-columns: 1fr; }
+  .span-2,.span-3,.span-full { grid-column: span 1; }
+}
+
+/* ── FIELDS ─────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 5px; position: relative; }
+label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--neutral-700);
+  letter-spacing: .2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.3;
+}
+label .norm {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--neutral-500);
+  font-style: italic;
+}
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--neutral-200);
+  background: var(--white);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--neutral-900);
+  transition: border-color .15s, box-shadow .15s;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--sky-dark);
+  box-shadow: 0 0 0 3px rgba(174,214,241,.35);
+}
+textarea {
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.5;
+}
+input::placeholder, textarea::placeholder { color: var(--neutral-300); }
+
+/* ── HINT BUTTON + TOOLTIP ──────────────────────────── */
+.hint-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--lav);
+  color: var(--lav-text);
+  font-size: 10px;
+  font-weight: 700;
+  border: 1px solid var(--lav-dark);
+  cursor: default;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 10;
+  vertical-align: middle;
+}
+.hint-wrap { position: relative; display: inline-block; }
+.tooltip-box {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 320px;
+  background: var(--white);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  box-shadow: var(--shadow-lg);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--neutral-700);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s, transform .15s;
+  z-index: 999;
+}
+.hint-btn:hover + .tooltip-box,
+.hint-btn:focus + .tooltip-box {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+.tooltip-box .tt-title {
+  font-weight: 700;
+  color: var(--neutral-900);
+  font-size: 12px;
+  margin-bottom: 5px;
+  display: block;
+}
+.tooltip-box .tt-norm {
+  font-size: 11px;
+  color: var(--lav-text);
+  background: var(--lav);
+  border-radius: 4px;
+  padding: 3px 7px;
+  margin-bottom: 6px;
+  display: block;
+  font-style: italic;
+}
+.tooltip-box .tt-eg {
+  font-size: 11px;
+  color: var(--mint-text);
+  background: var(--mint);
+  border-radius: 4px;
+  padding: 3px 7px;
+  margin-top: 5px;
+  display: block;
+}
+
+/* ── TABLES ─────────────────────────────────────────── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.data-table thead tr th {
+  padding: 9px 10px;
+  background: var(--neutral-50);
+  border: 1px solid var(--neutral-200);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--neutral-700);
+  text-align: left;
+  white-space: nowrap;
+}
+.data-table tbody tr td {
+  padding: 8px 10px;
+  border: 1px solid var(--neutral-200);
+  vertical-align: top;
+  min-width: 80px;
+}
+.data-table tbody tr:nth-child(even) td { background: var(--neutral-50); }
+.data-table tbody tr:hover td { background: #f0f7ff; }
+[contenteditable]:focus { outline: 2px solid var(--sky-dark); outline-offset: -1px; border-radius: 2px; }
+
+/* ── FICHA DE UNIDAD ────────────────────────────────── */
+.ficha-card {
+  background: var(--white);
+  border: 1px solid var(--neutral-200);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.ficha-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: linear-gradient(to right, var(--peach), var(--white));
+  border-bottom: 1px solid var(--peach-dark);
+}
+.ficha-head h4 {
+  font-family: var(--font-head);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--peach-text);
+}
+.ficha-body { padding: 16px; }
+
+/* ── FIRMA BLOCK ────────────────────────────────────── */
+.firma-block {
+  border-top: 2px dashed var(--neutral-200);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+.firma-line {
+  height: 38px;
+  border-bottom: 1.5px solid var(--neutral-700);
+  margin-bottom: 4px;
+  background: linear-gradient(to bottom, transparent 90%, rgba(0,0,0,.04));
+}
+.firma-label {
+  font-size: 11px;
+  color: var(--neutral-500);
+  text-align: center;
+  font-style: italic;
+}
+
+/* ── BUTTONS ─────────────────────────────────────────── */
+button {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: filter .15s, transform .1s;
+  white-space: nowrap;
+}
+button:active { transform: scale(.97); }
+.btn-sky     { background: var(--sky-dark); color: var(--sky-text); }
+.btn-mint    { background: var(--mint-dark); color: var(--mint-text); }
+.btn-lav     { background: var(--lav-dark); color: var(--lav-text); }
+.btn-ghost   { background: transparent; color: var(--neutral-700); border: 1.5px solid var(--neutral-300); }
+.btn-danger  { background: var(--rose-dark); color: var(--rose-text); }
+.btn-peach   { background: var(--peach-dark); color: var(--peach-text); }
+button:hover { filter: brightness(.93); }
+
+.controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.controls-bar .divider { width: 1px; background: var(--neutral-200); margin: 0 4px; align-self: stretch; }
+
+/* ── PILL TAGS ───────────────────────────────────────── */
+.pill { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+.pill-sky   { background: var(--sky); color: var(--sky-text); }
+.pill-mint  { background: var(--mint); color: var(--mint-text); }
+.pill-lav   { background: var(--lav); color: var(--lav-text); }
+
+/* ── NORM BANNER ────────────────────────────────────── */
+.norm-banner {
+  background: linear-gradient(to right, #eaf3fb, #f0faf5);
+  border: 1px solid #c8e6f5;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: #1a4460;
+  line-height: 1.6;
+}
+.norm-banner strong { color: #0d3352; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══ MASTHEAD ═══════════════════════════════════════ -->
+  <div class="masthead">
+    <div class="masthead-escudo">SF</div>
+    <div class="masthead-text">
+      <div class="sup-title">Ministerio de Educación – Provincia de Santa Fe</div>
+      <h1>Planificación Anual de Cátedra</h1>
+      <div class="sub">
+        Nivel Superior No Universitario · Régimen Académico Marco (RAM) – Decreto Provincial<br>
+        Plantilla para carga, impresión en A4 apaisado y exportación/importación XML
+      </div>
+    </div>
+    <div class="masthead-badge">
+      <div class="badge-label">Año lectivo</div>
+      <div class="badge-val" id="anio-display">–</div>
+    </div>
+  </div>
+
+  <!-- ══ 1. ENCABEZADO INSTITUCIONAL ═══════════════════ -->
+  <div class="section-card sec-inst">
+    <div class="section-header">
+      <div class="section-icon">🏫</div>
+      <h2>1. Encabezado Institucional</h2>
+      <div class="norm-ref">RAM · Capítulo II, Art. 8 y 9<br>Datos de identificación obligatorios</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Identifica unívocamente la planificación ante la institución, la coordinación de carrera y el Consejo de Educación. Todos los campos deben coincidir con los datos del <em>Proyecto Curricular Institucional (PCI)</em> aprobado.
+      </div>
+
+      <!-- Bloque A: Datos del Instituto -->
+      <div class="subsection">
+        <div class="subsection-title">A · Datos del Instituto</div>
+        <div class="grid g-3">
+
+          <div class="field">
+            <label>
+              Año lectivo
+              <span class="norm">RAM Art. 8 inc. a</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Año lectivo</span>
+                <span class="tt-norm">RAM Art. 8 inc. a – Datos de encabezado</span>
+                Indicar el año calendario del ciclo lectivo en curso.
+                <span class="tt-eg">Ej.: 2026</span>
+              </span></span>
+            </label>
+            <input id="anio" type="number" placeholder="2026" />
+          </div>
+
+          <div class="field span-2">
+            <label>
+              Nombre del Instituto
+              <span class="norm">PCI aprobado</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Nombre oficial del instituto</span>
+                <span class="tt-norm">Debe coincidir con la denominación en el PCI aprobado por la DES</span>
+                Escribir la denominación completa tal como figura en la resolución de creación o en el PCI.
+                <span class="tt-eg">Ej.: Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</span>
+              </span></span>
+            </label>
+            <input id="instituto" type="text" placeholder="Instituto Superior …" />
+          </div>
+
+          <div class="field span-2">
+            <label>
+              Carrera
+              <span class="norm">Plan de estudios aprobado</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Denominación oficial de la carrera</span>
+                <span class="tt-norm">Coincide con el plan de estudios aprobado por resolución ministerial</span>
+                Escribir exactamente como figura en la resolución aprobatoria del plan de estudios, incluyendo nivel y orientación si corresponde.
+                <span class="tt-eg">Ej.: Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</span>
+              </span></span>
+            </label>
+            <input id="carrera" type="text" placeholder="Tecnicatura / Profesorado en …" />
+          </div>
+
+          <div class="field">
+            <label>
+              Año / Nivel de cursada
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Año de la carrera</span>
+                Indicar a qué año de la carrera pertenece la asignatura según el plan de estudios.
+                <span class="tt-eg">Ej.: 1° Año · 2° Cuatrimestre</span>
+              </span></span>
+            </label>
+            <input id="anio-cursada" type="text" placeholder="1° Año · 2° Cuatrimestre" />
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bloque B: Datos de la Asignatura -->
+      <div class="subsection">
+        <div class="subsection-title">B · Datos de la Asignatura</div>
+        <div class="grid g-3">
+
+          <div class="field span-2">
+            <label>
+              Asignatura / Unidad Curricular
+              <span class="norm">Plan de estudios – Diseño Curricular</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Denominación de la unidad curricular</span>
+                <span class="tt-norm">Diseño Curricular jurisdiccional – denominación exacta</span>
+                Usar la denominación que figura en el diseño curricular jurisdiccional aprobado. No abreviar ni modificar.
+                <span class="tt-eg">Ej.: Programación I – Lenguajes y Paradigmas</span>
+              </span></span>
+            </label>
+            <input id="materia" type="text" placeholder="Nombre de la unidad curricular" />
+          </div>
+
+          <div class="field">
+            <label>
+              Comisión / División
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Comisión o división</span>
+                Identificador que distingue grupos paralelos de una misma asignatura en el mismo año.
+                <span class="tt-eg">Ej.: Comisión A · Turno Noche</span>
+              </span></span>
+            </label>
+            <input id="comision" type="text" placeholder="Comisión A – Turno …" />
+          </div>
+
+          <div class="field span-2">
+            <label>
+              Docente(s) a cargo
+              <span class="norm">RAM Art. 9 – Identificación del docente</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Docente titular / provisional / suplente</span>
+                <span class="tt-norm">RAM Art. 9 – La planificación debe estar firmada por el docente a cargo</span>
+                Apellido, Nombre completo · N° de DNI · Cargo/situación de revista (titular, provisional, suplente, interino).
+                <span class="tt-eg">Ej.: Pérez, Ana Lucía – DNI 28.456.789 – Titular</span>
+              </span></span>
+            </label>
+            <input id="docente" type="text" placeholder="Apellido, Nombre – DNI · Situación de revista" />
+          </div>
+
+          <div class="field">
+            <label>
+              Carga horaria anual (hs reloj)
+              <span class="norm">Plan de estudios</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Carga horaria total en horas reloj</span>
+                <span class="tt-norm">Según plan de estudios aprobado. 1 hora cátedra = 40 min = 0,67 hs reloj</span>
+                Indicar el total anual en horas reloj (no horas cátedra) tal como figura en el plan de estudios aprobado.
+                <span class="tt-eg">Ej.: 96 hs reloj (equivale a 144 hs cátedra)</span>
+              </span></span>
+            </label>
+            <input id="carga" type="number" placeholder="96" />
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bloque C: Normativa y Modalidad -->
+      <div class="subsection">
+        <div class="subsection-title">C · Normativa y Modalidad</div>
+        <div class="grid g-3">
+
+          <div class="field">
+            <label>
+              Modalidad de cursada
+              <span class="norm">RAM Art. 12</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Modalidad según RAM</span>
+                <span class="tt-norm">RAM Art. 12 – Régimen de cursada y asistencia</span>
+                Indicar la modalidad habilitada institucionalmente. La modalidad virtual o mixta requiere resolución o acto administrativo específico.
+                <span class="tt-eg">Ej.: Presencial · Mixta (con plataforma Moodle) · Virtual</span>
+              </span></span>
+            </label>
+            <select id="modalidad">
+              <option value="">— seleccionar —</option>
+              <option>Presencial</option>
+              <option>Virtual</option>
+              <option>Mixta (presencial + virtual)</option>
+            </select>
+          </div>
+
+          <div class="field span-2">
+            <label>
+              Referencia normativa RAM aplicable
+              <span class="norm">RAM vigente – Santa Fe</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Decreto / Resolución RAM que regula esta asignatura</span>
+                <span class="tt-norm">Régimen Académico Marco para el Nivel Superior – Santa Fe</span>
+                Indicar el número de decreto o resolución provincial del RAM que rige la asignatura, y el artículo específico que define los criterios de acreditación, asistencia mínima y condiciones de regularidad. Consultarlo en la Secretaría Académica o en el sitio del Ministerio de Educación provincial.
+                <span class="tt-eg">Ej.: Decreto N° 4199/2015 – Art. 28 (Acreditación) · Art. 32 (Asistencia 75%)</span>
+              </span></span>
+            </label>
+            <input id="ram" type="text" placeholder="Decreto / Res. N° … – Art. … (criterio que aplica)" />
+          </div>
+
+          <div class="field span-2">
+            <label>
+              Fecha de aprobación institucional / N° de expediente
+              <span class="norm">RAM Art. 10 – Aprobación del Consejo Directivo</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Acto administrativo de aprobación</span>
+                <span class="tt-norm">RAM Art. 10 – La planificación debe ser aprobada por el Consejo Directivo antes del inicio del ciclo lectivo</span>
+                Completar con la fecha de sesión del Consejo Directivo que aprobó la planificación y el número de expediente o acta correspondiente.
+                <span class="tt-eg">Ej.: Aprobada CD el 14/03/2026 – Acta N° 02/2026 – Expte. N° 0078-S-2026</span>
+              </span></span>
+            </label>
+            <input id="aprob" type="text" placeholder="DD/MM/AAAA – Acta N° … – Expte. N° …" />
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Bloque D: Correlatividades y Plan de Estudios -->
+      <div class="subsection">
+        <div class="subsection-title">D · Correlatividades y Plan de Estudios</div>
+        <div class="grid g-3">
+
+          <div class="field">
+            <label>
+              Correlativas para <strong>cursar</strong> esta materia
+              <span class="norm">Plan de estudios – tabla de correlatividades</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Requisitos para cursar (inscribirse)</span>
+                <span class="tt-norm">Tabla de correlatividades del plan de estudios aprobado por resolución ministerial</span>
+                Listar las materias que el estudiante debe tener <em>aprobadas o regularizadas</em> para poder inscribirse y cursar esta asignatura. Indicar si se exige aprobación (examen final rendido) o sólo regularización (cursado aprobado).
+                <span class="tt-eg">Ej.: "Matemática I (regular) · Introducción a la Programación (aprobada)"</span>
+              </span></span>
+            </label>
+            <textarea id="correl-cursar" style="min-height:70px;" placeholder="• Materia X (aprobada)&#10;• Materia Y (regularizada)&#10;• Sin correlativas previas"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Correlativas para <strong>rendir el examen final</strong>
+              <span class="norm">Plan de estudios – tabla de correlatividades</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Requisitos para presentarse al examen final</span>
+                <span class="tt-norm">Tabla de correlatividades del plan de estudios – columna "Para rendir"</span>
+                Listar las materias que el estudiante debe tener <em>aprobadas con examen final</em> antes de poder presentarse a rendir el examen final de esta asignatura. Este requisito es independiente del de cursado.
+                <span class="tt-eg">Ej.: "Matemática I (final aprobado) · Programación I (final aprobado)"</span>
+              </span></span>
+            </label>
+            <textarea id="correl-final" style="min-height:70px;" placeholder="• Materia X (examen final aprobado)&#10;• Sin correlativas para el final"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Asignaturas co-requisito (simultáneas obligatorias)
+              <span class="norm">Plan de estudios</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Co-requisitos – cursado simultáneo obligatorio</span>
+                <span class="tt-norm">Plan de estudios – materias que deben cursarse en el mismo período</span>
+                Listar las asignaturas que, según el plan de estudios, deben cursarse de manera simultánea con esta materia (co-requisitos). No confundir con correlativas previas.
+                <span class="tt-eg">Ej.: "Laboratorio de Programación (mismo cuatrimestre) · Sin co-requisitos"</span>
+              </span></span>
+            </label>
+            <textarea id="correl-simult" style="min-height:70px;" placeholder="• Materia Z (simultánea)&#10;• Sin co-requisitos"></textarea>
+          </div>
+
+          <div class="field span-3">
+            <label>
+              Enlace al Plan de Estudios (documento institucional)
+              <span class="norm">Documento disponible en la institución o en la nube</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Vínculo al plan de estudios de la materia</span>
+                <span class="tt-norm">El plan de estudios es el documento aprobado por resolución ministerial que define los contenidos mínimos, carga horaria y correlatividades de la asignatura</span>
+                Pegar aquí el enlace (URL) al documento del plan de estudios alojado en la nube institucional (Google Drive, OneDrive, servidor del instituto, etc.). El documento puede ser PDF, Word u otro formato. Este vínculo quedará guardado en el XML exportado y permitirá acceder al documento de referencia desde cualquier dispositivo.
+                <span class="tt-eg">Ej.: https://drive.google.com/file/d/1AbCdEfGhIjKlMnOpQrStUvWxYz/view · https://docs.google.com/document/d/…/edit</span>
+              </span></span>
+            </label>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <input id="plan-url" type="url" placeholder="https://drive.google.com/… (link al PDF o documento del plan de estudios)" style="flex:1;" />
+              <button type="button" class="btn-sky no-print" id="open-plan-url" style="white-space:nowrap; padding:9px 14px;">🔗 Abrir enlace</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 2. MARCO CURRICULAR ════════════════════════════ -->
+  <div class="section-card sec-curr">
+    <div class="section-header">
+      <div class="section-icon">📐</div>
+      <h2>2. Marco Curricular y Pedagógico</h2>
+      <div class="norm-ref">RAM · Capítulo III, Art. 15–17<br>Proyecto Curricular Institucional</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Explicita el encuadre didáctico-pedagógico de la asignatura articulando los objetivos con el <em>perfil de egreso</em> del título y las <em>competencias</em> definidas en el diseño curricular jurisdiccional (RAM, Cap. III).
+      </div>
+
+      <div class="grid g-2">
+
+        <div class="field">
+          <label>
+            Objetivos generales de la asignatura
+            <span class="norm">RAM Art. 15 – Diseño curricular</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Objetivos generales</span>
+              <span class="tt-norm">RAM Art. 15 · Deben derivarse del diseño curricular jurisdiccional</span>
+              Enunciar entre 3 y 5 objetivos generales comenzando con infinitivo verbal. Deben ser medibles, articularse con las competencias del perfil y ser alcanzables en el período lectivo.
+              <span class="tt-eg">Ej.: "Comprender los fundamentos del pensamiento computacional y aplicarlos en el diseño de algoritmos para la resolución de problemas reales."</span>
+            </span></span>
+          </label>
+          <textarea id="objgen" placeholder="• Comprender …&#10;• Aplicar …&#10;• Desarrollar …"></textarea>
+        </div>
+
+        <div class="field">
+          <label>
+            Competencias a desarrollar
+            <span class="norm">Perfil de egreso – Diseño curricular</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Competencias del perfil de egreso</span>
+              <span class="tt-norm">Extraídas del perfil de egreso del título habilitante – Diseño curricular jurisdiccional</span>
+              Listar las competencias del perfil de egreso que esta asignatura desarrolla parcialmente, usando la denominación exacta del diseño curricular.
+              <span class="tt-eg">Ej.: "Competencia 3 – Diseño e implementación de soluciones informáticas · Competencia 5 – Trabajo en equipo colaborativo"</span>
+            </span></span>
+          </label>
+          <textarea id="competencias" placeholder="• Competencia N° … – …&#10;• Competencia N° … – …"></textarea>
+        </div>
+
+        <div class="field">
+          <label>
+            Perfil de egreso relacionado
+            <span class="norm">Diseño curricular – perfil del título</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Relación con el perfil profesional del título</span>
+              <span class="tt-norm">Diseño curricular jurisdiccional – descripción del perfil de egreso del título habilitante</span>
+              Describir brevemente qué aspectos del perfil de egreso del título quedan contemplados en esta unidad curricular y cómo contribuye a la formación del futuro graduado.
+              <span class="tt-eg">Ej.: "Esta asignatura aporta a la formación del Técnico Superior en Programación habilitándolo para analizar, diseñar e implementar soluciones de software en lenguajes de alto nivel."</span>
+            </span></span>
+          </label>
+          <textarea id="perfil" placeholder="Esta asignatura aporta al perfil de egreso en tanto …"></textarea>
+        </div>
+
+        <div class="field">
+          <label>
+            Encuadre metodológico general
+            <span class="norm">RAM Art. 16 – Propuesta didáctica</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Enfoque pedagógico y metodología de enseñanza</span>
+              <span class="tt-norm">RAM Art. 16 – La propuesta didáctica debe explicitar el enfoque metodológico adoptado</span>
+              Describir el enfoque pedagógico general (constructivismo, aprendizaje basado en proyectos, ABP, etc.) y las estrategias metodológicas centrales que articulan la propuesta.
+              <span class="tt-eg">Ej.: "Enfoque constructivista con resolución de problemas reales. Se priorizan la clase invertida, el trabajo colaborativo y el uso de herramientas TIC en cada encuentro."</span>
+            </span></span>
+          </label>
+          <textarea id="metodologia" placeholder="Enfoque: … · Estrategias: …"></textarea>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PP. PRÁCTICA PROFESIONALIZANTE ════════════════ -->
+  <div class="section-card" id="sec-pp-card" style="border: 2px solid transparent; background: linear-gradient(white,white) padding-box, linear-gradient(135deg,#a9dfbf,#d2b4de) border-box; margin-top:14px;">
+    <div class="section-header" style="background: linear-gradient(to right, #eafaf1, #f5eefb, white);">
+      <div class="section-icon" style="background: linear-gradient(135deg,#d5f5e3,#e8daef); color:#1a5c35; font-size:16px;">🔧</div>
+      <h2 style="flex:1;">PP · Práctica Profesionalizante</h2>
+      <div style="display:flex; align-items:center; gap:10px; flex-shrink:0;">
+        <span style="font-size:11px; color:var(--neutral-500); font-style:italic;">Decreto N° 1559/17 – IES Santa Fe</span>
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:12px; font-weight:600; color:var(--mint-text); white-space:nowrap; margin:0;">
+          <input type="checkbox" id="pp-toggle" style="width:16px;height:16px;cursor:pointer;" />
+          Esta UC incluye PP
+        </label>
+      </div>
+    </div>
+    <div class="section-body" id="pp-body" style="display:none;">
+
+      <div class="norm-banner" style="background: linear-gradient(to right, #eafaf1, #f5eefb); border-color: #a9dfbf;">
+        <strong>¿Qué es la Práctica Profesionalizante (PP)?</strong> Es el conjunto de actividades formativas que los IES deben desarrollar para que los estudiantes consoliden, integren y amplíen las capacidades y saberes que se corresponden con el perfil profesional del título. Se rige por el <strong>Decreto Provincial N° 1559/17</strong>, que establece el Reglamento de Práctica Profesionalizante Marco para los IES de Santa Fe. No es una materia separada: puede estar integrada transversalmente a otras unidades curriculares del plan de estudios. Activar esta sección sólo si la unidad curricular tiene carga horaria o actividades de PP asignadas según el diseño curricular.
+      </div>
+
+      <!-- PP Bloque 1: Identificación -->
+      <div class="subsection" style="border-color:#a9dfbf;">
+        <div class="subsection-title" style="color: var(--mint-text);">PP-A · Identificación y Marco Normativo</div>
+        <div class="grid g-3">
+
+          <div class="field">
+            <label>
+              Tipo de Práctica Profesionalizante
+              <span class="norm">Decreto 1559/17 – Art. 4</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Tipo de PP según Decreto 1559/17</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 4 – Tipos de PP: integrada, institucional, en contexto real</span>
+                Indicar qué tipo de práctica profesionalizante corresponde según el diseño curricular y el plan institucional de PP aprobado. La PP <em>integrada</em> se desarrolla dentro de la UC; la <em>institucional</em> articula varias UC; la PP <em>en contexto real</em> se realiza en empresas u organismos.
+                <span class="tt-eg">Ej.: "PP Integrada a la UC (talleres dentro de la cátedra)" · "PP en contexto real (empresa XYZ)" · "PP Institucional – Proyecto integrador de carrera"</span>
+              </span></span>
+            </label>
+            <select id="pp-tipo">
+              <option value="">— seleccionar —</option>
+              <option>PP Integrada a la Unidad Curricular</option>
+              <option>PP Institucional (articulación entre UC)</option>
+              <option>PP en Contexto Real (empresa / organismo)</option>
+              <option>PP en Servicio Comunitario</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>
+              Carga horaria de PP dentro de esta UC (hs)
+              <span class="norm">Decreto 1559/17 – Art. 7</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Carga horaria específica de PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 7 – La carga horaria de PP debe estar explicitada en el diseño curricular</span>
+                Indicar cuántas horas reloj de la carga total de esta UC corresponden a actividades de PP. Debe coincidir con el diseño curricular aprobado.
+                <span class="tt-eg">Ej.: 32 hs reloj (de las 96 hs totales de la UC)</span>
+              </span></span>
+            </label>
+            <input id="pp-carga" type="number" placeholder="32" />
+          </div>
+
+          <div class="field">
+            <label>
+              Referencia normativa específica de PP
+              <span class="norm">Decreto 1559/17 – artículo aplicable</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Artículo del Decreto 1559/17 que rige esta PP</span>
+                <span class="tt-norm">Decreto Provincial N° 1559/17 – Reglamento de Práctica Profesionalizante Marco para IES Santa Fe</span>
+                Indicar el artículo o anexo del Decreto 1559/17 que regula la modalidad de PP elegida. Complementar con la resolución del plan institucional de PP si existe.
+                <span class="tt-eg">Ej.: "Decreto N° 1559/17 – Art. 4 (tipo PP integrada) · Art. 11 (evaluación de PP) · Plan Institucional PP aprobado Acta CD N° 05/2025"</span>
+              </span></span>
+            </label>
+            <input id="pp-norma" type="text" placeholder="Decreto N° 1559/17 – Art. … · Plan PP Institucional …" />
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PP Bloque 2: Propósitos y Competencias -->
+      <div class="subsection" style="border-color:#d2b4de;">
+        <div class="subsection-title" style="color: var(--lav-text);">PP-B · Propósitos Formativos y Competencias Profesionales</div>
+        <div class="grid g-2">
+
+          <div class="field">
+            <label>
+              Propósitos formativos de la PP
+              <span class="norm">Decreto 1559/17 – Art. 5</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Propósitos de la PP según Decreto 1559/17</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 5 – La PP debe explicitar sus propósitos formativos en relación al perfil de egreso</span>
+                Describir qué se espera que el estudiante logre a través de las actividades de PP: integración teoría-práctica, desarrollo de capacidades profesionales, inserción en contextos reales de trabajo, etc.
+                <span class="tt-eg">Ej.: "Integrar los conocimientos teóricos de programación en el desarrollo de un sistema real para una organización local, articulando las fases de análisis, diseño, implementación y documentación."</span>
+              </span></span>
+            </label>
+            <textarea id="pp-propositos" placeholder="• Integrar saberes teóricos en situaciones reales de trabajo …&#10;• Desarrollar capacidades de …&#10;• Articular con el perfil de egreso en …"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Capacidades y competencias profesionales a desarrollar
+              <span class="norm">Perfil de egreso – Decreto 1559/17 Art. 5</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Competencias profesionales de la PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 5 – Las capacidades deben vincularse al perfil profesional del título</span>
+                Enunciar las capacidades y competencias profesionales concretas que se desarrollarán mediante la PP. Deben relacionarse directamente con el perfil de egreso del título habilitante.
+                <span class="tt-eg">Ej.: "• Gestionar proyectos de desarrollo de software con metodologías ágiles. • Comunicar soluciones técnicas a destinatarios no especializados. • Trabajar en equipo en entornos profesionales reales."</span>
+              </span></span>
+            </label>
+            <textarea id="pp-competencias" placeholder="• Capacidad 1: …&#10;• Capacidad 2: …&#10;• Competencia profesional: …"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PP Bloque 3: Actividades y Organización -->
+      <div class="subsection" style="border-color:#a9dfbf;">
+        <div class="subsection-title" style="color: var(--mint-text);">PP-C · Actividades, Organización y Contexto</div>
+        <div class="grid g-2">
+
+          <div class="field">
+            <label>
+              Descripción de las actividades de PP
+              <span class="norm">Decreto 1559/17 – Art. 6 y 8</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Descripción detallada de las actividades de PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 6 (actividades) · Art. 8 (organización temporal)</span>
+                Detallar las actividades concretas que constituyen la PP: qué harán los estudiantes, en qué orden, con qué recursos. Puede incluir visitas, proyectos, simulaciones, pasantías, etc.
+                <span class="tt-eg">Ej.: "Sem. 1-4: diagnóstico de necesidades de una PYME local. Sem. 5-10: diseño e implementación del sistema. Sem. 11-12: presentación ante la organización y defensa oral."</span>
+              </span></span>
+            </label>
+            <textarea id="pp-actividades" placeholder="• Actividad 1 (modalidad, duración): …&#10;• Actividad 2: …&#10;• Producto final esperado: …"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Organización / Contexto de realización
+              <span class="norm">Decreto 1559/17 – Art. 9 (convenios)</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Contexto y organización de la PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 9 – Si la PP se realiza en empresas u organismos, debe existir un convenio institucional firmado</span>
+                Indicar dónde y cómo se desarrollará la PP: en el instituto, en una empresa, en un organismo público, en servicio comunitario. Si involucra entidades externas, indicar razón social y número de convenio.
+                <span class="tt-eg">Ej.: "PP en el aula-taller del instituto con cliente real externo (PYME 'TechRosario SRL' – Convenio N° 03/2026)" · "PP institucional – laboratorio de informática"</span>
+              </span></span>
+            </label>
+            <textarea id="pp-contexto" placeholder="Lugar de realización: …&#10;Entidad / organismo: …&#10;Nº de convenio (si aplica): …&#10;Responsable de supervisión externa: …"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Rol del docente tutor / Seguimiento
+              <span class="norm">Decreto 1559/17 – Art. 10</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Tutoría y seguimiento de la PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 10 – El IES debe designar un docente tutor responsable del seguimiento de la PP</span>
+                Describir cómo se realizará el seguimiento pedagógico de la PP: frecuencia de encuentros de tutoría, herramientas de seguimiento (bitácora, portafolio, informes), forma de comunicación con la entidad externa si aplica.
+                <span class="tt-eg">Ej.: "Tutorías semanales de 1 hs · Bitácora de avance en Moodle · Informe de avance cada 4 semanas · Reunión mensual con supervisor externo"</span>
+              </span></span>
+            </label>
+            <textarea id="pp-tutoria" placeholder="Frecuencia de tutorías: …&#10;Instrumento de seguimiento: bitácora / portafolio / informe&#10;Supervisor externo (si aplica): …"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Producto(s) / Resultado(s) esperado(s)
+              <span class="norm">Decreto 1559/17 – Art. 11 (acreditación)</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Productos esperados de la PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 11 – La acreditación de la PP requiere la producción de evidencias concretas</span>
+                Describir los productos o resultados tangibles que el estudiante debe presentar al finalizar la PP: informe técnico, prototipo, sistema implementado, presentación oral, etc.
+                <span class="tt-eg">Ej.: "• Informe técnico final (PDF, 20-30 pp.) · • Sistema funcional entregado al cliente · • Presentación oral ante tribunal evaluador (20 min.)"</span>
+              </span></span>
+            </label>
+            <textarea id="pp-productos" placeholder="• Producto 1 (formato, extensión): …&#10;• Producto 2: …&#10;• Presentación / defensa: …"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PP Bloque 4: Evaluación y Acreditación -->
+      <div class="subsection" style="border-color:#d2b4de;">
+        <div class="subsection-title" style="color: var(--lav-text);">PP-D · Evaluación y Acreditación de la PP</div>
+        <div class="grid g-2">
+
+          <div class="field">
+            <label>
+              Criterios de evaluación de la PP
+              <span class="norm">Decreto 1559/17 – Art. 11</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Criterios de evaluación específicos de PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 11 – La evaluación de la PP debe contemplar el proceso y el producto</span>
+                Definir los criterios cualitativos y cuantitativos para evaluar la PP. La evaluación debe contemplar tanto el <em>proceso</em> (desempeño durante la práctica) como el <em>producto</em> (resultado final). Indicar quiénes participan en la evaluación.
+                <span class="tt-eg">Ej.: "Proceso 40%: puntualidad, compromiso, registro en bitácora · Producto 40%: calidad técnica del sistema · Presentación 20%: claridad y defensa oral"</span>
+              </span></span>
+            </label>
+            <textarea id="pp-criterios-eval" placeholder="Proceso (%) : …&#10;Producto (%) : …&#10;Presentación (%) : …&#10;Participan en la evaluación: docente tutor / supervisor externo / tribunal"></textarea>
+          </div>
+
+          <div class="field">
+            <label>
+              Condiciones de acreditación de la PP
+              <span class="norm">Decreto 1559/17 – Art. 11 y 12</span>
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Condiciones para aprobar la PP</span>
+                <span class="tt-norm">Decreto N° 1559/17 Art. 11 (evaluación) · Art. 12 (recuperatorio)</span>
+                Indicar los requisitos mínimos para que el estudiante acredite la PP: nota mínima, entrega de todos los productos, asistencia a tutorías, informe aprobado por el supervisor externo, etc. Aclarar si hay instancia de recuperatorio.
+                <span class="tt-eg">Ej.: "Nota final ≥ 6 (seis) · Entrega del informe técnico completo · Informe del supervisor externo (concepto satisfactorio) · Recuperatorio: reentrega en el turno siguiente"</span>
+              </span></span>
+            </label>
+            <textarea id="pp-acred" placeholder="• Nota mínima: …&#10;• Requisitos de entrega: …&#10;• Aval del supervisor externo: sí / no aplica&#10;• Recuperatorio: …"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- /pp-body -->
+  </div>
+
+  <!-- ══ 3. RESUMEN DE UNIDADES ══════════════════════════ -->
+  <div class="section-card sec-unit">
+    <div class="section-header">
+      <div class="section-icon">📋</div>
+      <h2>3. Resumen de Unidades Didácticas</h2>
+      <div class="norm-ref">RAM Art. 17 – Organización y secuencia de contenidos</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Presenta la organización macro de la asignatura: unidades, contenidos vertebradores, duración aproximada e instancias de evaluación previstas. Debe guardar coherencia con la carga horaria declarada en el encabezado (RAM Art. 17).
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="tabla-unidades">
+          <thead>
+            <tr>
+              <th style="width:60px">Unidad N°</th>
+              <th>Título de la unidad</th>
+              <th style="width:130px">Duración<br><small style="font-weight:400;font-style:italic">(semanas / hs reloj)</small></th>
+              <th>Contenidos vertebradores</th>
+              <th>Instancias de evaluación previstas</th>
+              <th style="width:80px">Ponderación (%)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="controls-bar no-print">
+        <button class="btn-lav" id="add-row">+ Agregar unidad</button>
+        <button class="btn-ghost" id="clear-rows">Limpiar tabla</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 4. FICHAS DE UNIDAD ════════════════════════════ -->
+  <div class="section-card sec-ficha">
+    <div class="section-header">
+      <div class="section-icon">📄</div>
+      <h2>4. Fichas Detalladas por Unidad</h2>
+      <div class="norm-ref">RAM Art. 18–20 · Ley 26.206 Art. 11<br>ESI · TIC · Inclusión educativa</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Es la planificación micro: para cada unidad se detallan objetivos específicos, contenidos, actividades (incorporando ESI, TIC e inclusión según Ley 26.206 Art. 11), recursos, estrategias de evaluación y adaptaciones para necesidades educativas especiales (NEE).
+      </div>
+
+      <div id="fichas-container"></div>
+      <div class="controls-bar no-print">
+        <button class="btn-peach" id="add-ficha">+ Agregar ficha de unidad</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 5. EVALUACIÓN ══════════════════════════════════ -->
+  <div class="section-card sec-eval">
+    <div class="section-header">
+      <div class="section-icon">✅</div>
+      <h2>5. Régimen de Evaluación y Acreditación</h2>
+      <div class="norm-ref">RAM Art. 25–34 · Decreto 4199/2015<br>Criterios institucionales de evaluación</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Establece el contrato pedagógico de evaluación: criterios, instrumentos y ponderaciones que se comunicarán a los estudiantes al inicio del ciclo lectivo, en cumplimiento del <em>RAM Art. 25 (derecho a conocer criterios de evaluación)</em> y Art. 28 (condiciones de acreditación).
+      </div>
+
+      <div class="grid g-2">
+
+        <div class="field">
+          <label>
+            Criterios de evaluación
+            <span class="norm">RAM Art. 25 y 28</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Criterios de evaluación según RAM</span>
+              <span class="tt-norm">RAM Art. 25 – Los estudiantes tienen derecho a conocer los criterios antes del inicio · Art. 28 – Condiciones de acreditación</span>
+              Enunciar los criterios cualitativos y cuantitativos que se utilizarán para evaluar el aprendizaje. Incluir: asistencia mínima exigida (RAM Art. 32 establece el 75% como umbral general), nota mínima de aprobación y condiciones de regularidad.
+              <span class="tt-eg">Ej.: "Asistencia ≥ 75% (RAM Art. 32) · Nota ≥ 6 (seis) para aprobar · Entrega del 80% de trabajos prácticos"</span>
+            </span></span>
+          </label>
+          <textarea id="criterios" placeholder="• Asistencia mínima: 75% (RAM Art. 32)&#10;• Nota mínima de aprobación: …&#10;• Condición de regularidad: …"></textarea>
+        </div>
+
+        <div class="field">
+          <label>
+            Instrumentos de evaluación
+            <span class="norm">RAM Art. 26 – Diversidad de instrumentos</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Instrumentos de evaluación</span>
+              <span class="tt-norm">RAM Art. 26 – Se recomienda diversidad de instrumentos que contemplen diferentes estilos de aprendizaje</span>
+              Listar todos los instrumentos de evaluación previstos: parciales escritos, orales, trabajos prácticos, portafolio, proyectos, coloquios, etc. Indicar si son individuales o grupales.
+              <span class="tt-eg">Ej.: "2 Parciales escritos (individuales) · Trabajos prácticos semanales (grupales) · Proyecto integrador final (grupal)"</span>
+            </span></span>
+          </label>
+          <textarea id="instrumentos" placeholder="• Parciales escritos: …&#10;• Trabajos prácticos: …&#10;• Proyecto integrador: …"></textarea>
+        </div>
+
+        <div class="field span-2">
+          <label>
+            Ponderaciones por instrumento / tipo de actividad (%)
+            <span class="norm">RAM Art. 29 – Transparencia en la calificación</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Distribución porcentual de la calificación final</span>
+              <span class="tt-norm">RAM Art. 29 – El sistema de calificación debe ser transparente y conocido por los estudiantes</span>
+              Indicar el porcentaje que aporta cada instrumento/actividad a la nota final. La suma debe ser 100%. Si hay instancias de recuperatorio, aclararlo.
+              <span class="tt-eg">Ej.: "Parciales 40% (20% c/u) · Prácticos 30% · Proyecto final 20% · Participación 10% = 100%"</span>
+            </span></span>
+          </label>
+          <textarea id="ponderaciones" placeholder="• Parciales: …% · Prácticos: …% · Proyecto: …% · Participación: …% = 100%"></textarea>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ 6. CRONOGRAMA ══════════════════════════════════ -->
+  <div class="section-card sec-crono">
+    <div class="section-header">
+      <div class="section-icon">📅</div>
+      <h2>6. Cronograma Anual</h2>
+      <div class="norm-ref">RAM Art. 17 – Organización temporal<br>Calendario escolar provincial</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Distribuye los contenidos a lo largo del año lectivo articulando con el <em>calendario escolar provincial</em> y los períodos de exámenes. Permite anticipar y comunicar las instancias evaluativas (RAM Art. 25).
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="cronograma">
+          <thead>
+            <tr>
+              <th style="width:120px">Semana / Fecha</th>
+              <th>Unidad y tema</th>
+              <th>Actividad principal</th>
+              <th style="width:160px">Evaluación prevista</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="controls-bar no-print">
+        <button class="btn-sky" id="add-crono">+ Agregar fila</button>
+        <button class="btn-ghost" id="clear-crono">Limpiar cronograma</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 7. BIBLIOGRAFÍA Y RECURSOS ════════════════════ -->
+  <div class="section-card sec-biblio">
+    <div class="section-header">
+      <div class="section-icon">📚</div>
+      <h2>7. Bibliografía y Recursos</h2>
+      <div class="norm-ref">RAM Art. 16 – Recursos didácticos<br>Normas APA / IRAM-ISO 690</div>
+    </div>
+    <div class="section-body">
+
+      <div class="norm-banner">
+        <strong>¿Para qué sirve esta sección?</strong> Informa a los estudiantes los materiales obligatorios y complementarios disponibles. Se recomienda usar <em>formato APA</em> o IRAM-ISO 690 para las citas. Incluir fuentes de acceso abierto cuando sea posible (RAM Art. 16 – accesibilidad de recursos).
+      </div>
+
+      <div class="grid g-2">
+
+        <div class="field">
+          <label>
+            Bibliografía obligatoria
+            <span class="norm">APA 7ª ed. o IRAM-ISO 690</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Bibliografía obligatoria</span>
+              <span class="tt-norm">Formato APA 7ª ed.: Apellido, N. (Año). Título. Editorial. DOI/URL</span>
+              Listar los textos de lectura obligatoria en orden de relevancia. Para libros indicar edición; para artículos indicar DOI o URL si es digital.
+              <span class="tt-eg">Ej.: "Cormen, T. et al. (2009). Introduction to Algorithms (3ª ed.). MIT Press."</span>
+            </span></span>
+          </label>
+          <textarea id="biblio-ob" placeholder="Apellido, N. (Año). Título. Editorial.&#10;Apellido, N. (Año). Título. Editorial."></textarea>
+        </div>
+
+        <div class="field">
+          <label>
+            Bibliografía complementaria y recursos digitales
+            <span class="norm">Acceso abierto recomendado</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Bibliografía complementaria y recursos</span>
+              <span class="tt-norm">Incluir recursos de acceso abierto (OA) siempre que sea posible – RAM Art. 16</span>
+              Lecturas optativas, videos, plataformas, tutoriales, simuladores o cualquier recurso que enriquezca el aprendizaje. Indicar URL y fecha de último acceso para fuentes digitales.
+              <span class="tt-eg">Ej.: "Khan Academy – Programación (khanacademy.org/computing) · CS50x – Harvard (cs50.harvard.edu) [Acceso: feb. 2026]"</span>
+            </span></span>
+          </label>
+          <textarea id="biblio-comp" placeholder="Recursos digitales, videos, plataformas …&#10;URL – [Acceso: mes año]"></textarea>
+        </div>
+
+      </div>
+
+      <!-- FIRMAS -->
+      <div class="firma-block">
+        <div class="grid g-2" style="gap:32px; margin-top:16px;">
+          <div>
+            <div class="firma-line"></div>
+            <div class="field" style="margin-top:8px;">
+              <label>Firma y aclaración – Docente a cargo</label>
+              <input id="firma-doc" type="text" placeholder="Apellido, Nombre – DNI – Cargo" />
+            </div>
+          </div>
+          <div>
+            <div class="firma-line"></div>
+            <div class="field" style="margin-top:8px;">
+              <label>Firma y aclaración – Coordinación de Carrera</label>
+              <input id="firma-coord" type="text" placeholder="Apellido, Nombre – Cargo" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ CONTROLES ════════════════════════════════════════ -->
+  <div class="section-card no-print" style="margin-top:14px;">
+    <div class="section-body">
+      <div class="controls-bar">
+        <button class="btn-mint" id="print-pdf">🖨 Imprimir / Guardar PDF</button>
+        <div class="divider"></div>
+        <button class="btn-sky" id="export-xml">⬇ Exportar XML</button>
+        <button class="btn-ghost" id="import-xml-btn">⬆ Importar XML</button>
+        <input id="import-xml" type="file" accept=".xml" style="display:none" />
+        <button class="btn-lav" id="download-sample-xml">⬇ Descargar XML de ejemplo</button>
+        <div class="divider"></div>
+        <button class="btn-danger" id="reset-form">🗑 Limpiar todo</button>
+      </div>
+      <p style="margin-top:10px; color:var(--neutral-500); font-size:12px;">
+        💡 <strong>Para imprimir en A4 apaisado:</strong> usar Chrome o Edge → Imprimir → Orientación: Horizontal → Escala: 80-90% → Activar "Gráficos de fondo".
+      </p>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<!-- ── TEMPLATE: FICHA DE UNIDAD ──────────────────────── -->
+<template id="tpl-ficha">
+  <div class="ficha-card">
+    <div class="ficha-head">
+      <h4>Ficha de Unidad N° <span class="unidad-num">—</span></h4>
+      <button class="btn-ghost btn-remove" type="button" style="font-size:12px;padding:5px 10px;">✕ Eliminar</button>
+    </div>
+    <div class="ficha-body">
+      <div class="grid g-4" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Unidad N°</label>
+          <input class="f-unidad" type="text" placeholder="1" />
+        </div>
+        <div class="field span-2">
+          <label>
+            Título de la unidad
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Título de la unidad didáctica</span>
+              Debe coincidir con el título declarado en el resumen de unidades (sección 3).
+              <span class="tt-eg">Ej.: Unidad 1 – Introducción al Pensamiento Computacional</span>
+            </span></span>
+          </label>
+          <input class="f-titulo" type="text" placeholder="Título de la unidad" />
+        </div>
+        <div class="field">
+          <label>
+            Duración (semanas / hs)
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Duración aproximada</span>
+              Indicar en semanas y horas reloj. Debe sumar con las demás unidades la carga horaria total declarada.
+              <span class="tt-eg">Ej.: 4 semanas / 16 hs reloj</span>
+            </span></span>
+          </label>
+          <input class="f-duracion" type="text" placeholder="4 sem / 16 hs" />
+        </div>
+      </div>
+
+      <div class="grid g-1" style="margin-bottom:14px;">
+        <div class="field">
+          <label>
+            Objetivos específicos de la unidad
+            <span class="norm">RAM Art. 15 – Derivados de los objetivos generales</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Objetivos específicos</span>
+              <span class="tt-norm">RAM Art. 15 – Deben derivarse de los objetivos generales y ser evaluables</span>
+              Formular 2-4 objetivos específicos, observables y evaluables, comenzando con infinitivo verbal (identificar, analizar, diseñar, implementar…).
+              <span class="tt-eg">Ej.: "• Identificar los componentes de un algoritmo. • Diseñar pseudocódigos para problemas de complejidad creciente."</span>
+            </span></span>
+          </label>
+          <textarea class="f-objetivos" placeholder="• Identificar …&#10;• Analizar …&#10;• Diseñar …"></textarea>
+        </div>
+      </div>
+
+      <div class="grid g-2" style="margin-bottom:14px;">
+        <div class="field">
+          <label>
+            Contenidos
+            <span class="norm">Diseño curricular jurisdiccional</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Contenidos conceptuales, procedimentales y actitudinales</span>
+              <span class="tt-norm">Deben derivarse del diseño curricular jurisdiccional aprobado – RAM Art. 17</span>
+              Organizar los contenidos en tres ejes: <strong>conceptual</strong> (saber qué), <strong>procedimental</strong> (saber hacer) y <strong>actitudinal</strong> (saber ser). Separar cada contenido con punto y coma o nueva línea.
+              <span class="tt-eg">Ej.: "Conceptual: Algoritmo, variable, estructura de control. Procedimental: Diseño de pseudocódigos. Actitudinal: Valoración del trabajo colaborativo."</span>
+            </span></span>
+          </label>
+          <textarea class="f-contenidos" placeholder="Conceptual: …&#10;Procedimental: …&#10;Actitudinal: …"></textarea>
+        </div>
+        <div class="field">
+          <label>
+            Contenidos mínimos de la unidad
+            <span class="norm">Plan de estudios aprobado</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Contenidos mínimos según plan de estudios</span>
+              <span class="tt-norm">Transcribir textualmente del plan de estudios aprobado por resolución ministerial</span>
+              Copiar los contenidos mínimos tal como figuran en el plan de estudios aprobado. Son el piso obligatorio que no puede omitirse.
+              <span class="tt-eg">Ej.: "Algoritmos y estructuras de datos. Paradigmas de programación. Estructuras de control." (Plan de estudios Res. 2457/19)</span>
+            </span></span>
+          </label>
+          <textarea class="f-minimos" placeholder="Según plan de estudios Res. N° … : …"></textarea>
+        </div>
+      </div>
+
+      <div class="grid g-2" style="margin-bottom:14px;">
+        <div class="field">
+          <label>
+            Actividades de aprendizaje (ESI · TIC · Inclusión)
+            <span class="norm">Ley 26.150 · Ley 26.206 Art. 11</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Actividades de aprendizaje con enfoque en ESI, TIC e inclusión</span>
+              <span class="tt-norm">Ley 26.150 (ESI) · Ley 26.206 Art. 11 (inclusión) · Marco TIC-Educación</span>
+              Detallar las actividades previstas para desarrollar los contenidos. Indicar si contempla: perspectiva ESI (Educación Sexual Integral), uso de TIC, estrategias de inclusión para diversidad de estudiantes (NEE, género, interculturalidad).
+              <span class="tt-eg">Ej.: "Resolución de problemas grupales (inclusión) · Uso de IDE en línea (TIC) · Reflexión sobre sesgos en algoritmos (ESI/género)"</span>
+            </span></span>
+          </label>
+          <textarea class="f-actividades" placeholder="• Actividad 1 (modalidad, agrupamiento) …&#10;• TIC: …&#10;• ESI/Inclusión: …"></textarea>
+        </div>
+        <div class="field">
+          <label>
+            Recursos y materiales
+            <span class="norm">RAM Art. 16 – Accesibilidad de recursos</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Recursos didácticos y materiales</span>
+              <span class="tt-norm">RAM Art. 16 – Los recursos deben ser accesibles para todos los estudiantes</span>
+              Enumerar los materiales físicos y digitales necesarios. Indicar si son de acceso libre o requieren adquisición. Incluir la plataforma institucional si se utiliza.
+              <span class="tt-eg">Ej.: "Manual del docente (fotocopiado) · Plataforma Moodle institucional · Repl.it (IDE gratuito en línea) · Proyector"</span>
+            </span></span>
+          </label>
+          <textarea class="f-recursos" placeholder="• Materiales físicos: …&#10;• Recursos digitales: …&#10;• Plataforma: …"></textarea>
+        </div>
+      </div>
+
+      <div class="grid g-2" style="margin-bottom:14px;">
+        <div class="field">
+          <label>
+            Estrategias e instrumentos de evaluación de la unidad
+            <span class="norm">RAM Art. 26–28</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Evaluación de la unidad</span>
+              <span class="tt-norm">RAM Art. 26 (diversidad) · Art. 27 (evaluación formativa) · Art. 28 (acreditación)</span>
+              Indicar qué se evaluará en esta unidad (evaluación formativa y/o sumativa), con qué instrumento y en qué momento. Distinguir entre evaluación diagnóstica, de proceso y sumativa.
+              <span class="tt-eg">Ej.: "Diagnóstica: cuestionario inicial sem. 1 · Formativa: revisión de prácticos sem. 2-3 · Sumativa: parcial escrito sem. 4 (ponderación 20%)"</span>
+            </span></span>
+          </label>
+          <textarea class="f-estrategias" placeholder="Diagnóstica: … · Formativa: … · Sumativa: …"></textarea>
+        </div>
+        <div class="field">
+          <label>
+            Evidencias exigibles
+            <span class="norm">RAM Art. 28 – Condiciones de acreditación</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Evidencias que debe presentar el estudiante</span>
+              <span class="tt-norm">RAM Art. 28 – Condiciones de acreditación de la unidad curricular</span>
+              Listar las producciones concretas que el estudiante debe entregar para acreditar esta unidad: trabajos, informes, resoluciones, proyectos, etc. Indicar formato (papel/digital).
+              <span class="tt-eg">Ej.: "• 3 Prácticos resueltos (digital, plataforma) · • Parcial escrito aprobado ≥ 6 · • Asistencia ≥ 75%"</span>
+            </span></span>
+          </label>
+          <textarea class="f-evidencias" placeholder="• Entrega 1: …&#10;• Entrega 2: …&#10;• Examen: …"></textarea>
+        </div>
+      </div>
+
+      <div class="grid g-2" style="margin-bottom:14px;">
+        <div class="field">
+          <label>
+            Instancias y fechas tentativas
+            <span class="norm">Calendario escolar provincial</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Cronograma interno de la unidad</span>
+              Indicar las fechas tentativas de evaluaciones y entregas de esta unidad, articulando con el calendario escolar provincial y con las otras unidades.
+              <span class="tt-eg">Ej.: "Sem. 2 (14/03): diagnóstico · Sem. 4 (28/03): entrega TP 1 · Sem. 6 (11/04): parcial 1"</span>
+            </span></span>
+          </label>
+          <textarea class="f-fechas" placeholder="Sem. 1 (DD/MM): … · Sem. 3 (DD/MM): …"></textarea>
+        </div>
+        <div class="field">
+          <label>
+            Observaciones / Adaptaciones para NEE
+            <span class="norm">Ley 26.206 Art. 11 · Res. Prov. Educación Inclusiva</span>
+            <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+            <span class="tooltip-box">
+              <span class="tt-title">Adaptaciones curriculares para necesidades educativas especiales</span>
+              <span class="tt-norm">Ley 26.206 Art. 11 (educación inclusiva) · Resolución provincial de educación inclusiva en nivel superior</span>
+              Indicar las adaptaciones previstas para estudiantes con NEE (discapacidad visual, auditiva, motriz, cognitiva), diversidad lingüística u otras situaciones de vulnerabilidad. Si no hay NEE en la comisión, consignar "Sin adaptaciones específicas previstas al momento de la planificación."
+              <span class="tt-eg">Ej.: "Estudiante con hipoacusia: materiales escritos y subtitulado en videos. Estudiante con dislexia: mayor tiempo en parciales."</span>
+            </span></span>
+          </label>
+          <textarea class="f-adaptaciones" placeholder="Adaptaciones previstas:&#10;• NEE visual: …&#10;• NEE auditiva: …&#10;• Sin adaptaciones específicas al momento de la planificación."></textarea>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</template>
+
+<script>
+/* ── UTILS ── */
+const qs  = (s, ctx=document) => ctx.querySelector(s);
+const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+
+/* ── Año en masthead ── */
+qs('#anio').addEventListener('input', e => {
+  qs('#anio-display').textContent = e.target.value || '–';
+});
+
+/* ── TABLA UNIDADES ── */
+const tablaBody = qs('#tabla-unidades tbody');
+qs('#add-row').addEventListener('click', () => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td contenteditable="true" style="text-align:center;">1</td>
+    <td contenteditable="true">Título de la unidad</td>
+    <td contenteditable="true">4 sem / 16 hs</td>
+    <td contenteditable="true">Contenidos vertebradores…</td>
+    <td contenteditable="true">Diagnóstico · Parcial 1</td>
+    <td contenteditable="true" style="text-align:center;">30</td>
+  `;
+  tablaBody.appendChild(tr);
+});
+qs('#clear-rows').addEventListener('click', () => tablaBody.innerHTML = '');
+
+/* ── FICHAS ── */
+const fichasContainer = qs('#fichas-container');
+const tplFicha = qs('#tpl-ficha');
+
+function addFicha(pre = {}) {
+  const node = tplFicha.content.cloneNode(true);
+  const el = node.querySelector('.ficha-card');
+  const fields = {
+    'f-unidad': 'unidad', 'f-titulo': 'titulo', 'f-duracion': 'duracion',
+    'f-objetivos': 'objetivos', 'f-contenidos': 'contenidos',
+    'f-actividades': 'actividades', 'f-recursos': 'recursos',
+    'f-estrategias': 'estrategias', 'f-evidencias': 'evidencias',
+    'f-fechas': 'fechas', 'f-minimos': 'minimos', 'f-adaptaciones': 'adaptaciones'
+  };
+  for (const [cls, key] of Object.entries(fields)) {
+    if (pre[key]) el.querySelector('.' + cls).value = pre[key];
+  }
+  node.querySelector('.btn-remove').addEventListener('click', ev => {
+    ev.target.closest('.ficha-card').remove();
+    updateFichaNum();
+  });
+  fichasContainer.appendChild(node);
+  updateFichaNum();
+}
+
+qs('#add-ficha').addEventListener('click', () => addFicha());
+
+function updateFichaNum() {
+  qsa('#fichas-container .ficha-card').forEach((c, i) => {
+    const sp = c.querySelector('.unidad-num');
+    if (sp) sp.textContent = i + 1;
+  });
+}
+
+/* ── CRONOGRAMA ── */
+const cronoBody = qs('#cronograma tbody');
+qs('#add-crono').addEventListener('click', () => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td contenteditable="true">Semana 1</td>
+    <td contenteditable="true">Unidad 1 – Introducción</td>
+    <td contenteditable="true">Clase expositiva · Diagnóstico</td>
+    <td contenteditable="true">Evaluación diagnóstica</td>
+  `;
+  cronoBody.appendChild(tr);
+});
+qs('#clear-crono').addEventListener('click', () => cronoBody.innerHTML = '');
+
+/* ── PP TOGGLE ── */
+qs('#pp-toggle').addEventListener('change', e => {
+  qs('#pp-body').style.display = e.target.checked ? 'block' : 'none';
+  qs('#sec-pp-card').style.opacity = e.target.checked ? '1' : '0.6';
+});
+qs('#sec-pp-card').style.opacity = '0.6';
+
+/* ── OPEN PLAN URL ── */
+qs('#open-plan-url').addEventListener('click', () => {
+  const url = qs('#plan-url').value.trim();
+  if (url) window.open(url, '_blank', 'noopener');
+  else alert('Primero ingresá el enlace al plan de estudios.');
+});
+
+/* ── EXPORT / IMPORT XML ── */
+function formToObject() {
+  const o = {};
+  ['anio','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
+   'correl-cursar','correl-final','correl-simult','plan-url',
+   'objgen','competencias','perfil','metodologia',
+   'criterios','instrumentos','ponderaciones',
+   'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(id => o[id] = (qs('#'+id)||{}).value || '');
+  o['pp-activa'] = qs('#pp-toggle').checked ? 'si' : 'no';
+  ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
+   'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(id => o[id] = (qs('#'+id)||{}).value || '');
+  o.unidades = qsa('#tabla-unidades tbody tr').map(tr => {
+    const c = Array.from(tr.children);
+    return { unidad: c[0].textContent.trim(), titulo: c[1].textContent.trim(), duracion: c[2].textContent.trim(),
+             contenidos: c[3].textContent.trim(), instancias: c[4].textContent.trim(), ponderacion: c[5].textContent.trim() };
+  });
+  o.fichas = qsa('#fichas-container .ficha-card').map(s => ({
+    unidad: s.querySelector('.f-unidad').value||'', titulo: s.querySelector('.f-titulo').value||'',
+    duracion: s.querySelector('.f-duracion').value||'', objetivos: s.querySelector('.f-objetivos').value||'',
+    contenidos: s.querySelector('.f-contenidos').value||'', actividades: s.querySelector('.f-actividades').value||'',
+    recursos: s.querySelector('.f-recursos').value||'', estrategias: s.querySelector('.f-estrategias').value||'',
+    evidencias: s.querySelector('.f-evidencias').value||'', fechas: s.querySelector('.f-fechas').value||'',
+    minimos: s.querySelector('.f-minimos').value||'', adaptaciones: s.querySelector('.f-adaptaciones').value||''
+  }));
+  o.cronograma = qsa('#cronograma tbody tr').map(tr => {
+    const c = Array.from(tr.children);
+    return { fecha: c[0].textContent.trim(), tema: c[1].textContent.trim(),
+             actividad: c[2].textContent.trim(), evaluacion: c[3].textContent.trim() };
+  });
+  return o;
+}
+
+function esc(s) { return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function objectToXml(o) {
+  let x = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n';
+  ['anio','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
+   'correl-cursar','correl-final','correl-simult','plan-url',
+   'objgen','competencias','perfil','metodologia','criterios','instrumentos','ponderaciones',
+   'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(k => { x += `  <${k}>${esc(o[k])}</${k}>\n`; });
+  x += `  <pp-activa>${esc(o['pp-activa'])}</pp-activa>\n`;
+  x += '  <practica-profesionalizante>\n';
+  ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
+   'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(k => { x += `    <${k}>${esc(o[k])}</${k}>\n`; });
+  x += '  </practica-profesionalizante>\n';
+  x += '  <unidades>\n';
+  o.unidades.forEach(u => {
+    x += '    <unidad>\n';
+    ['unidad','titulo','duracion','contenidos','instancias','ponderacion'].forEach(k => { x += `      <${k}>${esc(u[k])}</${k}>\n`; });
+    x += '    </unidad>\n';
+  });
+  x += '  </unidades>\n  <fichas>\n';
+  o.fichas.forEach(f => {
+    x += '    <ficha>\n';
+    ['unidad','titulo','duracion','objetivos','contenidos','actividades','recursos','estrategias','evidencias','fechas','minimos','adaptaciones'].forEach(k => { x += `      <${k}>${esc(f[k])}</${k}>\n`; });
+    x += '    </ficha>\n';
+  });
+  x += '  </fichas>\n  <cronograma>\n';
+  o.cronograma.forEach(c => {
+    x += '    <fila>\n';
+    ['fecha','tema','actividad','evaluacion'].forEach(k => { x += `      <${k}>${esc(c[k])}</${k}>\n`; });
+    x += '    </fila>\n';
+  });
+  x += '  </cronograma>\n</planificacion>\n';
+  return x;
+}
+
+function downloadFile(name, content, mime='application/xml') {
+  const blob = new Blob([content], {type: mime});
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), {href:url, download:name});
+  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+}
+
+qs('#export-xml').addEventListener('click', () => downloadFile('planificacion_export.xml', objectToXml(formToObject())));
+qs('#import-xml-btn').addEventListener('click', () => qs('#import-xml').click());
+qs('#import-xml').addEventListener('change', ev => {
+  const f = ev.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = e => {
+    try {
+      const doc = new DOMParser().parseFromString(e.target.result, 'application/xml');
+      if (doc.querySelector('parsererror')) throw new Error('XML inválido');
+      ['anio','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
+       'correl-cursar','correl-final','correl-simult','plan-url',
+       'objgen','competencias','perfil','metodologia','criterios','instrumentos','ponderaciones',
+       'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(id => {
+        const n = doc.querySelector(id); const el = qs('#'+id); if (n && el) el.value = n.textContent;
+      });
+      // PP activa
+      const ppActiva = doc.querySelector('pp-activa')?.textContent === 'si';
+      qs('#pp-toggle').checked = ppActiva;
+      qs('#pp-body').style.display = ppActiva ? 'block' : 'none';
+      qs('#sec-pp-card').style.opacity = ppActiva ? '1' : '0.6';
+      const ppNode = doc.querySelector('practica-profesionalizante');
+      if (ppNode) {
+        ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
+         'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(id => {
+          const n = ppNode.querySelector(id); const el = qs('#'+id); if (n && el) el.value = n.textContent;
+        });
+      }
+      // Disparar actualización del año en masthead
+      qs('#anio').dispatchEvent(new Event('input'));
+      tablaBody.innerHTML = '';
+      doc.querySelectorAll('unidades > unidad').forEach(u => {
+        const tr = document.createElement('tr');
+        const get = k => u.querySelector(k)?.textContent || '';
+        tr.innerHTML = `<td contenteditable="true" style="text-align:center;">${get('unidad')}</td>
+          <td contenteditable="true">${get('titulo')}</td><td contenteditable="true">${get('duracion')}</td>
+          <td contenteditable="true">${get('contenidos')}</td><td contenteditable="true">${get('instancias')}</td>
+          <td contenteditable="true" style="text-align:center;">${get('ponderacion')}</td>`;
+        tablaBody.appendChild(tr);
+      });
+      fichasContainer.innerHTML = '';
+      doc.querySelectorAll('fichas > ficha').forEach(f => {
+        addFicha({ unidad: f.querySelector('unidad')?.textContent||'', titulo: f.querySelector('titulo')?.textContent||'',
+          duracion: f.querySelector('duracion')?.textContent||'', objetivos: f.querySelector('objetivos')?.textContent||'',
+          contenidos: f.querySelector('contenidos')?.textContent||'', actividades: f.querySelector('actividades')?.textContent||'',
+          recursos: f.querySelector('recursos')?.textContent||'', estrategias: f.querySelector('estrategias')?.textContent||'',
+          evidencias: f.querySelector('evidencias')?.textContent||'', fechas: f.querySelector('fechas')?.textContent||'',
+          minimos: f.querySelector('minimos')?.textContent||'', adaptaciones: f.querySelector('adaptaciones')?.textContent||'' });
+      });
+      cronoBody.innerHTML = '';
+      doc.querySelectorAll('cronograma > fila').forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td contenteditable="true">${row.querySelector('fecha')?.textContent||''}</td>
+          <td contenteditable="true">${row.querySelector('tema')?.textContent||''}</td>
+          <td contenteditable="true">${row.querySelector('actividad')?.textContent||''}</td>
+          <td contenteditable="true">${row.querySelector('evaluacion')?.textContent||''}</td>`;
+        cronoBody.appendChild(tr);
+      });
+      updateFichaNum();
+      alert('✅ Importación completada correctamente.');
+    } catch(err) { alert('❌ Error al importar XML: ' + err.message); }
+  };
+  r.readAsText(f, 'utf-8');
+});
+
+qs('#download-sample-xml').addEventListener('click', () => {
+  const s = `<?xml version="1.0" encoding="UTF-8"?>
+<planificacion>
+  <anio>2026</anio>
+  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</instituto>
+  <anio-cursada>1° Año – 2° Cuatrimestre</anio-cursada>
+  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>
+  <materia>Programación I – Lenguajes y Paradigmas</materia>
+  <comision>Comisión A – Turno Noche</comision>
+  <docente>Pérez, Ana Lucía – DNI 28.456.789 – Titular</docente>
+  <carga>96</carga>
+  <modalidad>Mixta (presencial + virtual)</modalidad>
+  <ram>Decreto N° 4199/2015 – Art. 28 (Acreditación) · Art. 32 (Asistencia 75%)</ram>
+  <aprob>Aprobada CD el 14/03/2026 – Acta N° 02/2026 – Expte. N° 0078-S-2026</aprob>
+  <correl-cursar>• Matemática I (regularizada)
+• Introducción a la Programación (aprobada con examen final)</correl-cursar>
+  <correl-final>• Matemática I (examen final aprobado)
+• Introducción a la Programación (examen final aprobado)</correl-final>
+  <correl-simult>• Laboratorio de Programación (mismo cuatrimestre)
+• Sin otros co-requisitos</correl-simult>
+  <plan-url>https://drive.google.com/file/d/EJEMPLO_ID_PLAN_ESTUDIOS/view</plan-url>
+  <objgen>• Comprender los fundamentos del pensamiento computacional y aplicarlos en el diseño de algoritmos.
+• Implementar soluciones en lenguajes de programación de alto nivel.
+• Desarrollar hábitos de trabajo colaborativo y documentación de código.</objgen>
+  <competencias>Competencia 3 – Diseño e implementación de soluciones informáticas.
+Competencia 5 – Trabajo en equipo colaborativo.</competencias>
+  <perfil>Esta asignatura aporta al perfil del Técnico Superior en Programación habilitándolo para analizar, diseñar e implementar soluciones de software.</perfil>
+  <metodologia>Enfoque constructivista con resolución de problemas reales. Clase invertida, trabajo colaborativo y uso de TIC en cada encuentro.</metodologia>
+  <criterios>• Asistencia ≥ 75% (RAM Art. 32)
+• Nota mínima de aprobación: 6 (seis)
+• Entrega del 80% de trabajos prácticos</criterios>
+  <instrumentos>• 2 Parciales escritos (individuales)
+• Trabajos prácticos semanales (grupales)
+• Proyecto integrador final (grupal)</instrumentos>
+  <ponderaciones>Parciales 40% (20% c/u) · Prácticos 30% · Proyecto final 20% · Participación 10% = 100%</ponderaciones>
+  <biblio-ob>Cormen, T. et al. (2009). Introduction to Algorithms (3ª ed.). MIT Press.
+Cairó, O. (2006). Metodología de la Programación. Alfaomega.</biblio-ob>
+  <biblio-comp>CS50x – Harvard (cs50.harvard.edu) [Acceso: feb. 2026]
+Khan Academy – Programación (khanacademy.org/computing)</biblio-comp>
+  <firma-doc>Pérez, Ana Lucía – DNI 28.456.789 – Titular</firma-doc>
+  <firma-coord>García, Roberto – Coordinador de Carrera</firma-coord>
+  <pp-activa>si</pp-activa>
+  <practica-profesionalizante>
+    <pp-tipo>PP Integrada a la Unidad Curricular</pp-tipo>
+    <pp-carga>32</pp-carga>
+    <pp-norma>Decreto N° 1559/17 – Art. 4 (PP integrada) · Art. 11 (evaluación) · Plan PP Institucional – Acta CD N° 05/2025</pp-norma>
+    <pp-propositos>• Integrar los conocimientos teóricos de programación en el desarrollo de un sistema real para una organización local.
+• Articular las fases de análisis, diseño, implementación y documentación en un contexto profesional.</pp-propositos>
+    <pp-competencias>• Gestionar proyectos de desarrollo de software con metodologías ágiles.
+• Comunicar soluciones técnicas a destinatarios no especializados.
+• Trabajar en equipo en entornos profesionales reales.</pp-competencias>
+    <pp-actividades>• Sem. 1-4: diagnóstico de necesidades de una PYME local (relevamiento y entrevistas).
+• Sem. 5-10: diseño e implementación del sistema.
+• Sem. 11-12: presentación ante la organización y defensa oral.</pp-actividades>
+    <pp-contexto>PP en el aula-taller del instituto con cliente real externo.
+Entidad: TechRosario SRL – Convenio N° 03/2026.
+Responsable de supervisión externa: Ing. López, M.</pp-contexto>
+    <pp-tutoria>Tutorías semanales de 1 hs · Bitácora de avance en Moodle · Informe de avance cada 4 semanas.</pp-tutoria>
+    <pp-productos>• Informe técnico final (PDF, 20-30 pp.)
+• Sistema funcional entregado al cliente
+• Presentación oral ante tribunal evaluador (20 min.)</pp-productos>
+    <pp-criterios-eval>Proceso 40%: puntualidad, compromiso, registro en bitácora.
+Producto 40%: calidad técnica del sistema.
+Presentación 20%: claridad y defensa oral.
+Participan: docente tutor + supervisor externo.</pp-criterios-eval>
+    <pp-acred>• Nota final ≥ 6 (seis)
+• Entrega del informe técnico completo
+• Informe del supervisor externo (concepto satisfactorio)
+• Recuperatorio: reentrega en el turno siguiente</pp-acred>
+  </practica-profesionalizante>
+  <unidades>
+    <unidad>
+      <unidad>1</unidad>
+      <titulo>Introducción al Pensamiento Computacional</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <contenidos>Algoritmos; Variables; Estructuras de control</contenidos>
+      <instancias>Diagnóstico; Parcial 1</instancias>
+      <ponderacion>30</ponderacion>
+    </unidad>
+  </unidades>
+  <fichas>
+    <ficha>
+      <unidad>1</unidad>
+      <titulo>Introducción al Pensamiento Computacional</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <objetivos>• Identificar los componentes de un algoritmo.
+• Diseñar pseudocódigos para problemas de complejidad creciente.</objetivos>
+      <contenidos>Conceptual: Algoritmo, variable, estructura de control.
+Procedimental: Diseño de pseudocódigos.
+Actitudinal: Valoración del trabajo colaborativo.</contenidos>
+      <actividades>• Resolución de problemas grupales (inclusión)
+• Uso de IDE en línea – Repl.it (TIC)
+• Reflexión sobre sesgos en algoritmos (ESI/género)</actividades>
+      <recursos>• Manual del docente (fotocopiado)
+• Plataforma Moodle institucional
+• Repl.it (IDE gratuito en línea)</recursos>
+      <estrategias>Diagnóstica: cuestionario inicial sem. 1
+Formativa: revisión de prácticos sem. 2-3
+Sumativa: parcial escrito sem. 4 (ponderación 20%)</estrategias>
+      <evidencias>• 3 Prácticos resueltos (digital, plataforma)
+• Parcial escrito aprobado ≥ 6
+• Asistencia ≥ 75%</evidencias>
+      <fechas>Sem. 1 (04/03): diagnóstico · Sem. 3 (18/03): TP 1 · Sem. 4 (25/03): parcial 1</fechas>
+      <minimos>Algoritmos y estructuras de datos. Paradigmas de programación. (Res. 2457/19)</minimos>
+      <adaptaciones>Estudiante con hipoacusia: materiales escritos y subtitulado en videos.
+Sin otras adaptaciones específicas al momento de la planificación.</adaptaciones>
+    </ficha>
+  </fichas>
+  <cronograma>
+    <fila>
+      <fecha>Semana 1 – 04/03</fecha>
+      <tema>Unidad 1 – Introducción</tema>
+      <actividad>Clase expositiva · Diagnóstico inicial</actividad>
+      <evaluacion>Evaluación diagnóstica</evaluacion>
+    </fila>
+    <fila>
+      <fecha>Semana 2 – 11/03</fecha>
+      <tema>Unidad 1 – Algoritmos</tema>
+      <actividad>Resolución de problemas en grupos</actividad>
+      <evaluacion>—</evaluacion>
+    </fila>
+  </cronograma>
+</planificacion>`;
+  downloadFile('planificacion_ejemplo.xml', s);
+});
+
+qs('#print-pdf').addEventListener('click', () => window.print());
+qs('#reset-form').addEventListener('click', () => {
+  if (!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
+  document.querySelectorAll('input,textarea,select').forEach(i => { if(i.type!=='file') i.value=''; });
+  tablaBody.innerHTML = ''; fichasContainer.innerHTML = ''; cronoBody.innerHTML = '';
+  qs('#anio-display').textContent = '–';
+});
+
+/* ── INIT con datos de ejemplo ── */
+addFicha({
+  unidad:'1', titulo:'Introducción al Pensamiento Computacional', duracion:'4 sem / 16 hs',
+  objetivos:'• Identificar los componentes de un algoritmo.\n• Diseñar pseudocódigos para problemas de complejidad creciente.',
+  contenidos:'Conceptual: Algoritmo, variable, estructura de control.\nProcedimental: Diseño de pseudocódigos.\nActitudinal: Valoración del trabajo colaborativo.',
+  actividades:'• Resolución de problemas grupales (inclusión)\n• Uso de IDE en línea – Repl.it (TIC)\n• Reflexión sobre sesgos en algoritmos (ESI/género)',
+  recursos:'• Manual del docente (fotocopiado)\n• Plataforma Moodle institucional\n• Repl.it (IDE gratuito en línea)',
+  estrategias:'Diagnóstica: cuestionario inicial sem. 1\nFormativa: revisión de prácticos sem. 2-3\nSumativa: parcial escrito sem. 4',
+  evidencias:'• 3 Prácticos resueltos (digital, plataforma)\n• Parcial escrito aprobado ≥ 6\n• Asistencia ≥ 75%',
+  fechas:'Sem. 1 (04/03): diagnóstico · Sem. 3 (18/03): TP 1 · Sem. 4 (25/03): parcial 1',
+  minimos:'Algoritmos y estructuras de datos. Paradigmas de programación. (Res. 2457/19)',
+  adaptaciones:'Sin adaptaciones específicas previstas al momento de la planificación.'
+});
+qs('#add-row').click();
+qs('#add-crono').click();
+</script>
+</body>
+</html>
