@@ -1515,13 +1515,13 @@ button:hover { filter: brightness(.93); }
 </template>
 
 <script>
-/* ── UTILS ── */
+/* \u2500\u2500 UTILS \u2500\u2500 */
 const qs  = (s, ctx=document) => ctx.querySelector(s);
 const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
 
 document.addEventListener('DOMContentLoaded', function() {
 
-/* ── MASTHEAD LIVE UPDATE ── */
+/* \u2500\u2500 MASTHEAD LIVE UPDATE \u2500\u2500 */
 function initials(name) {
   return name.trim().split(/\s+/).filter(w=>w.length>3).slice(0,3)
     .map(w=>w[0].toUpperCase()).join('') || name.slice(0,2).toUpperCase() || '?';
@@ -1534,14 +1534,14 @@ function updateMasthead() {
   var materia = qs('#materia').value.trim();
   var anioC   = qs('#anio-cursada').value.trim();
   var modal   = qs('#modalidad').value.trim();
-  qs('#anio-display').textContent          = anio    || '–';
-  qs('#masthead-jurisdiccion').textContent = juris   || 'Ministerio de Educación – Nivel Superior No Universitario';
-  qs('#masthead-instituto').textContent    = inst    || 'Planificación Anual de Cátedra';
+  qs('#anio-display').textContent          = anio    || '\u2013';
+  qs('#masthead-jurisdiccion').textContent = juris   || 'Ministerio de Educaci\u00F3n \u2013 Nivel Superior No Universitario';
+  qs('#masthead-instituto').textContent    = inst    || 'Planificaci\u00F3n Anual de C\u00E1tedra';
   qs('#masthead-carrera').textContent      = carrera || 'Carrera no especificada';
   qs('#masthead-materia').textContent      = materia || 'Asignatura no especificada';
   qs('#masthead-anio-cursada').textContent = anioC   || '';
   qs('#masthead-modalidad').textContent    = modal   || '';
-  qs('#masthead-siglas').textContent       = inst ? initials(inst) : '–';
+  qs('#masthead-siglas').textContent       = inst ? initials(inst) : '\u2013';
   qs('#masthead-sep2').style.display = (anioC && modal) ? '' : 'none';
 }
 ['anio','jurisdiccion','instituto','carrera','materia','anio-cursada'].forEach(function(id){
@@ -1550,21 +1550,21 @@ function updateMasthead() {
 qs('#modalidad').addEventListener('change', updateMasthead);
 qs('#modalidad').addEventListener('input',  updateMasthead);
 
-/* ── TABLA UNIDADES ── */
+/* \u2500\u2500 TABLA UNIDADES \u2500\u2500 */
 var tablaBody = qs('#tabla-unidades tbody');
 qs('#add-row').addEventListener('click', function() {
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true" style="text-align:center;">1</td>'
-    +'<td contenteditable="true">Título de la unidad</td>'
+    +'<td contenteditable="true">T\u00EDtulo de la unidad</td>'
     +'<td contenteditable="true">4 sem / 16 hs</td>'
-    +'<td contenteditable="true">Contenidos vertebradores…</td>'
-    +'<td contenteditable="true">Diagnóstico · Parcial 1</td>'
+    +'<td contenteditable="true">Contenidos vertebradores\u2026</td>'
+    +'<td contenteditable="true">Diagn\u00F3stico \u00B7 Parcial 1</td>'
     +'<td contenteditable="true" style="text-align:center;">30</td>';
   tablaBody.appendChild(tr);
 });
 qs('#clear-rows').addEventListener('click', function(){ tablaBody.innerHTML=''; });
 
-/* ── FICHAS ── */
+/* \u2500\u2500 FICHAS \u2500\u2500 */
 var fichasContainer = qs('#fichas-container');
 var tplFicha = qs('#tpl-ficha');
 
@@ -1598,33 +1598,33 @@ function updateFichaNum() {
   });
 }
 
-/* ── CRONOGRAMA ── */
+/* \u2500\u2500 CRONOGRAMA \u2500\u2500 */
 var cronoBody = qs('#cronograma tbody');
 qs('#add-crono').addEventListener('click', function(){
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true">Semana 1</td>'
-    +'<td contenteditable="true">Unidad 1 – Introducción</td>'
-    +'<td contenteditable="true">Clase expositiva · Diagnóstico</td>'
-    +'<td contenteditable="true">Evaluación diagnóstica</td>';
+    +'<td contenteditable="true">Unidad 1 \u2013 Introducci\u00F3n</td>'
+    +'<td contenteditable="true">Clase expositiva \u00B7 Diagn\u00F3stico</td>'
+    +'<td contenteditable="true">Evaluaci\u00F3n diagn\u00F3stica</td>';
   cronoBody.appendChild(tr);
 });
 qs('#clear-crono').addEventListener('click', function(){ cronoBody.innerHTML=''; });
 
-/* ── PP TOGGLE ── */
+/* \u2500\u2500 PP TOGGLE \u2500\u2500 */
 qs('#pp-toggle').addEventListener('change', function(e){
   qs('#pp-body').style.display = e.target.checked ? 'block' : 'none';
   qs('#sec-pp-card').style.opacity = e.target.checked ? '1' : '0.6';
 });
 qs('#sec-pp-card').style.opacity = '0.6';
 
-/* ── OPEN PLAN URL ── */
+/* \u2500\u2500 OPEN PLAN URL \u2500\u2500 */
 qs('#open-plan-url').addEventListener('click', function(){
   var url = qs('#plan-url').value.trim();
   if(url) window.open(url,'_blank','noopener');
-  else alert('Primero ingresá el enlace al plan de estudios.');
+  else alert('Primero ingres\u00E1 el enlace al plan de estudios.');
 });
 
-/* ── XML: campos planos ── */
+/* \u2500\u2500 XML: campos planos \u2500\u2500 */
 var FLAT_FIELDS = [
   'anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision',
   'docente','carga','modalidad','ram','aprob',
@@ -1711,7 +1711,7 @@ function objectToXml(o) {
   return x;
 }
 
-/* ── DOWNLOAD (3 métodos para máxima compatibilidad) ── */
+/* \u2500\u2500 DOWNLOAD (3 m\u00E9todos para m\u00E1xima compatibilidad) \u2500\u2500 */
 function downloadFile(name, content) {
   try {
     var blob = new Blob([content], {type:'application/xml;charset=utf-8'});
@@ -1734,12 +1734,12 @@ function downloadFile(name, content) {
   if(w){ w.document.open('text/xml'); w.document.write(content); w.document.close(); }
 }
 
-/* ── EXPORT ── */
+/* \u2500\u2500 EXPORT \u2500\u2500 */
 qs('#export-xml').addEventListener('click', function(){
   downloadFile('planificacion_export.xml', objectToXml(formToObject()));
 });
 
-/* ── IMPORT ── */
+/* \u2500\u2500 IMPORT \u2500\u2500 */
 qs('#import-xml-btn').addEventListener('click', function(){ qs('#import-xml').click(); });
 qs('#import-xml').addEventListener('change', function(ev){
   var f = ev.target.files[0]; if(!f) return;
@@ -1747,7 +1747,7 @@ qs('#import-xml').addEventListener('change', function(ev){
   r.onload = function(e){
     try {
       var doc = new DOMParser().parseFromString(e.target.result,'application/xml');
-      if(doc.querySelector('parsererror')) throw new Error('XML inválido');
+      if(doc.querySelector('parsererror')) throw new Error('XML inv\u00E1lido');
       FLAT_FIELDS.forEach(function(id){
         var n=doc.querySelector(id); var el=qs('#'+id); if(n&&el) el.value=n.textContent;
       });
@@ -1793,42 +1793,42 @@ qs('#import-xml').addEventListener('change', function(ev){
       });
       updateFichaNum();
       updateMasthead();
-      alert('✅ Importación completada correctamente.');
-    } catch(err){ alert('❌ Error al importar XML: '+err.message); }
+      alert('\u2705 Importaci\u00F3n completada correctamente.');
+    } catch(err){ alert('\u274C Error al importar XML: '+err.message); }
   };
   r.readAsText(f,'utf-8');
 });
 
-/* ── DOWNLOAD SAMPLE XML ── */
+/* \u2500\u2500 DOWNLOAD SAMPLE XML \u2500\u2500 */
 qs('#download-sample-xml').addEventListener('click', function(){
   var s = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n'
     +'  <anio>2026</anio>\n'
-    +'  <jurisdiccion>Ministerio de Educación – Provincia de Santa Fe – DES</jurisdiccion>\n'
-    +'  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</instituto>\n'
-    +'  <anio-cursada>1° Año – 2° Cuatrimestre</anio-cursada>\n'
-    +'  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>\n'
-    +'  <materia>Programación I – Lenguajes y Paradigmas</materia>\n'
-    +'  <comision>Comisión A – Turno Noche</comision>\n'
-    +'  <docente>Pérez, Ana Lucía – DNI 28.456.789 – Titular</docente>\n'
+    +'  <jurisdiccion>Ministerio de Educaci\u00F3n \u2013 Provincia de Santa Fe \u2013 DES</jurisdiccion>\n'
+    +'  <instituto>Instituto Superior de Formaci\u00F3n Docente y T\u00E9cnica N\u00BA 18 "Dr. Antenor Tello"</instituto>\n'
+    +'  <anio-cursada>1\u00B0 A\u00F1o \u2013 2\u00B0 Cuatrimestre</anio-cursada>\n'
+    +'  <carrera>Tecnicatura Superior en Programaci\u00F3n (Res. Prov. N\u00B0 2457/2019)</carrera>\n'
+    +'  <materia>Programaci\u00F3n I \u2013 Lenguajes y Paradigmas</materia>\n'
+    +'  <comision>Comisi\u00F3n A \u2013 Turno Noche</comision>\n'
+    +'  <docente>P\u00E9rez, Ana Luc\u00EDa \u2013 DNI 28.456.789 \u2013 Titular</docente>\n'
     +'  <carga>96</carga>\n'
     +'  <modalidad>Mixta (presencial + virtual)</modalidad>\n'
-    +'  <ram>Decreto N° 4199/2015 – Art. 28 · Art. 32 (Asistencia 75%)</ram>\n'
-    +'  <aprob>Aprobada CD el 14/03/2026 – Acta N° 02/2026 – Expte. N° 0078-S-2026</aprob>\n'
-    +'  <correl-cursar>• Matemática I (regularizada)\n• Introducción a la Programación (aprobada)</correl-cursar>\n'
-    +'  <correl-final>• Matemática I (examen final aprobado)\n• Introducción a la Programación (examen final aprobado)</correl-final>\n'
-    +'  <correl-simult>• Laboratorio de Programación (mismo cuatrimestre)</correl-simult>\n'
+    +'  <ram>Decreto N\u00B0 4199/2015 \u2013 Art. 28 \u00B7 Art. 32 (Asistencia 75%)</ram>\n'
+    +'  <aprob>Aprobada CD el 14/03/2026 \u2013 Acta N\u00B0 02/2026 \u2013 Expte. N\u00B0 0078-S-2026</aprob>\n'
+    +'  <correl-cursar>\u2022 Matem\u00E1tica I (regularizada)\n\u2022 Introducci\u00F3n a la Programaci\u00F3n (aprobada)</correl-cursar>\n'
+    +'  <correl-final>\u2022 Matem\u00E1tica I (examen final aprobado)\n\u2022 Introducci\u00F3n a la Programaci\u00F3n (examen final aprobado)</correl-final>\n'
+    +'  <correl-simult>\u2022 Laboratorio de Programaci\u00F3n (mismo cuatrimestre)</correl-simult>\n'
     +'  <plan-url>https://drive.google.com/file/d/EJEMPLO_ID/view</plan-url>\n'
-    +'  <objgen>• Comprender los fundamentos del pensamiento computacional.\n• Implementar soluciones en lenguajes de alto nivel.</objgen>\n'
-    +'  <competencias>Competencia 3 – Diseño e implementación de soluciones informáticas.</competencias>\n'
-    +'  <perfil>Esta asignatura aporta al perfil del Técnico Superior en Programación.</perfil>\n'
-    +'  <metodologia>Enfoque constructivista con resolución de problemas reales.</metodologia>\n'
-    +'  <criterios>• Asistencia ≥ 75% (RAM Art. 32)\n• Nota mínima: 6 (seis)</criterios>\n'
-    +'  <instrumentos>• 2 Parciales escritos · Trabajos prácticos · Proyecto integrador</instrumentos>\n'
-    +'  <ponderaciones>Parciales 40% · Prácticos 30% · Proyecto 20% · Participación 10%</ponderaciones>\n'
+    +'  <objgen>\u2022 Comprender los fundamentos del pensamiento computacional.\n\u2022 Implementar soluciones en lenguajes de alto nivel.</objgen>\n'
+    +'  <competencias>Competencia 3 \u2013 Dise\u00F1o e implementaci\u00F3n de soluciones inform\u00E1ticas.</competencias>\n'
+    +'  <perfil>Esta asignatura aporta al perfil del T\u00E9cnico Superior en Programaci\u00F3n.</perfil>\n'
+    +'  <metodologia>Enfoque constructivista con resoluci\u00F3n de problemas reales.</metodologia>\n'
+    +'  <criterios>\u2022 Asistencia \u2265 75% (RAM Art. 32)\n\u2022 Nota m\u00EDnima: 6 (seis)</criterios>\n'
+    +'  <instrumentos>\u2022 2 Parciales escritos \u00B7 Trabajos pr\u00E1cticos \u00B7 Proyecto integrador</instrumentos>\n'
+    +'  <ponderaciones>Parciales 40% \u00B7 Pr\u00E1cticos 30% \u00B7 Proyecto 20% \u00B7 Participaci\u00F3n 10%</ponderaciones>\n'
     +'  <biblio-ob>Cormen, T. et al. (2009). Introduction to Algorithms. MIT Press.</biblio-ob>\n'
-    +'  <biblio-comp>CS50x – Harvard (cs50.harvard.edu)</biblio-comp>\n'
-    +'  <firma-doc>Pérez, Ana Lucía – DNI 28.456.789 – Titular</firma-doc>\n'
-    +'  <firma-coord>García, Roberto – Coordinador de Carrera</firma-coord>\n'
+    +'  <biblio-comp>CS50x \u2013 Harvard (cs50.harvard.edu)</biblio-comp>\n'
+    +'  <firma-doc>P\u00E9rez, Ana Luc\u00EDa \u2013 DNI 28.456.789 \u2013 Titular</firma-doc>\n'
+    +'  <firma-coord>Garc\u00EDa, Roberto \u2013 Coordinador de Carrera</firma-coord>\n'
     +'  <pp-activa>no</pp-activa>\n'
     +'  <practica-profesionalizante>\n'
     +'    <pp-tipo></pp-tipo>\n    <pp-carga></pp-carga>\n    <pp-norma></pp-norma>\n'
@@ -1838,37 +1838,37 @@ qs('#download-sample-xml').addEventListener('click', function(){
     +'    <pp-criterios-eval></pp-criterios-eval>\n    <pp-acred></pp-acred>\n'
     +'  </practica-profesionalizante>\n'
     +'  <unidades>\n'
-    +'    <unidad>\n      <unidad>1</unidad>\n      <titulo>Introducción al Pensamiento Computacional</titulo>\n'
+    +'    <unidad>\n      <unidad>1</unidad>\n      <titulo>Introducci\u00F3n al Pensamiento Computacional</titulo>\n'
     +'      <duracion>4 sem / 16 hs</duracion>\n      <contenidos>Algoritmos; Variables; Estructuras de control</contenidos>\n'
-    +'      <instancias>Diagnóstico; Parcial 1</instancias>\n      <ponderacion>30</ponderacion>\n    </unidad>\n'
+    +'      <instancias>Diagn\u00F3stico; Parcial 1</instancias>\n      <ponderacion>30</ponderacion>\n    </unidad>\n'
     +'  </unidades>\n'
     +'  <fichas>\n    <ficha>\n'
-    +'      <unidad>1</unidad>\n      <titulo>Introducción al Pensamiento Computacional</titulo>\n'
+    +'      <unidad>1</unidad>\n      <titulo>Introducci\u00F3n al Pensamiento Computacional</titulo>\n'
     +'      <duracion>4 sem / 16 hs</duracion>\n'
-    +'      <objetivos>• Identificar los componentes de un algoritmo.\n• Diseñar pseudocódigos.</objetivos>\n'
-    +'      <contenidos>Conceptual: Algoritmo, variable.\nProcedimental: Pseudocódigo.\nActitudinal: Trabajo colaborativo.</contenidos>\n'
-    +'      <actividades>• Resolución de problemas grupales\n• Uso de IDE en línea (TIC)</actividades>\n'
-    +'      <recursos>• Manual del docente\n• Plataforma Moodle institucional</recursos>\n'
-    +'      <estrategias>Diagnóstica: sem. 1 · Formativa: prácticos · Sumativa: parcial sem. 4</estrategias>\n'
-    +'      <evidencias>• 3 Prácticos resueltos\n• Parcial escrito aprobado ≥ 6</evidencias>\n'
-    +'      <fechas>Sem. 1 (04/03): diagnóstico · Sem. 4 (25/03): parcial 1</fechas>\n'
+    +'      <objetivos>\u2022 Identificar los componentes de un algoritmo.\n\u2022 Dise\u00F1ar pseudoc\u00F3digos.</objetivos>\n'
+    +'      <contenidos>Conceptual: Algoritmo, variable.\nProcedimental: Pseudoc\u00F3digo.\nActitudinal: Trabajo colaborativo.</contenidos>\n'
+    +'      <actividades>\u2022 Resoluci\u00F3n de problemas grupales\n\u2022 Uso de IDE en l\u00EDnea (TIC)</actividades>\n'
+    +'      <recursos>\u2022 Manual del docente\n\u2022 Plataforma Moodle institucional</recursos>\n'
+    +'      <estrategias>Diagn\u00F3stica: sem. 1 \u00B7 Formativa: pr\u00E1cticos \u00B7 Sumativa: parcial sem. 4</estrategias>\n'
+    +'      <evidencias>\u2022 3 Pr\u00E1cticos resueltos\n\u2022 Parcial escrito aprobado \u2265 6</evidencias>\n'
+    +'      <fechas>Sem. 1 (04/03): diagn\u00F3stico \u00B7 Sem. 4 (25/03): parcial 1</fechas>\n'
     +'      <minimos>Algoritmos y estructuras de datos. (Res. 2457/19)</minimos>\n'
-    +'      <adaptaciones>Sin adaptaciones específicas previstas al momento de la planificación.</adaptaciones>\n'
+    +'      <adaptaciones>Sin adaptaciones espec\u00EDficas previstas al momento de la planificaci\u00F3n.</adaptaciones>\n'
     +'    </ficha>\n  </fichas>\n'
     +'  <cronograma>\n    <fila>\n'
-    +'      <fecha>Semana 1 – 04/03</fecha>\n      <tema>Unidad 1 – Introducción</tema>\n'
-    +'      <actividad>Clase expositiva · Diagnóstico inicial</actividad>\n'
-    +'      <evaluacion>Evaluación diagnóstica</evaluacion>\n'
+    +'      <fecha>Semana 1 \u2013 04/03</fecha>\n      <tema>Unidad 1 \u2013 Introducci\u00F3n</tema>\n'
+    +'      <actividad>Clase expositiva \u00B7 Diagn\u00F3stico inicial</actividad>\n'
+    +'      <evaluacion>Evaluaci\u00F3n diagn\u00F3stica</evaluacion>\n'
     +'    </fila>\n  </cronograma>\n</planificacion>';
   downloadFile('planificacion_ejemplo.xml', s);
 });
 
-/* ── PRINT ── */
+/* \u2500\u2500 PRINT \u2500\u2500 */
 qs('#print-pdf').addEventListener('click', function(){ window.print(); });
 
-/* ── RESET ── */
+/* \u2500\u2500 RESET \u2500\u2500 */
 qs('#reset-form').addEventListener('click', function(){
-  if(!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
+  if(!confirm('\u00BFLimpiar todo el formulario? Esta acci\u00F3n no se puede deshacer.')) return;
   document.querySelectorAll('input,textarea,select').forEach(function(i){
     if(i.type!=='file') i.value='';
   });
@@ -1879,18 +1879,18 @@ qs('#reset-form').addEventListener('click', function(){
   updateMasthead();
 });
 
-/* ── INIT DATOS DE EJEMPLO ── */
+/* \u2500\u2500 INIT DATOS DE EJEMPLO \u2500\u2500 */
 addFicha({
-  unidad:'1', titulo:'Introducción al Pensamiento Computacional', duracion:'4 sem / 16 hs',
-  objetivos:'• Identificar los componentes de un algoritmo.\n• Diseñar pseudocódigos para problemas de complejidad creciente.',
-  contenidos:'Conceptual: Algoritmo, variable, estructura de control.\nProcedimental: Diseño de pseudocódigos.\nActitudinal: Valoración del trabajo colaborativo.',
-  actividades:'• Resolución de problemas grupales (inclusión)\n• Uso de IDE en línea – Repl.it (TIC)\n• Reflexión sobre sesgos en algoritmos (ESI/género)',
-  recursos:'• Manual del docente (fotocopiado)\n• Plataforma Moodle institucional\n• Repl.it (IDE gratuito en línea)',
-  estrategias:'Diagnóstica: cuestionario inicial sem. 1\nFormativa: revisión de prácticos sem. 2-3\nSumativa: parcial escrito sem. 4',
-  evidencias:'• 3 Prácticos resueltos (digital, plataforma)\n• Parcial escrito aprobado ≥ 6\n• Asistencia ≥ 75%',
-  fechas:'Sem. 1 (04/03): diagnóstico · Sem. 3 (18/03): TP 1 · Sem. 4 (25/03): parcial 1',
-  minimos:'Algoritmos y estructuras de datos. Paradigmas de programación. (Res. 2457/19)',
-  adaptaciones:'Sin adaptaciones específicas previstas al momento de la planificación.'
+  unidad:'1', titulo:'Introducci\u00F3n al Pensamiento Computacional', duracion:'4 sem / 16 hs',
+  objetivos:'\u2022 Identificar los componentes de un algoritmo.\n\u2022 Dise\u00F1ar pseudoc\u00F3digos para problemas de complejidad creciente.',
+  contenidos:'Conceptual: Algoritmo, variable, estructura de control.\nProcedimental: Dise\u00F1o de pseudoc\u00F3digos.\nActitudinal: Valoraci\u00F3n del trabajo colaborativo.',
+  actividades:'\u2022 Resoluci\u00F3n de problemas grupales (inclusi\u00F3n)\n\u2022 Uso de IDE en l\u00EDnea \u2013 Repl.it (TIC)\n\u2022 Reflexi\u00F3n sobre sesgos en algoritmos (ESI/g\u00E9nero)',
+  recursos:'\u2022 Manual del docente (fotocopiado)\n\u2022 Plataforma Moodle institucional\n\u2022 Repl.it (IDE gratuito en l\u00EDnea)',
+  estrategias:'Diagn\u00F3stica: cuestionario inicial sem. 1\nFormativa: revisi\u00F3n de pr\u00E1cticos sem. 2-3\nSumativa: parcial escrito sem. 4',
+  evidencias:'\u2022 3 Pr\u00E1cticos resueltos (digital, plataforma)\n\u2022 Parcial escrito aprobado \u2265 6\n\u2022 Asistencia \u2265 75%',
+  fechas:'Sem. 1 (04/03): diagn\u00F3stico \u00B7 Sem. 3 (18/03): TP 1 \u00B7 Sem. 4 (25/03): parcial 1',
+  minimos:'Algoritmos y estructuras de datos. Paradigmas de programaci\u00F3n. (Res. 2457/19)',
+  adaptaciones:'Sin adaptaciones espec\u00EDficas previstas al momento de la planificaci\u00F3n.'
 });
 qs('#add-row').click();
 qs('#add-crono').click();
