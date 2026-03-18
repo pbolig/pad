@@ -1519,6 +1519,8 @@ button:hover { filter: brightness(.93); }
 const qs  = (s, ctx=document) => ctx.querySelector(s);
 const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
 
+const _init = () => {
+
 /* ── MASTHEAD LIVE UPDATE ── */
 function initials(name) {
   return name.trim().split(/\s+/)
@@ -1690,11 +1692,30 @@ function objectToXml(o) {
   return x;
 }
 
-function downloadFile(name, content, mime='application/xml') {
-  const blob = new Blob([content], {type: mime});
-  const url = URL.createObjectURL(blob);
-  const a = Object.assign(document.createElement('a'), {href:url, download:name});
-  document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+function downloadFile(name, content) {
+  // Método 1: Blob + createObjectURL (funciona en la mayoría de navegadores y hostings)
+  try {
+    const blob = new Blob([content], {type: 'application/xml;charset=utf-8'});
+    const url = URL.createObjectURL(blob);
+    const a = Object.assign(document.createElement('a'), {href: url, download: name});
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    return;
+  } catch(e1) { /* continúa con método 2 */ }
+  // Método 2: data URI base64 (GitHub Pages con CSP restrictivo)
+  try {
+    const b64 = btoa(unescape(encodeURIComponent(content)));
+    const a = Object.assign(document.createElement('a'), {
+      href: 'data:application/xml;charset=utf-8;base64,' + b64,
+      download: name
+    });
+    document.body.appendChild(a); a.click(); a.remove();
+    return;
+  } catch(e2) { /* continúa con método 3 */ }
+  // Método 3: abrir en nueva pestaña para guardar manualmente
+  const w = window.open('', '_blank');
+  if (w) { w.document.open('text/xml'); w.document.write(content); w.document.close(); }
+  else { alert('No se pudo descargar automáticamente. Abrí la consola (F12) y ejecutá:\ncopy(xmlContent)'); }
 }
 
 qs('#export-xml').addEventListener('click', () => downloadFile('planificacion_export.xml', objectToXml(formToObject())));
@@ -1914,6 +1935,13 @@ addFicha({
 });
 qs('#add-row').click();
 qs('#add-crono').click();
+}; // end _init
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _init);
+} else {
+  _init();
+}
 </script>
 </body>
 </html>
