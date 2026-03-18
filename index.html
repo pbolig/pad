@@ -1519,408 +1519,367 @@ button:hover { filter: brightness(.93); }
 const qs  = (s, ctx=document) => ctx.querySelector(s);
 const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
 
-const _init = () => {
+document.addEventListener('DOMContentLoaded', function() {
 
 /* ── MASTHEAD LIVE UPDATE ── */
 function initials(name) {
-  return name.trim().split(/\s+/)
-    .filter(w => w.length > 3)
-    .slice(0, 3)
-    .map(w => w[0].toUpperCase())
-    .join('') || name.slice(0,2).toUpperCase() || '?';
+  return name.trim().split(/\s+/).filter(w=>w.length>3).slice(0,3)
+    .map(w=>w[0].toUpperCase()).join('') || name.slice(0,2).toUpperCase() || '?';
 }
 function updateMasthead() {
-  const anio        = qs('#anio').value.trim();
-  const jurisdiccion= qs('#jurisdiccion').value.trim();
-  const instituto   = qs('#instituto').value.trim();
-  const carrera     = qs('#carrera').value.trim();
-  const materia     = qs('#materia').value.trim();
-  const anioC       = qs('#anio-cursada').value.trim();
-  const modalidad   = qs('#modalidad').value.trim();
-
-  qs('#anio-display').textContent        = anio || '–';
-  qs('#masthead-jurisdiccion').textContent = jurisdiccion || 'Ministerio de Educación – Nivel Superior No Universitario';
-  qs('#masthead-instituto').textContent  = instituto   || 'Planificación Anual de Cátedra';
-  qs('#masthead-carrera').textContent    = carrera     || 'Carrera no especificada';
-  qs('#masthead-materia').textContent    = materia     || 'Asignatura no especificada';
-  qs('#masthead-anio-cursada').textContent = anioC     || '';
-  qs('#masthead-modalidad').textContent  = modalidad   || '';
-  qs('#masthead-siglas').textContent     = instituto ? initials(instituto) : '–';
-  // hide separators when fields are empty
-  qs('#masthead-sep2').style.display = (anioC && modalidad) ? '' : 'none';
+  var anio    = qs('#anio').value.trim();
+  var juris   = qs('#jurisdiccion').value.trim();
+  var inst    = qs('#instituto').value.trim();
+  var carrera = qs('#carrera').value.trim();
+  var materia = qs('#materia').value.trim();
+  var anioC   = qs('#anio-cursada').value.trim();
+  var modal   = qs('#modalidad').value.trim();
+  qs('#anio-display').textContent          = anio    || '–';
+  qs('#masthead-jurisdiccion').textContent = juris   || 'Ministerio de Educación – Nivel Superior No Universitario';
+  qs('#masthead-instituto').textContent    = inst    || 'Planificación Anual de Cátedra';
+  qs('#masthead-carrera').textContent      = carrera || 'Carrera no especificada';
+  qs('#masthead-materia').textContent      = materia || 'Asignatura no especificada';
+  qs('#masthead-anio-cursada').textContent = anioC   || '';
+  qs('#masthead-modalidad').textContent    = modal   || '';
+  qs('#masthead-siglas').textContent       = inst ? initials(inst) : '–';
+  qs('#masthead-sep2').style.display = (anioC && modal) ? '' : 'none';
 }
-['anio','jurisdiccion','instituto','carrera','materia','anio-cursada','modalidad'].forEach(id => {
-  const el = qs('#'+id); if (el) el.addEventListener('input', updateMasthead);
+['anio','jurisdiccion','instituto','carrera','materia','anio-cursada'].forEach(function(id){
+  var el = qs('#'+id); if(el) el.addEventListener('input', updateMasthead);
 });
 qs('#modalidad').addEventListener('change', updateMasthead);
+qs('#modalidad').addEventListener('input',  updateMasthead);
 
 /* ── TABLA UNIDADES ── */
-const tablaBody = qs('#tabla-unidades tbody');
-qs('#add-row').addEventListener('click', () => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td contenteditable="true" style="text-align:center;">1</td>
-    <td contenteditable="true">Título de la unidad</td>
-    <td contenteditable="true">4 sem / 16 hs</td>
-    <td contenteditable="true">Contenidos vertebradores…</td>
-    <td contenteditable="true">Diagnóstico · Parcial 1</td>
-    <td contenteditable="true" style="text-align:center;">30</td>
-  `;
+var tablaBody = qs('#tabla-unidades tbody');
+qs('#add-row').addEventListener('click', function() {
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable="true" style="text-align:center;">1</td>'
+    +'<td contenteditable="true">Título de la unidad</td>'
+    +'<td contenteditable="true">4 sem / 16 hs</td>'
+    +'<td contenteditable="true">Contenidos vertebradores…</td>'
+    +'<td contenteditable="true">Diagnóstico · Parcial 1</td>'
+    +'<td contenteditable="true" style="text-align:center;">30</td>';
   tablaBody.appendChild(tr);
 });
-qs('#clear-rows').addEventListener('click', () => tablaBody.innerHTML = '');
+qs('#clear-rows').addEventListener('click', function(){ tablaBody.innerHTML=''; });
 
 /* ── FICHAS ── */
-const fichasContainer = qs('#fichas-container');
-const tplFicha = qs('#tpl-ficha');
+var fichasContainer = qs('#fichas-container');
+var tplFicha = qs('#tpl-ficha');
 
-function addFicha(pre = {}) {
-  const node = tplFicha.content.cloneNode(true);
-  const el = node.querySelector('.ficha-card');
-  const fields = {
-    'f-unidad': 'unidad', 'f-titulo': 'titulo', 'f-duracion': 'duracion',
-    'f-objetivos': 'objetivos', 'f-contenidos': 'contenidos',
-    'f-actividades': 'actividades', 'f-recursos': 'recursos',
-    'f-estrategias': 'estrategias', 'f-evidencias': 'evidencias',
-    'f-fechas': 'fechas', 'f-minimos': 'minimos', 'f-adaptaciones': 'adaptaciones'
+function addFicha(pre) {
+  pre = pre || {};
+  var node = tplFicha.content.cloneNode(true);
+  var el = node.querySelector('.ficha-card');
+  var map = {
+    'f-unidad':'unidad','f-titulo':'titulo','f-duracion':'duracion',
+    'f-objetivos':'objetivos','f-contenidos':'contenidos','f-actividades':'actividades',
+    'f-recursos':'recursos','f-estrategias':'estrategias','f-evidencias':'evidencias',
+    'f-fechas':'fechas','f-minimos':'minimos','f-adaptaciones':'adaptaciones'
   };
-  for (const [cls, key] of Object.entries(fields)) {
-    if (pre[key]) el.querySelector('.' + cls).value = pre[key];
-  }
-  node.querySelector('.btn-remove').addEventListener('click', ev => {
+  Object.keys(map).forEach(function(cls){
+    var key = map[cls];
+    if(pre[key]) el.querySelector('.'+cls).value = pre[key];
+  });
+  node.querySelector('.btn-remove').addEventListener('click', function(ev){
     ev.target.closest('.ficha-card').remove();
     updateFichaNum();
   });
   fichasContainer.appendChild(node);
   updateFichaNum();
 }
-
-qs('#add-ficha').addEventListener('click', () => addFicha());
+qs('#add-ficha').addEventListener('click', function(){ addFicha(); });
 
 function updateFichaNum() {
-  qsa('#fichas-container .ficha-card').forEach((c, i) => {
-    const sp = c.querySelector('.unidad-num');
-    if (sp) sp.textContent = i + 1;
+  qsa('#fichas-container .ficha-card').forEach(function(c,i){
+    var sp = c.querySelector('.unidad-num');
+    if(sp) sp.textContent = i+1;
   });
 }
 
 /* ── CRONOGRAMA ── */
-const cronoBody = qs('#cronograma tbody');
-qs('#add-crono').addEventListener('click', () => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td contenteditable="true">Semana 1</td>
-    <td contenteditable="true">Unidad 1 – Introducción</td>
-    <td contenteditable="true">Clase expositiva · Diagnóstico</td>
-    <td contenteditable="true">Evaluación diagnóstica</td>
-  `;
+var cronoBody = qs('#cronograma tbody');
+qs('#add-crono').addEventListener('click', function(){
+  var tr = document.createElement('tr');
+  tr.innerHTML = '<td contenteditable="true">Semana 1</td>'
+    +'<td contenteditable="true">Unidad 1 – Introducción</td>'
+    +'<td contenteditable="true">Clase expositiva · Diagnóstico</td>'
+    +'<td contenteditable="true">Evaluación diagnóstica</td>';
   cronoBody.appendChild(tr);
 });
-qs('#clear-crono').addEventListener('click', () => cronoBody.innerHTML = '');
+qs('#clear-crono').addEventListener('click', function(){ cronoBody.innerHTML=''; });
 
 /* ── PP TOGGLE ── */
-qs('#pp-toggle').addEventListener('change', e => {
+qs('#pp-toggle').addEventListener('change', function(e){
   qs('#pp-body').style.display = e.target.checked ? 'block' : 'none';
   qs('#sec-pp-card').style.opacity = e.target.checked ? '1' : '0.6';
 });
 qs('#sec-pp-card').style.opacity = '0.6';
 
 /* ── OPEN PLAN URL ── */
-qs('#open-plan-url').addEventListener('click', () => {
-  const url = qs('#plan-url').value.trim();
-  if (url) window.open(url, '_blank', 'noopener');
+qs('#open-plan-url').addEventListener('click', function(){
+  var url = qs('#plan-url').value.trim();
+  if(url) window.open(url,'_blank','noopener');
   else alert('Primero ingresá el enlace al plan de estudios.');
 });
 
-/* ── EXPORT / IMPORT XML ── */
+/* ── XML: campos planos ── */
+var FLAT_FIELDS = [
+  'anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision',
+  'docente','carga','modalidad','ram','aprob',
+  'correl-cursar','correl-final','correl-simult','plan-url',
+  'objgen','competencias','perfil','metodologia',
+  'criterios','instrumentos','ponderaciones',
+  'biblio-ob','biblio-comp','firma-doc','firma-coord'
+];
+var PP_FIELDS = [
+  'pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias',
+  'pp-actividades','pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'
+];
+
+function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
 function formToObject() {
-  const o = {};
-  ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
+  var o = {};
+  FLAT_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
   o['pp-activa'] = qs('#pp-toggle').checked ? 'si' : 'no';
-  ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
-   'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(id => o[id] = (qs('#'+id)||{}).value || '');
-  o.unidades = qsa('#tabla-unidades tbody tr').map(tr => {
-    const c = Array.from(tr.children);
-    return { unidad: c[0].textContent.trim(), titulo: c[1].textContent.trim(), duracion: c[2].textContent.trim(),
-             contenidos: c[3].textContent.trim(), instancias: c[4].textContent.trim(), ponderacion: c[5].textContent.trim() };
+  PP_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
+  o.unidades = qsa('#tabla-unidades tbody tr').map(function(tr){
+    var c = Array.from(tr.children);
+    return {unidad:c[0].textContent.trim(), titulo:c[1].textContent.trim(),
+            duracion:c[2].textContent.trim(), contenidos:c[3].textContent.trim(),
+            instancias:c[4].textContent.trim(), ponderacion:c[5].textContent.trim()};
   });
-  o.fichas = qsa('#fichas-container .ficha-card').map(s => ({
-    unidad: s.querySelector('.f-unidad').value||'', titulo: s.querySelector('.f-titulo').value||'',
-    duracion: s.querySelector('.f-duracion').value||'', objetivos: s.querySelector('.f-objetivos').value||'',
-    contenidos: s.querySelector('.f-contenidos').value||'', actividades: s.querySelector('.f-actividades').value||'',
-    recursos: s.querySelector('.f-recursos').value||'', estrategias: s.querySelector('.f-estrategias').value||'',
-    evidencias: s.querySelector('.f-evidencias').value||'', fechas: s.querySelector('.f-fechas').value||'',
-    minimos: s.querySelector('.f-minimos').value||'', adaptaciones: s.querySelector('.f-adaptaciones').value||''
-  }));
-  o.cronograma = qsa('#cronograma tbody tr').map(tr => {
-    const c = Array.from(tr.children);
-    return { fecha: c[0].textContent.trim(), tema: c[1].textContent.trim(),
-             actividad: c[2].textContent.trim(), evaluacion: c[3].textContent.trim() };
+  o.fichas = qsa('#fichas-container .ficha-card').map(function(s){
+    return {
+      unidad:s.querySelector('.f-unidad').value||'',
+      titulo:s.querySelector('.f-titulo').value||'',
+      duracion:s.querySelector('.f-duracion').value||'',
+      objetivos:s.querySelector('.f-objetivos').value||'',
+      contenidos:s.querySelector('.f-contenidos').value||'',
+      actividades:s.querySelector('.f-actividades').value||'',
+      recursos:s.querySelector('.f-recursos').value||'',
+      estrategias:s.querySelector('.f-estrategias').value||'',
+      evidencias:s.querySelector('.f-evidencias').value||'',
+      fechas:s.querySelector('.f-fechas').value||'',
+      minimos:s.querySelector('.f-minimos').value||'',
+      adaptaciones:s.querySelector('.f-adaptaciones').value||''
+    };
+  });
+  o.cronograma = qsa('#cronograma tbody tr').map(function(tr){
+    var c = Array.from(tr.children);
+    return {fecha:c[0].textContent.trim(), tema:c[1].textContent.trim(),
+            actividad:c[2].textContent.trim(), evaluacion:c[3].textContent.trim()};
   });
   return o;
 }
 
-function esc(s) { return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
 function objectToXml(o) {
-  let x = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n';
-  ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
-  x += `  <pp-activa>${esc(o['pp-activa'])}</pp-activa>\n`;
+  var x = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n';
+  FLAT_FIELDS.forEach(function(k){ x += '  <'+k+'>'+esc(o[k])+'</'+k+'>\n'; });
+  x += '  <pp-activa>'+esc(o['pp-activa'])+'</pp-activa>\n';
   x += '  <practica-profesionalizante>\n';
-  ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
-   'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(k => { x += `    <${k}>${esc(o[k])}</${k}>\n`; });
+  PP_FIELDS.forEach(function(k){ x += '    <'+k+'>'+esc(o[k])+'</'+k+'>\n'; });
   x += '  </practica-profesionalizante>\n';
   x += '  <unidades>\n';
-  o.unidades.forEach(u => {
+  o.unidades.forEach(function(u){
     x += '    <unidad>\n';
-    ['unidad','titulo','duracion','contenidos','instancias','ponderacion'].forEach(k => { x += `      <${k}>${esc(u[k])}</${k}>\n`; });
+    ['unidad','titulo','duracion','contenidos','instancias','ponderacion'].forEach(function(k){
+      x += '      <'+k+'>'+esc(u[k])+'</'+k+'>\n';
+    });
     x += '    </unidad>\n';
   });
   x += '  </unidades>\n  <fichas>\n';
-  o.fichas.forEach(f => {
+  o.fichas.forEach(function(f){
     x += '    <ficha>\n';
-    ['unidad','titulo','duracion','objetivos','contenidos','actividades','recursos','estrategias','evidencias','fechas','minimos','adaptaciones'].forEach(k => { x += `      <${k}>${esc(f[k])}</${k}>\n`; });
+    ['unidad','titulo','duracion','objetivos','contenidos','actividades','recursos',
+     'estrategias','evidencias','fechas','minimos','adaptaciones'].forEach(function(k){
+      x += '      <'+k+'>'+esc(f[k])+'</'+k+'>\n';
+    });
     x += '    </ficha>\n';
   });
   x += '  </fichas>\n  <cronograma>\n';
-  o.cronograma.forEach(c => {
+  o.cronograma.forEach(function(c){
     x += '    <fila>\n';
-    ['fecha','tema','actividad','evaluacion'].forEach(k => { x += `      <${k}>${esc(c[k])}</${k}>\n`; });
+    ['fecha','tema','actividad','evaluacion'].forEach(function(k){
+      x += '      <'+k+'>'+esc(c[k])+'</'+k+'>\n';
+    });
     x += '    </fila>\n';
   });
   x += '  </cronograma>\n</planificacion>\n';
   return x;
 }
 
+/* ── DOWNLOAD (3 métodos para máxima compatibilidad) ── */
 function downloadFile(name, content) {
-  // Método 1: Blob + createObjectURL (funciona en la mayoría de navegadores y hostings)
   try {
-    const blob = new Blob([content], {type: 'application/xml;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    const a = Object.assign(document.createElement('a'), {href: url, download: name});
+    var blob = new Blob([content], {type:'application/xml;charset=utf-8'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = name;
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
     return;
-  } catch(e1) { /* continúa con método 2 */ }
-  // Método 2: data URI base64 (GitHub Pages con CSP restrictivo)
+  } catch(e1){}
   try {
-    const b64 = btoa(unescape(encodeURIComponent(content)));
-    const a = Object.assign(document.createElement('a'), {
-      href: 'data:application/xml;charset=utf-8;base64,' + b64,
-      download: name
-    });
-    document.body.appendChild(a); a.click(); a.remove();
+    var b64 = btoa(unescape(encodeURIComponent(content)));
+    var a2 = document.createElement('a');
+    a2.href = 'data:application/xml;charset=utf-8;base64,'+b64;
+    a2.download = name;
+    document.body.appendChild(a2); a2.click(); a2.remove();
     return;
-  } catch(e2) { /* continúa con método 3 */ }
-  // Método 3: abrir en nueva pestaña para guardar manualmente
-  const w = window.open('', '_blank');
-  if (w) { w.document.open('text/xml'); w.document.write(content); w.document.close(); }
-  else { alert('No se pudo descargar automáticamente. Abrí la consola (F12) y ejecutá:\ncopy(xmlContent)'); }
+  } catch(e2){}
+  var w = window.open('','_blank');
+  if(w){ w.document.open('text/xml'); w.document.write(content); w.document.close(); }
 }
 
-qs('#export-xml').addEventListener('click', () => downloadFile('planificacion_export.xml', objectToXml(formToObject())));
-qs('#import-xml-btn').addEventListener('click', () => qs('#import-xml').click());
-qs('#import-xml').addEventListener('change', ev => {
-  const f = ev.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = e => {
+/* ── EXPORT ── */
+qs('#export-xml').addEventListener('click', function(){
+  downloadFile('planificacion_export.xml', objectToXml(formToObject()));
+});
+
+/* ── IMPORT ── */
+qs('#import-xml-btn').addEventListener('click', function(){ qs('#import-xml').click(); });
+qs('#import-xml').addEventListener('change', function(ev){
+  var f = ev.target.files[0]; if(!f) return;
+  var r = new FileReader();
+  r.onload = function(e){
     try {
-      const doc = new DOMParser().parseFromString(e.target.result, 'application/xml');
-      if (doc.querySelector('parsererror')) throw new Error('XML inválido');
-      ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision','docente','carga','modalidad','ram','aprob',
-       'correl-cursar','correl-final','correl-simult','plan-url',
-       'objgen','competencias','perfil','metodologia','criterios','instrumentos','ponderaciones',
-       'biblio-ob','biblio-comp','firma-doc','firma-coord'].forEach(id => {
-        const n = doc.querySelector(id); const el = qs('#'+id); if (n && el) el.value = n.textContent;
+      var doc = new DOMParser().parseFromString(e.target.result,'application/xml');
+      if(doc.querySelector('parsererror')) throw new Error('XML inválido');
+      FLAT_FIELDS.forEach(function(id){
+        var n=doc.querySelector(id); var el=qs('#'+id); if(n&&el) el.value=n.textContent;
       });
-      // PP activa
-      const ppActiva = doc.querySelector('pp-activa')?.textContent === 'si';
+      var ppActiva = doc.querySelector('pp-activa') && doc.querySelector('pp-activa').textContent==='si';
       qs('#pp-toggle').checked = ppActiva;
       qs('#pp-body').style.display = ppActiva ? 'block' : 'none';
       qs('#sec-pp-card').style.opacity = ppActiva ? '1' : '0.6';
-      const ppNode = doc.querySelector('practica-profesionalizante');
-      if (ppNode) {
-        ['pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias','pp-actividades',
-         'pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'].forEach(id => {
-          const n = ppNode.querySelector(id); const el = qs('#'+id); if (n && el) el.value = n.textContent;
+      var ppNode = doc.querySelector('practica-profesionalizante');
+      if(ppNode){
+        PP_FIELDS.forEach(function(id){
+          var n=ppNode.querySelector(id); var el=qs('#'+id); if(n&&el) el.value=n.textContent;
         });
       }
-      // Actualizar masthead completo
-      updateMasthead();
-      tablaBody.innerHTML = '';
-      doc.querySelectorAll('unidades > unidad').forEach(u => {
-        const tr = document.createElement('tr');
-        const get = k => u.querySelector(k)?.textContent || '';
-        tr.innerHTML = `<td contenteditable="true" style="text-align:center;">${get('unidad')}</td>
-          <td contenteditable="true">${get('titulo')}</td><td contenteditable="true">${get('duracion')}</td>
-          <td contenteditable="true">${get('contenidos')}</td><td contenteditable="true">${get('instancias')}</td>
-          <td contenteditable="true" style="text-align:center;">${get('ponderacion')}</td>`;
+      tablaBody.innerHTML='';
+      doc.querySelectorAll('unidades > unidad').forEach(function(u){
+        var tr=document.createElement('tr');
+        function g(k){ return u.querySelector(k)?u.querySelector(k).textContent:''; }
+        tr.innerHTML='<td contenteditable="true" style="text-align:center;">'+g('unidad')+'</td>'
+          +'<td contenteditable="true">'+g('titulo')+'</td>'
+          +'<td contenteditable="true">'+g('duracion')+'</td>'
+          +'<td contenteditable="true">'+g('contenidos')+'</td>'
+          +'<td contenteditable="true">'+g('instancias')+'</td>'
+          +'<td contenteditable="true" style="text-align:center;">'+g('ponderacion')+'</td>';
         tablaBody.appendChild(tr);
       });
-      fichasContainer.innerHTML = '';
-      doc.querySelectorAll('fichas > ficha').forEach(f => {
-        addFicha({ unidad: f.querySelector('unidad')?.textContent||'', titulo: f.querySelector('titulo')?.textContent||'',
-          duracion: f.querySelector('duracion')?.textContent||'', objetivos: f.querySelector('objetivos')?.textContent||'',
-          contenidos: f.querySelector('contenidos')?.textContent||'', actividades: f.querySelector('actividades')?.textContent||'',
-          recursos: f.querySelector('recursos')?.textContent||'', estrategias: f.querySelector('estrategias')?.textContent||'',
-          evidencias: f.querySelector('evidencias')?.textContent||'', fechas: f.querySelector('fechas')?.textContent||'',
-          minimos: f.querySelector('minimos')?.textContent||'', adaptaciones: f.querySelector('adaptaciones')?.textContent||'' });
+      fichasContainer.innerHTML='';
+      doc.querySelectorAll('fichas > ficha').forEach(function(f){
+        function g(k){ return f.querySelector(k)?f.querySelector(k).textContent:''; }
+        addFicha({unidad:g('unidad'),titulo:g('titulo'),duracion:g('duracion'),
+          objetivos:g('objetivos'),contenidos:g('contenidos'),actividades:g('actividades'),
+          recursos:g('recursos'),estrategias:g('estrategias'),evidencias:g('evidencias'),
+          fechas:g('fechas'),minimos:g('minimos'),adaptaciones:g('adaptaciones')});
       });
-      cronoBody.innerHTML = '';
-      doc.querySelectorAll('cronograma > fila').forEach(row => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td contenteditable="true">${row.querySelector('fecha')?.textContent||''}</td>
-          <td contenteditable="true">${row.querySelector('tema')?.textContent||''}</td>
-          <td contenteditable="true">${row.querySelector('actividad')?.textContent||''}</td>
-          <td contenteditable="true">${row.querySelector('evaluacion')?.textContent||''}</td>`;
+      cronoBody.innerHTML='';
+      doc.querySelectorAll('cronograma > fila').forEach(function(row){
+        var tr=document.createElement('tr');
+        function g(k){ return row.querySelector(k)?row.querySelector(k).textContent:''; }
+        tr.innerHTML='<td contenteditable="true">'+g('fecha')+'</td>'
+          +'<td contenteditable="true">'+g('tema')+'</td>'
+          +'<td contenteditable="true">'+g('actividad')+'</td>'
+          +'<td contenteditable="true">'+g('evaluacion')+'</td>';
         cronoBody.appendChild(tr);
       });
       updateFichaNum();
+      updateMasthead();
       alert('✅ Importación completada correctamente.');
-    } catch(err) { alert('❌ Error al importar XML: ' + err.message); }
+    } catch(err){ alert('❌ Error al importar XML: '+err.message); }
   };
-  r.readAsText(f, 'utf-8');
+  r.readAsText(f,'utf-8');
 });
 
-qs('#download-sample-xml').addEventListener('click', () => {
-  const s = `<?xml version="1.0" encoding="UTF-8"?>
-<planificacion>
-  <anio>2026</anio>
-  <jurisdiccion>Ministerio de Educación – Provincia de Santa Fe – DES</jurisdiccion>
-  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</instituto>
-  <anio-cursada>1° Año – 2° Cuatrimestre</anio-cursada>
-  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>
-  <materia>Programación I – Lenguajes y Paradigmas</materia>
-  <comision>Comisión A – Turno Noche</comision>
-  <docente>Pérez, Ana Lucía – DNI 28.456.789 – Titular</docente>
-  <carga>96</carga>
-  <modalidad>Mixta (presencial + virtual)</modalidad>
-  <ram>Decreto N° 4199/2015 – Art. 28 (Acreditación) · Art. 32 (Asistencia 75%)</ram>
-  <aprob>Aprobada CD el 14/03/2026 – Acta N° 02/2026 – Expte. N° 0078-S-2026</aprob>
-  <correl-cursar>• Matemática I (regularizada)
-• Introducción a la Programación (aprobada con examen final)</correl-cursar>
-  <correl-final>• Matemática I (examen final aprobado)
-• Introducción a la Programación (examen final aprobado)</correl-final>
-  <correl-simult>• Laboratorio de Programación (mismo cuatrimestre)
-• Sin otros co-requisitos</correl-simult>
-  <plan-url>https://drive.google.com/file/d/EJEMPLO_ID_PLAN_ESTUDIOS/view</plan-url>
-  <objgen>• Comprender los fundamentos del pensamiento computacional y aplicarlos en el diseño de algoritmos.
-• Implementar soluciones en lenguajes de programación de alto nivel.
-• Desarrollar hábitos de trabajo colaborativo y documentación de código.</objgen>
-  <competencias>Competencia 3 – Diseño e implementación de soluciones informáticas.
-Competencia 5 – Trabajo en equipo colaborativo.</competencias>
-  <perfil>Esta asignatura aporta al perfil del Técnico Superior en Programación habilitándolo para analizar, diseñar e implementar soluciones de software.</perfil>
-  <metodologia>Enfoque constructivista con resolución de problemas reales. Clase invertida, trabajo colaborativo y uso de TIC en cada encuentro.</metodologia>
-  <criterios>• Asistencia ≥ 75% (RAM Art. 32)
-• Nota mínima de aprobación: 6 (seis)
-• Entrega del 80% de trabajos prácticos</criterios>
-  <instrumentos>• 2 Parciales escritos (individuales)
-• Trabajos prácticos semanales (grupales)
-• Proyecto integrador final (grupal)</instrumentos>
-  <ponderaciones>Parciales 40% (20% c/u) · Prácticos 30% · Proyecto final 20% · Participación 10% = 100%</ponderaciones>
-  <biblio-ob>Cormen, T. et al. (2009). Introduction to Algorithms (3ª ed.). MIT Press.
-Cairó, O. (2006). Metodología de la Programación. Alfaomega.</biblio-ob>
-  <biblio-comp>CS50x – Harvard (cs50.harvard.edu) [Acceso: feb. 2026]
-Khan Academy – Programación (khanacademy.org/computing)</biblio-comp>
-  <firma-doc>Pérez, Ana Lucía – DNI 28.456.789 – Titular</firma-doc>
-  <firma-coord>García, Roberto – Coordinador de Carrera</firma-coord>
-  <pp-activa>si</pp-activa>
-  <practica-profesionalizante>
-    <pp-tipo>PP Integrada a la Unidad Curricular</pp-tipo>
-    <pp-carga>32</pp-carga>
-    <pp-norma>Decreto N° 1559/17 – Art. 4 (PP integrada) · Art. 11 (evaluación) · Plan PP Institucional – Acta CD N° 05/2025</pp-norma>
-    <pp-propositos>• Integrar los conocimientos teóricos de programación en el desarrollo de un sistema real para una organización local.
-• Articular las fases de análisis, diseño, implementación y documentación en un contexto profesional.</pp-propositos>
-    <pp-competencias>• Gestionar proyectos de desarrollo de software con metodologías ágiles.
-• Comunicar soluciones técnicas a destinatarios no especializados.
-• Trabajar en equipo en entornos profesionales reales.</pp-competencias>
-    <pp-actividades>• Sem. 1-4: diagnóstico de necesidades de una PYME local (relevamiento y entrevistas).
-• Sem. 5-10: diseño e implementación del sistema.
-• Sem. 11-12: presentación ante la organización y defensa oral.</pp-actividades>
-    <pp-contexto>PP en el aula-taller del instituto con cliente real externo.
-Entidad: TechRosario SRL – Convenio N° 03/2026.
-Responsable de supervisión externa: Ing. López, M.</pp-contexto>
-    <pp-tutoria>Tutorías semanales de 1 hs · Bitácora de avance en Moodle · Informe de avance cada 4 semanas.</pp-tutoria>
-    <pp-productos>• Informe técnico final (PDF, 20-30 pp.)
-• Sistema funcional entregado al cliente
-• Presentación oral ante tribunal evaluador (20 min.)</pp-productos>
-    <pp-criterios-eval>Proceso 40%: puntualidad, compromiso, registro en bitácora.
-Producto 40%: calidad técnica del sistema.
-Presentación 20%: claridad y defensa oral.
-Participan: docente tutor + supervisor externo.</pp-criterios-eval>
-    <pp-acred>• Nota final ≥ 6 (seis)
-• Entrega del informe técnico completo
-• Informe del supervisor externo (concepto satisfactorio)
-• Recuperatorio: reentrega en el turno siguiente</pp-acred>
-  </practica-profesionalizante>
-  <unidades>
-    <unidad>
-      <unidad>1</unidad>
-      <titulo>Introducción al Pensamiento Computacional</titulo>
-      <duracion>4 sem / 16 hs</duracion>
-      <contenidos>Algoritmos; Variables; Estructuras de control</contenidos>
-      <instancias>Diagnóstico; Parcial 1</instancias>
-      <ponderacion>30</ponderacion>
-    </unidad>
-  </unidades>
-  <fichas>
-    <ficha>
-      <unidad>1</unidad>
-      <titulo>Introducción al Pensamiento Computacional</titulo>
-      <duracion>4 sem / 16 hs</duracion>
-      <objetivos>• Identificar los componentes de un algoritmo.
-• Diseñar pseudocódigos para problemas de complejidad creciente.</objetivos>
-      <contenidos>Conceptual: Algoritmo, variable, estructura de control.
-Procedimental: Diseño de pseudocódigos.
-Actitudinal: Valoración del trabajo colaborativo.</contenidos>
-      <actividades>• Resolución de problemas grupales (inclusión)
-• Uso de IDE en línea – Repl.it (TIC)
-• Reflexión sobre sesgos en algoritmos (ESI/género)</actividades>
-      <recursos>• Manual del docente (fotocopiado)
-• Plataforma Moodle institucional
-• Repl.it (IDE gratuito en línea)</recursos>
-      <estrategias>Diagnóstica: cuestionario inicial sem. 1
-Formativa: revisión de prácticos sem. 2-3
-Sumativa: parcial escrito sem. 4 (ponderación 20%)</estrategias>
-      <evidencias>• 3 Prácticos resueltos (digital, plataforma)
-• Parcial escrito aprobado ≥ 6
-• Asistencia ≥ 75%</evidencias>
-      <fechas>Sem. 1 (04/03): diagnóstico · Sem. 3 (18/03): TP 1 · Sem. 4 (25/03): parcial 1</fechas>
-      <minimos>Algoritmos y estructuras de datos. Paradigmas de programación. (Res. 2457/19)</minimos>
-      <adaptaciones>Estudiante con hipoacusia: materiales escritos y subtitulado en videos.
-Sin otras adaptaciones específicas al momento de la planificación.</adaptaciones>
-    </ficha>
-  </fichas>
-  <cronograma>
-    <fila>
-      <fecha>Semana 1 – 04/03</fecha>
-      <tema>Unidad 1 – Introducción</tema>
-      <actividad>Clase expositiva · Diagnóstico inicial</actividad>
-      <evaluacion>Evaluación diagnóstica</evaluacion>
-    </fila>
-    <fila>
-      <fecha>Semana 2 – 11/03</fecha>
-      <tema>Unidad 1 – Algoritmos</tema>
-      <actividad>Resolución de problemas en grupos</actividad>
-      <evaluacion>—</evaluacion>
-    </fila>
-  </cronograma>
-</planificacion>`;
+/* ── DOWNLOAD SAMPLE XML ── */
+qs('#download-sample-xml').addEventListener('click', function(){
+  var s = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n'
+    +'  <anio>2026</anio>\n'
+    +'  <jurisdiccion>Ministerio de Educación – Provincia de Santa Fe – DES</jurisdiccion>\n'
+    +'  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</instituto>\n'
+    +'  <anio-cursada>1° Año – 2° Cuatrimestre</anio-cursada>\n'
+    +'  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>\n'
+    +'  <materia>Programación I – Lenguajes y Paradigmas</materia>\n'
+    +'  <comision>Comisión A – Turno Noche</comision>\n'
+    +'  <docente>Pérez, Ana Lucía – DNI 28.456.789 – Titular</docente>\n'
+    +'  <carga>96</carga>\n'
+    +'  <modalidad>Mixta (presencial + virtual)</modalidad>\n'
+    +'  <ram>Decreto N° 4199/2015 – Art. 28 · Art. 32 (Asistencia 75%)</ram>\n'
+    +'  <aprob>Aprobada CD el 14/03/2026 – Acta N° 02/2026 – Expte. N° 0078-S-2026</aprob>\n'
+    +'  <correl-cursar>• Matemática I (regularizada)\n• Introducción a la Programación (aprobada)</correl-cursar>\n'
+    +'  <correl-final>• Matemática I (examen final aprobado)\n• Introducción a la Programación (examen final aprobado)</correl-final>\n'
+    +'  <correl-simult>• Laboratorio de Programación (mismo cuatrimestre)</correl-simult>\n'
+    +'  <plan-url>https://drive.google.com/file/d/EJEMPLO_ID/view</plan-url>\n'
+    +'  <objgen>• Comprender los fundamentos del pensamiento computacional.\n• Implementar soluciones en lenguajes de alto nivel.</objgen>\n'
+    +'  <competencias>Competencia 3 – Diseño e implementación de soluciones informáticas.</competencias>\n'
+    +'  <perfil>Esta asignatura aporta al perfil del Técnico Superior en Programación.</perfil>\n'
+    +'  <metodologia>Enfoque constructivista con resolución de problemas reales.</metodologia>\n'
+    +'  <criterios>• Asistencia ≥ 75% (RAM Art. 32)\n• Nota mínima: 6 (seis)</criterios>\n'
+    +'  <instrumentos>• 2 Parciales escritos · Trabajos prácticos · Proyecto integrador</instrumentos>\n'
+    +'  <ponderaciones>Parciales 40% · Prácticos 30% · Proyecto 20% · Participación 10%</ponderaciones>\n'
+    +'  <biblio-ob>Cormen, T. et al. (2009). Introduction to Algorithms. MIT Press.</biblio-ob>\n'
+    +'  <biblio-comp>CS50x – Harvard (cs50.harvard.edu)</biblio-comp>\n'
+    +'  <firma-doc>Pérez, Ana Lucía – DNI 28.456.789 – Titular</firma-doc>\n'
+    +'  <firma-coord>García, Roberto – Coordinador de Carrera</firma-coord>\n'
+    +'  <pp-activa>no</pp-activa>\n'
+    +'  <practica-profesionalizante>\n'
+    +'    <pp-tipo></pp-tipo>\n    <pp-carga></pp-carga>\n    <pp-norma></pp-norma>\n'
+    +'    <pp-propositos></pp-propositos>\n    <pp-competencias></pp-competencias>\n'
+    +'    <pp-actividades></pp-actividades>\n    <pp-contexto></pp-contexto>\n'
+    +'    <pp-tutoria></pp-tutoria>\n    <pp-productos></pp-productos>\n'
+    +'    <pp-criterios-eval></pp-criterios-eval>\n    <pp-acred></pp-acred>\n'
+    +'  </practica-profesionalizante>\n'
+    +'  <unidades>\n'
+    +'    <unidad>\n      <unidad>1</unidad>\n      <titulo>Introducción al Pensamiento Computacional</titulo>\n'
+    +'      <duracion>4 sem / 16 hs</duracion>\n      <contenidos>Algoritmos; Variables; Estructuras de control</contenidos>\n'
+    +'      <instancias>Diagnóstico; Parcial 1</instancias>\n      <ponderacion>30</ponderacion>\n    </unidad>\n'
+    +'  </unidades>\n'
+    +'  <fichas>\n    <ficha>\n'
+    +'      <unidad>1</unidad>\n      <titulo>Introducción al Pensamiento Computacional</titulo>\n'
+    +'      <duracion>4 sem / 16 hs</duracion>\n'
+    +'      <objetivos>• Identificar los componentes de un algoritmo.\n• Diseñar pseudocódigos.</objetivos>\n'
+    +'      <contenidos>Conceptual: Algoritmo, variable.\nProcedimental: Pseudocódigo.\nActitudinal: Trabajo colaborativo.</contenidos>\n'
+    +'      <actividades>• Resolución de problemas grupales\n• Uso de IDE en línea (TIC)</actividades>\n'
+    +'      <recursos>• Manual del docente\n• Plataforma Moodle institucional</recursos>\n'
+    +'      <estrategias>Diagnóstica: sem. 1 · Formativa: prácticos · Sumativa: parcial sem. 4</estrategias>\n'
+    +'      <evidencias>• 3 Prácticos resueltos\n• Parcial escrito aprobado ≥ 6</evidencias>\n'
+    +'      <fechas>Sem. 1 (04/03): diagnóstico · Sem. 4 (25/03): parcial 1</fechas>\n'
+    +'      <minimos>Algoritmos y estructuras de datos. (Res. 2457/19)</minimos>\n'
+    +'      <adaptaciones>Sin adaptaciones específicas previstas al momento de la planificación.</adaptaciones>\n'
+    +'    </ficha>\n  </fichas>\n'
+    +'  <cronograma>\n    <fila>\n'
+    +'      <fecha>Semana 1 – 04/03</fecha>\n      <tema>Unidad 1 – Introducción</tema>\n'
+    +'      <actividad>Clase expositiva · Diagnóstico inicial</actividad>\n'
+    +'      <evaluacion>Evaluación diagnóstica</evaluacion>\n'
+    +'    </fila>\n  </cronograma>\n</planificacion>';
   downloadFile('planificacion_ejemplo.xml', s);
 });
 
-qs('#print-pdf').addEventListener('click', () => window.print());
-qs('#reset-form').addEventListener('click', () => {
-  if (!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
-  document.querySelectorAll('input,textarea,select').forEach(i => { if(i.type!=='file') i.value=''; });
-  tablaBody.innerHTML = ''; fichasContainer.innerHTML = ''; cronoBody.innerHTML = '';
-  qs('#pp-toggle').checked = false;
-  qs('#pp-body').style.display = 'none';
-  qs('#sec-pp-card').style.opacity = '0.6';
+/* ── PRINT ── */
+qs('#print-pdf').addEventListener('click', function(){ window.print(); });
+
+/* ── RESET ── */
+qs('#reset-form').addEventListener('click', function(){
+  if(!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
+  document.querySelectorAll('input,textarea,select').forEach(function(i){
+    if(i.type!=='file') i.value='';
+  });
+  tablaBody.innerHTML=''; fichasContainer.innerHTML=''; cronoBody.innerHTML='';
+  qs('#pp-toggle').checked=false;
+  qs('#pp-body').style.display='none';
+  qs('#sec-pp-card').style.opacity='0.6';
   updateMasthead();
 });
 
-/* ── INIT con datos de ejemplo ── */
+/* ── INIT DATOS DE EJEMPLO ── */
 addFicha({
   unidad:'1', titulo:'Introducción al Pensamiento Computacional', duracion:'4 sem / 16 hs',
   objetivos:'• Identificar los componentes de un algoritmo.\n• Diseñar pseudocódigos para problemas de complejidad creciente.',
@@ -1935,13 +1894,8 @@ addFicha({
 });
 qs('#add-row').click();
 qs('#add-crono').click();
-}; // end _init
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', _init);
-} else {
-  _init();
-}
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
