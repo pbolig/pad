@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Planificación Anual – Nivel Superior Santa Fe</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -1749,16 +1750,21 @@ qs('#import-xml').addEventListener('change', function(ev){
       var doc = new DOMParser().parseFromString(e.target.result,'application/xml');
       if(doc.querySelector('parsererror')) throw new Error('XML inv\u00E1lido');
       FLAT_FIELDS.forEach(function(id){
-        var n=doc.querySelector(id); var el=qs('#'+id); if(n&&el) el.value=n.textContent;
+        // Use getElementsByTagName on the XML doc to avoid conflicts with HTML ids
+        var nodes=doc.getElementsByTagName(id);
+        var el=qs('#'+id);
+        if(nodes.length>0 && el) el.value=nodes[0].textContent;
       });
-      var ppActiva = doc.querySelector('pp-activa') && doc.querySelector('pp-activa').textContent==='si';
+      var ppActivaNodes=doc.getElementsByTagName('pp-activa'); var ppActiva=ppActivaNodes.length>0 && ppActivaNodes[0].textContent==='si';
       qs('#pp-toggle').checked = ppActiva;
       qs('#pp-body').style.display = ppActiva ? 'block' : 'none';
       qs('#sec-pp-card').style.opacity = ppActiva ? '1' : '0.6';
       var ppNode = doc.querySelector('practica-profesionalizante');
       if(ppNode){
         PP_FIELDS.forEach(function(id){
-          var n=ppNode.querySelector(id); var el=qs('#'+id); if(n&&el) el.value=n.textContent;
+          var nodes=ppNode.getElementsByTagName(id);
+          var el=qs('#'+id);
+          if(nodes.length>0 && el) el.value=nodes[0].textContent;
         });
       }
       tablaBody.innerHTML='';
