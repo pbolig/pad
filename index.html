@@ -2183,29 +2183,38 @@ function initials(name) {
     .map(w=>w[0].toUpperCase()).join('') || name.slice(0,2).toUpperCase() || '?';
 }
 function updateMasthead() {
-  var anio    = qs('#anio').value.trim();
-  var juris   = qs('#jurisdiccion').value.trim();
-  var inst    = qs('#instituto').value.trim();
-  var carrera = qs('#carrera').value.trim();
-  var materia = qs('#materia').value.trim();
-  var anioC   = qs('#anio-cursada').value.trim();
-  var modal   = qs('#modalidad').value.trim();
-  qs('#anio-display').textContent          = anio    || '\u2013';
-  qs('#masthead-jurisdiccion').textContent = juris   || 'Ministerio de Educaci\u00F3n \u2013 Nivel Superior No Universitario';
-  qs('#masthead-instituto').textContent    = inst    || 'Planificaci\u00F3n Anual de C\u00E1tedra';
-  qs('#masthead-carrera').textContent      = carrera || 'Carrera no especificada';
-  qs('#masthead-materia').textContent      = materia || 'Asignatura no especificada';
-  qs('#masthead-anio-cursada').textContent = anioC   || '';
-  qs('#masthead-modalidad').textContent    = modal   || '';
-  qs('#masthead-siglas').textContent       = inst ? initials(inst) : '\u2013';
-  qs('#masthead-sep2').style.display = (anioC && modal) ? '' : 'none';
+  const getV = (id) => { const el = qs(id); return el ? el.value.trim() : ''; };
+  const setT = (id, val) => { const el = qs(id); if(el) el.textContent = val; };
+  
+  var anio    = getV('#anio');
+  var juris   = getV('#jurisdiccion');
+  var inst    = getV('#instituto');
+  var carrera = getV('#carrera');
+  var materia = getV('#materia');
+  var anioC   = getV('#anio-cursada');
+  var modal   = getV('#modalidad');
+  
+  setT('#anio-display', anio || '–');
+  setT('#masthead-jurisdiccion', juris || 'Ministerio de Educación – Nivel Superior No Universitario');
+  setT('#masthead-instituto', inst || 'Planificación Anual de Cátedra');
+  setT('#masthead-carrera', carrera || 'Carrera no especificada');
+  setT('#masthead-materia', materia || 'Asignatura no especificada');
+  setT('#masthead-anio-cursada', anioC || '');
+  setT('#masthead-modalidad', modal || '');
+  setT('#masthead-siglas', inst ? initials(inst) : '–');
+  
+  const sep2 = qs('#masthead-sep2');
+  if(sep2) sep2.style.display = (anioC && modal) ? '' : 'none';
 }
 ['anio','jurisdiccion','instituto','anio-cursada','carrera'].forEach(function(id){
   var el = qs('#'+id); if(el) el.addEventListener('input', updateMasthead);
   if(el && el.tagName === 'SELECT') el.addEventListener('change', updateMasthead);
 });
-qs('#modalidad').addEventListener('change', updateMasthead);
-qs('#modalidad').addEventListener('input',  updateMasthead);
+const bModal = qs('#modalidad');
+if (bModal) {
+  bModal.addEventListener('change', updateMasthead);
+  bModal.addEventListener('input',  updateMasthead);
+}
 
 /* ── TABLA UNIDADES ── */
 var tablaBody = qs('#units-body');
@@ -2224,11 +2233,12 @@ qs('#clear-rows').addEventListener('click', function(){ if(tablaBody) tablaBody.
 
 /* \u2500\u2500 FICHAS \u2500\u2500 */
 var fichasContainer = qs('#fichas-container');
-var tplFicha = qs('#tpl-ficha');
 
-window.addFicha = function(pre) { // Made global for loadObjectToForm
+window.addFicha = function(pre) {
   pre = pre || {};
-  var node = tplFicha.content.cloneNode(true);
+  const tpl = qs('#tpl-ficha');
+  if (!tpl) return console.error("Template #tpl-ficha no encontrado");
+  var node = tpl.content.cloneNode(true);
   var el = node.querySelector('.ficha-card');
   var map = {
     'f-unidad':'unidad','f-titulo':'titulo','f-duracion':'duracion',
@@ -2323,24 +2333,11 @@ function formToObject() {
 }
 
 /* ── CONTROLES FINAL ── */
-qs('#save-firebase').addEventListener('click', window.saveToFirebase);
-qs('#load-sample-btn').addEventListener('click', window.loadSampleData);
-qs('#print-pdf').addEventListener('click', function(){ window.print(); });
+const btnSave = qs('#save-firebase'); if(btnSave) btnSave.onclick = window.saveToFirebase;
+const btnSample = qs('#load-sample-btn'); if(btnSample) btnSample.onclick = window.loadSampleData;
+const btnPrint = qs('#print-pdf'); if(btnPrint) btnPrint.onclick = () => window.print();
 
-/* \u2500\u2500 RESET \u2500\u2500 */
-qs('#reset-form').addEventListener('click', function(){
-  if(!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
-  document.querySelectorAll('input,textarea,select').forEach(function(i){
-    if(i.type!=='file') i.value='';
-  });
-  if(qs('#units-body')) qs('#units-body').innerHTML='';
-  if(qs('#fichas-container')) qs('#fichas-container').innerHTML='';
-  if(qs('#crono-body')) qs('#crono-body').innerHTML='';
-  qs('#pp-toggle').checked=false;
-  qs('#pp-body').style.display='none';
-  qs('#sec-pp-card').style.opacity='0.6';
-  updateMasthead();
-});
+/* ── INIT DATOS DE EJEMPLO ── */
 
 /* \u2500\u2500 INIT DATOS DE EJEMPLO \u2500\u2500 */
 addFicha({
@@ -2355,28 +2352,31 @@ addFicha({
   minimos:'Algoritmos y estructuras de datos. Paradigmas de programaci\u00F3n. (Res. 2457/19)',
   adaptaciones:'Sin adaptaciones espec\u00EDficas previstas al momento de la planificaci\u00F3n.'
 });
-qs('#add-row').click();
-qs('#add-crono').click();
+  const btnAddRow = qs('#add-row'); if(btnAddRow) btnAddRow.click();
+  const btnAddCrono = qs('#add-crono'); if(btnAddCrono) btnAddCrono.click();
 
   updateFichaNum();
   
   // APP STATE ACTIONS
-  qs('#home-create-btn').onclick = () => setAppState('CREATE');
-  qs('#hdr-create-btn').onclick = () => setAppState('CREATE');
+  const bHomeCreate = qs('#home-create-btn'); if(bHomeCreate) bHomeCreate.onclick = () => setAppState('CREATE');
+  const bHdrCreate  = qs('#hdr-create-btn');  if(bHdrCreate)  bHdrCreate.onclick  = () => setAppState('CREATE');
   
-  qs('#home-edit-btn').onclick = () => {
+  const bHomeEdit = qs('#home-edit-btn');
+  if (bHomeEdit) bHomeEdit.onclick = () => {
     qs('#modal-recover').style.display = 'flex';
     populateFilters();
   };
-  qs('#hdr-edit-btn').onclick = () => {
+  const bHdrEdit = qs('#hdr-edit-btn');
+  if (bHdrEdit) bHdrEdit.onclick = () => {
     qs('#modal-recover').style.display = 'flex';
     populateFilters();
   };
   
-  qs('#modal-close-btn').onclick = () => qs('#modal-recover').style.display = 'none';
-  qs('#modal-cancel-btn').onclick = () => qs('#modal-recover').style.display = 'none';
+  const bModClose = qs('#modal-close-btn');  if(bModClose)  bModClose.onclick  = () => qs('#modal-recover').style.display = 'none';
+  const bModCan   = qs('#modal-cancel-btn'); if(bModCan)    bModCan.onclick    = () => qs('#modal-recover').style.display = 'none';
   
-  qs('#cancel-plan-btn').onclick = () => {
+  const bPlanCan  = qs('#cancel-plan-btn');
+  if (bPlanCan) bPlanCan.onclick = () => {
     if (confirm("¿Estás seguro de salir? Se perderán los cambios no guardados.")) {
       setAppState('HOME');
     }
