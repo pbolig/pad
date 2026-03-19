@@ -594,6 +594,32 @@ input.search-input {
   box-shadow: var(--shadow-sm);
 }
 .search-icon { position: absolute; left: 24px; top: 16px; opacity: .6; pointer-events: none; font-size: 19px; z-index: 5; }
+
+/* ── SMART DROPDOWN (Generic) ── */
+.smart-dropdown {
+  display: none;
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  background: var(--white);
+  border-radius: 12px;
+  margin-top: 8px;
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  max-height: 250px;
+  overflow-y: auto;
+  border: 1px solid var(--neutral-100);
+}
+.smart-dropdown div {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--neutral-50);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.smart-dropdown div:hover { background: var(--neutral-50); }
+.smart-dropdown div:last-child { border-bottom: none; }
+.smart-dropdown strong { display: block; color: var(--neutral-800); font-size: 14px; }
+.smart-dropdown small { color: var(--neutral-500); font-size: 11px; }
+
 </style>
 </head>
 <body class="state-home">
@@ -851,8 +877,10 @@ input.search-input {
                 <span class="tt-eg">Ej.: Pérez, Ana Lucía – DNI 28.456.789 – Titular</span>
               </span></span>
             </label>
-            <input id="docente" type="text" list="docentes-list" autocomplete="off" placeholder="Apellido, Nombre – DNI · Situación de revista" />
-            <datalist id="docentes-list"></datalist>
+            <div style="position:relative;">
+              <input id="docente" type="text" autocomplete="off" placeholder="Apellido, Nombre – DNI · Situación de revista" />
+              <div id="docente-results" class="smart-dropdown"></div>
+            </div>
           </div>
 
           <div class="field">
@@ -2181,41 +2209,54 @@ async function loadDocentes() {
   try {
     const snap = await get(ref(db, 'docentes'));
     const raw = snap.val() || {};
-    DOCENTES_CACHE = {};
-    const displayNames = {}; // nKey -> name
-    const dl = qs('#docentes-list');
-    if (!dl) return;
-    dl.innerHTML = '';
+    DOCENTES_CACHE = {}; 
     
+    // Group by normalized key for deduplication but keep display names
     Object.keys(raw).forEach(k => {
       const d = raw[k];
       if (d && d.name) {
         const nKey = normalizeKey(d.name);
-        // Prioritize names with DNI if multiples exist
-        if (!displayNames[nKey] || d.name.toUpperCase().includes('DNI')) {
-           displayNames[nKey] = d.name;
+        // Prioritize showing name with DNI
+        if (!DOCENTES_CACHE[nKey] || d.name.toUpperCase().includes('DNI')) {
+          DOCENTES_CACHE[nKey] = d;
         }
-        DOCENTES_CACHE[d.name] = d;
       }
-    });
-
-    Object.values(displayNames).sort().forEach(name => {
-      const opt = document.createElement('option');
-      opt.value = name;
-      dl.appendChild(opt);
     });
   } catch(e) { console.error("Error loading docentes:", e); }
 }
 
 function handleDocenteInput(e) {
   const val = e.target.value.trim();
-  if (DOCENTES_CACHE[val]) {
-    const d = DOCENTES_CACHE[val];
-    const elMail = qs('#email-docente');
-    const elTel = qs('#tel-docente');
-    // Force override to ensure data is applied
-    if (elMail) elMail.value = d.email || '';
-    if (elTel) elTel.value = d.tel || '';
+  const resDiv = qs('#docente-results');
+  if (!resDiv) return;
+  
+  if (val.length < 2) {
+    resDiv.style.display = 'none';
+    return;
+  }
+  
+  const lowQ = normalizeKey(val);
+  const matches = Object.values(DOCENTES_CACHE).filter(d => {
+    return normalizeKey(d.name).includes(lowQ);
+  });
+  
+  resDiv.innerHTML = '';
+  if (matches.length > 0) {
+    resDiv.style.display = 'block';
+    matches.forEach(d => {
+      const item = document.createElement('div');
+      item.innerHTML = `<strong>${d.name}</strong><small>${d.email || d.tel || ''}</small>`;
+      item.onclick = () => {
+        qs('#docente').value = d.name;
+        qs('#email-docente').value = d.email || '';
+        qs('#tel-docente').value = d.tel || '';
+        resDiv.style.display = 'none';
+        if (window.updateMasthead) window.updateMasthead();
+      };
+      resDiv.appendChild(item);
+    });
+  } else {
+    resDiv.style.display = 'none';
   }
 }
 
@@ -2448,10 +2489,18 @@ document.addEventListener('DOMContentLoaded', function() {
   const elDocente = qs('#docente');
   if (elDocente) {
     elDocente.addEventListener('input', handleDocenteInput);
-    elDocente.addEventListener('change', handleDocenteInput);
+    elDocente.addEventListener('focus', handleDocenteInput);
   }
 
   loadDocentes();
+
+  // Hide dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (e.target.id !== 'docente' && !e.target.closest('#docente-results')) {
+      const dr = qs('#docente-results');
+      if (dr) dr.style.display = 'none';
+    }
+  });
 
 const bAddRow = qs('#add-row');
 if (bAddRow) bAddRow.onclick = function() {
