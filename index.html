@@ -851,7 +851,7 @@ input.search-input {
                 <span class="tt-eg">Ej.: Pérez, Ana Lucía – DNI 28.456.789 – Titular</span>
               </span></span>
             </label>
-            <input id="docente" type="text" list="docentes-list" placeholder="Apellido, Nombre – DNI · Situación de revista" />
+            <input id="docente" type="text" list="docentes-list" autocomplete="off" placeholder="Apellido, Nombre – DNI · Situación de revista" />
             <datalist id="docentes-list"></datalist>
           </div>
 
@@ -2107,9 +2107,73 @@ let DOCENTES_CACHE = {};
 
 function normalizeKey(s) {
   if (!s) return '';
-  return s.toString().toLowerCase()
+  // More aggressive normalization: remove accents, use only lowercase alphanumeric
+  return s.toString()
     .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
     .replace(/[^a-z0-9]/g, '');
+}
+
+function extractDNI(s) {
+  if (!s) return null;
+  const m = s.match(/DNI\s*([\d.]+)/i);
+  if (m) return m[1].replace(/\./g, '');
+  return null;
+}
+
+async function cleanupDocentes() {
+  if (!db) return;
+  try {
+    const snap = await get(ref(db, 'docentes'));
+    const raw = snap.val();
+    if (!raw) return;
+    
+    const unique = {};
+    // Iterate keys to find duplicates
+    Object.keys(raw).forEach(k => {
+      const d = raw[k];
+      if (!d || !d.name) return;
+      
+      const dni = extractDNI(d.name);
+      const email = (d.email || '').toLowerCase().trim();
+      const nName = normalizeKey(d.name);
+      
+      // Identity can be DNI, Email or Normalized Name
+      const identity = dni ? ('dni_' + dni) : (email ? ('eml_' + email) : ('nam_' + nName));
+      
+      // If identity exists, we'll keep the one with more data or the latest
+      if (!unique[identity] || (d.email && !unique[identity].email)) {
+        unique[identity] = { ...d, oldKey: k };
+      } else {
+        unique[identity].redundantKeys = unique[identity].redundantKeys || [];
+        unique[identity].redundantKeys.push(k);
+      }
+    });
+
+    // Write back and remove redundant
+    for (const id in unique) {
+      const d = unique[id];
+      const newKey = normalizeKey(d.name);
+      
+      // Save canonical
+      await set(ref(db, `docentes/${newKey}`), {
+        name: d.name,
+        email: d.email || '',
+        tel: d.tel || ''
+      });
+      
+      // Remove old if key changed or redundant
+      if (d.oldKey !== newKey) {
+        await remove(ref(db, `docentes/${d.oldKey}`));
+      }
+      if (d.redundantKeys) {
+        for (const rk of d.redundantKeys) {
+          if (rk !== newKey) await remove(ref(db, `docentes/${rk}`));
+        }
+      }
+    }
+    console.log("Cleanup docentes complete.");
+  } catch(e) { console.error("Error during cleanup:", e); }
 }
 
 async function loadDocentes() {
@@ -2127,7 +2191,10 @@ async function loadDocentes() {
       const d = raw[k];
       if (d && d.name) {
         const nKey = normalizeKey(d.name);
-        displayNames[nKey] = d.name; // Keep formatting of last one
+        // Prioritize names with DNI if multiples exist
+        if (!displayNames[nKey] || d.name.toUpperCase().includes('DNI')) {
+           displayNames[nKey] = d.name;
+        }
         DOCENTES_CACHE[d.name] = d;
       }
     });
@@ -2326,8 +2393,9 @@ window.saveToFirebase = async () => {
       const docenteKey = normalizeKey(docenteName);
       await set(ref(db, `docentes/${docenteKey}`), {
         name: docenteName,
-        email: o['email-docente'] || '',
-        tel: o['tel-docente'] || ''
+        dni: extractDNI(docenteName) || '',
+        email: (o['email-docente'] || '').trim(),
+        tel: (o['tel-docente'] || '').trim()
       });
       loadDocentes();
     }
@@ -2536,6 +2604,7 @@ addFicha({
   // INITIALIZE
   (async () => {
     const ok = await initFirebase();
+    if (ok) await cleanupDocentes();
     setAppState('HOME');
     console.log("App initialized. Mode: HOME. Firebase OK:", ok);
   })();
