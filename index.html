@@ -851,7 +851,8 @@ input.search-input {
                 <span class="tt-eg">Ej.: Pérez, Ana Lucía – DNI 28.456.789 – Titular</span>
               </span></span>
             </label>
-            <input id="docente" type="text" placeholder="Apellido, Nombre – DNI · Situación de revista" />
+            <input id="docente" type="text" list="docentes-list" placeholder="Apellido, Nombre – DNI · Situación de revista" />
+            <datalist id="docentes-list"></datalist>
           </div>
 
           <div class="field">
@@ -1774,9 +1775,9 @@ const FIREBASE_CFG = {
 /* ── DATOS DE EJEMPLO (Basados en XML) ── */
 const SAMPLE_DATA = {
   materia: {
-    anio: "2026",
+    anio: new Date().getFullYear().toString(),
     jurisdiccion: "Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)",
-    instituto: "Instituto Superior de Formación Docente y Técnica Nº 18 \"Dr. Antenor Tello\" – Rosario",
+    instituto: "Instituto Superior de Educación y Técnica Nº 57 – Rosario",
     "anio-cursada": "2° Año – 1° Cuatrimestre",
     carrera: "Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)",
     materia: "Base de Datos I – Modelado, Diseño e Implementación",
@@ -1806,9 +1807,9 @@ const SAMPLE_DATA = {
     "pp-activa": "no"
   },
   pp: {
-    anio: "2026",
+    anio: new Date().getFullYear().toString(),
     jurisdiccion: "Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)",
-    instituto: "Instituto Superior de Formación Docente y Técnica Nº 18 \"Dr. Antenor Tello\" – Rosario",
+    instituto: "Instituto Superior de Educación y Técnica Nº 57 – Rosario",
     "anio-cursada": "3° Año – Anual",
     carrera: "Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)",
     materia: "Práctica Profesionalizante III – Desarrollo de Proyecto en Contexto Real",
@@ -2101,6 +2102,37 @@ async function loadSubjects(career) {
   }
 }
 
+// ── DOCENTE MANAGEMENT ──
+let DOCENTES_CACHE = {};
+
+async function loadDocentes() {
+  if (!db) return;
+  try {
+    const snap = await get(ref(db, 'docentes'));
+    DOCENTES_CACHE = snap.val() || {};
+    const dl = qs('#docentes-list');
+    if (!dl) return;
+    dl.innerHTML = '';
+    Object.keys(DOCENTES_CACHE).sort().forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = name;
+      dl.appendChild(opt);
+    });
+  } catch(e) { console.error("Error loading docentes:", e); }
+}
+
+function handleDocenteInput(e) {
+  const val = e.target.value.trim();
+  if (DOCENTES_CACHE[val]) {
+    const d = DOCENTES_CACHE[val];
+    const elMail = qs('#email-docente');
+    const elTel = qs('#tel-docente');
+    if (elMail && !elMail.value) elMail.value = d.email || '';
+    if (elTel && !elTel.value) elTel.value = d.tel || '';
+  }
+}
+
+
 async function addSubject() {
   const career = qs('#carrera').value;
   if (!career) return alert("Primero seleccioná una carrera.");
@@ -2268,6 +2300,17 @@ window.saveToFirebase = async () => {
     };
     await set(ref(db, `planificaciones_index/${id}`), indexData);
     
+    // Save/Update Docente info
+    if (o.docente) {
+      const docenteKey = o.docente.trim();
+      await set(ref(db, `docentes/${docenteKey}`), {
+        name: o.docente,
+        email: o['email-docente'] || '',
+        tel: o['tel-docente'] || ''
+      });
+      loadDocentes(); // Refresh local list
+    }
+    
     ACTIVE_PLAN_ID = id;
     alert("Planificación guardada correctamente.");
     if (APP_MODE === 'CREATE') setAppState('EDIT');
@@ -2312,6 +2355,14 @@ document.addEventListener('DOMContentLoaded', function() {
       el.addEventListener('change', updateMasthead);
     }
   });
+
+  const elDocente = qs('#docente');
+  if (elDocente) {
+    elDocente.addEventListener('input', handleDocenteInput);
+    elDocente.addEventListener('change', handleDocenteInput);
+  }
+
+  loadDocentes();
 
 const bAddRow = qs('#add-row');
 if (bAddRow) bAddRow.onclick = function() {
