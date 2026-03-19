@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planificacion>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ENCABEZADO INSTITUCIONAL
+       NOTA: Esta UC es íntegramente Práctica Profesionalizante.
+       Rige el Decreto Provincial N° 1559/17. No aplica el régimen
+       de parciales del RAM: la acreditación es por proyecto y
+       defensa (Decreto 1559/17 Art. 11).
+  ════════════════════════════════════════════════════════════ -->
+  <anio>2026</anio>
+  <jurisdiccion>Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)</jurisdiccion>
+  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello" – Rosario</instituto>
+  <anio-cursada>3° Año – Anual</anio-cursada>
+  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>
+  <materia>Práctica Profesionalizante III – Desarrollo de Proyecto en Contexto Real</materia>
+  <comision>Comisión Única – Turno Noche</comision>
+  <docente>Villalba, Marcela Inés – DNI 30.112.456 – Titular · Referente Institucional de PP</docente>
+  <carga>128</carga>
+  <modalidad>Mixta (presencial + contexto real en organización externa)</modalidad>
+  <ram>Decreto N° 4199/2015 – Art. 32 (Asistencia 75%, aplicable por analogía a tutorías) · NORMA ESPECÍFICA PREVALENTE: Decreto Provincial N° 1559/17 – Reglamento de Práctica Profesionalizante Marco para IES Santa Fe (Art. 3, 4, 9, 11 y 12)</ram>
+  <aprob>Aprobada CD el 09/03/2026 – Acta N° 01/2026 – Expte. N° 0031-S-2026 · Plan Institucional de PP aprobado – Acta CD N° 08/2025</aprob>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CORRELATIVIDADES
+  ════════════════════════════════════════════════════════════ -->
+  <correl-cursar>• Programación II (aprobada con examen final)
+• Base de Datos I (aprobada con examen final)
+• Ingeniería de Software I (regularizada – cursado aprobado)
+• Práctica Profesionalizante II (aprobada)
+• Redes y Comunicaciones (regularizada)</correl-cursar>
+
+  <correl-final>• Programación II (examen final aprobado)
+• Base de Datos I (examen final aprobado)
+• Ingeniería de Software I (examen final aprobado)
+ACLARACIÓN IMPORTANTE: Esta UC NO tiene examen final ante tribunal en el sentido del RAM ordinario. La instancia de acreditación es la DEFENSA DEL PROYECTO ante tribunal evaluador, regida por el Decreto 1559/17 Art. 11. Las correlativas "para el final" se refieren a los requisitos para acceder a esa defensa.</correl-final>
+
+  <correl-simult>• Proyecto de Software (cursado simultáneo articulado – el proyecto de esta asignatura puede coincidir con el proyecto integrador de dicha UC)
+• Sin otros co-requisitos formales</correl-simult>
+
+  <plan-url>https://drive.google.com/file/d/1EjEmploPlanEstudiosPP3_TSP/view?usp=sharing</plan-url>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MARCO CURRICULAR Y PEDAGÓGICO
+  ════════════════════════════════════════════════════════════ -->
+  <objgen>• Desarrollar un sistema de software completo y funcional en un contexto organizacional real, integrando los saberes técnicos, metodológicos y comunicacionales adquiridos a lo largo de la carrera (Decreto 1559/17 Art. 3).
+• Gestionar de forma autónoma y colaborativa el ciclo completo de desarrollo de software: relevamiento de requerimientos, análisis, diseño, implementación, prueba, documentación y entrega formal al cliente.
+• Ejercitar la comunicación técnica y profesional oral y escrita ante destinatarios de distinto perfil: clientes, usuarios finales, pares técnicos y tribunal evaluador.
+• Asumir responsabilidades profesionales concretas ante una organización real, desarrollando actitudes propias del ejercicio ético, comprometido y responsable de la profesión.
+• Aplicar metodologías ágiles de gestión de proyectos (Scrum) en un entorno con incertidumbre y cambios de requerimientos reales.</objgen>
+
+  <competencias>Competencia 1 – Identificación, análisis y documentación de problemas de información en organizaciones reales, traducidos a requerimientos formales de software (SRS IEEE 830).
+Competencia 2 – Diseño de arquitecturas de software escalables, mantenibles y adecuadas al contexto del problema, con selección fundamentada de tecnologías.
+Competencia 3 – Implementación, prueba y documentación de sistemas de software funcionales con estándares de calidad profesional (código limpio, control de versiones, testing).
+Competencia 4 – Gestión de proyectos de software con metodología ágil Scrum: planificación de sprints, backlogs, revisiones y retrospectivas.
+Competencia 5 – Comunicación técnica oral y escrita ante distintos destinatarios: informe técnico formal, presentaciones, capacitación a usuarios.
+Competencia 6 – Trabajo en equipo con distribución equitativa de roles, responsabilidades y carga de trabajo en entornos profesionales reales.</competencias>
+
+  <perfil>Esta UC es el espacio de síntesis del perfil de egreso del Técnico Superior en Programación (Res. 2457/19). Integra transversalmente la totalidad de las competencias del título habilitante en un proyecto real de desarrollo de software. Constituye la evidencia más completa y auténtica de que el graduado está en condiciones de desempeñarse con autonomía en el campo profesional. La defensa del proyecto ante tribunal es el acto de cierre simbólico y formal de la formación técnica, y el producto entregado a la organización cliente es la demostración tangible del valor social de la formación recibida.</perfil>
+
+  <metodologia>La UC se organiza íntegramente bajo la lógica del APRENDIZAJE BASADO EN PROYECTOS (ABP) en contexto real, conforme al Decreto 1559/17. No existen clases expositivas sistemáticas: todos los encuentros presenciales son espacios de tutoría grupal e individual, revisión de avances, resolución de obstáculos emergentes, retroalimentación técnica y preparación de presentaciones ante el cliente y el tribunal. Los estudiantes trabajan en equipos de 3 a 4 integrantes con roles Scrum rotativos (Product Owner, Scrum Master, Developers). La organización cliente participa activamente en las revisiones de sprint (cada 3 semanas), actuando como stakeholder real. El docente tutor ejerce un rol de facilitador y acompañamiento metodológico, no de transmisor de contenidos.</metodologia>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       EVALUACIÓN – RÉGIMEN ESPECIAL PP (Decreto 1559/17)
+  ════════════════════════════════════════════════════════════ -->
+  <criterios>RÉGIMEN ESPECIAL DE PRÁCTICA PROFESIONALIZANTE – Decreto N° 1559/17 Art. 11.
+NO aplica el régimen de parciales del RAM para esta UC.
+
+CONDICIONES DE ACREDITACIÓN:
+• Asistencia mínima al 75% de los encuentros de tutoría presencial (por analogía con RAM Art. 32).
+• Entrega completa de TODOS los productos grupales e individuales según el cronograma establecido.
+• Concepto mínimo "Satisfactorio" en el informe de evaluación del supervisor externo de la organización cliente (REQUISITO EXCLUYENTE: sin este concepto no se puede acceder a la defensa oral, independientemente de la nota acumulada).
+• Nota final ponderada ≥ 6 (seis) sobre 10 en la evaluación integrada de proceso + producto + defensa.
+• Participación en TODAS las revisiones de sprint (inasistencia justificada con reemplazo acordado con el tutor con 48 hs de anticipación).
+
+NOTA: Esta UC NO tiene condición de "libre". Requiere cursado obligatorio con presencia en tutorías y entregas parciales (Decreto 1559/17 Art. 11).</criterios>
+
+  <instrumentos>EVALUACIÓN DE PROCESO (seguimiento continuo):
+• Bitácora de avance individual: registro semanal obligatorio en plataforma Moodle (entrada cada viernes antes de las 23:59 hs). Cada entrada incluye: tareas realizadas, obstáculos encontrados, próximos pasos, porcentaje de avance estimado.
+• Actas de revisión de sprint grupales: firmadas por el equipo, el docente tutor y el representante de la organización cliente al finalizar cada sprint (6 actas en total).
+• Tablero Kanban grupal en Trello: actualizado en tiempo real, con acceso compartido al docente tutor.
+
+EVALUACIÓN DE PRODUCTO:
+• Sprint 0 – SRS completo (plantilla IEEE 830, mínimo 15 pp.), validado y firmado por el cliente.
+• Sprint 1 – Documento de diseño arquitectónico (diagrama de clases UML, modelo de BD, mockups de UI).
+• Sistema funcional: código fuente en repositorio Git (rama main protegida, README completo) + ejecutable o acceso a instancia desplegada.
+• Informe técnico final grupal (PDF, 30-50 pp.): portada, índice, introducción, descripción de la organización, SRS, diseño, implementación, pruebas, manual de usuario, conclusiones, bibliografía.
+
+EVALUACIÓN DE PRESENTACIÓN Y DEFENSA:
+• Presentación oral ante tribunal evaluador institucional: 30 minutos de exposición + 15 minutos de preguntas del tribunal. El tribunal está integrado por el docente tutor, la coordinadora de carrera y el representante de la organización cliente.
+
+EVALUACIÓN EXTERNA:
+• Formulario de evaluación del supervisor externo (escala: Insatisfactorio / En desarrollo / Satisfactorio / Destacado), completado por el representante de la organización cliente y entregado en sobre cerrado a la Secretaría Académica.</instrumentos>
+
+  <ponderaciones>PROCESO Y SEGUIMIENTO CONTINUO: 30%
+  – Bitácora individual (regularidad, profundidad, evidencia de reflexión): 10%
+  – Actas de revisión de sprint (cumplimiento de objetivos, calidad de la comunicación con el cliente): 10%
+  – Participación activa en tutorías (actitud profesional, iniciativa, capacidad de autogestión): 10%
+
+PRODUCTO FINAL: 40%
+  – Calidad técnica del sistema (correctitud funcional, arquitectura, código documentado, cobertura de tests): 20%
+  – Informe técnico escrito (estructura, completitud, redacción técnica, cumplimiento de plantilla): 10%
+  – Repositorio Git (historial de commits significativo de todos los integrantes, organización, documentación): 10%
+
+PRESENTACIÓN Y DEFENSA ORAL: 20%
+  – Claridad expositiva, dominio del contenido, distribución del tiempo, respuesta a preguntas del tribunal: 20%
+
+INFORME DEL SUPERVISOR EXTERNO: 10%
+  – Evaluación del desempeño profesional, compromiso, comunicación y entrega del equipo: 10%
+
+TOTAL: 100%
+NOTA: El concepto mínimo "Satisfactorio" del supervisor externo es CONDICIÓN EXCLUYENTE, independientemente de la nota ponderada.</ponderaciones>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BIBLIOGRAFÍA
+  ════════════════════════════════════════════════════════════ -->
+  <biblio-ob>Schwaber, K. y Sutherland, J. (2020). La Guía Scrum (versión oficial gratuita, disponible en scrumguides.org).
+Pressman, R. S. y Maxim, B. R. (2015). Ingeniería del Software: Un enfoque práctico (8ª ed.). McGraw-Hill.
+Decreto Provincial N° 1559/17 – Reglamento de Práctica Profesionalizante Marco para IES Santa Fe (texto completo disponible en Secretaría Académica del instituto y en el sitio del Ministerio de Educación de Santa Fe).</biblio-ob>
+
+  <biblio-comp>IEEE Std 830-1998 – Plantilla de Especificación de Requisitos de Software (disponible en Moodle institucional).
+Atlassian – Guías y plantillas Scrum (atlassian.com/es/agile/scrum) [Acceso: mar. 2026].
+Git – Documentación oficial + Pro Git Book (git-scm.com/doc) [Acceso: mar. 2026].
+Martin, R. C. (2009). Clean Code: A Handbook of Agile Software Craftsmanship. Prentice Hall (fragmentos seleccionados, disponibles en Moodle).
+Trello – Guía de uso para equipos ágiles (trello.com/guide) [Acceso: mar. 2026].</biblio-comp>
+
+  <firma-doc>Villalba, Marcela Inés – DNI 30.112.456 – Titular · Referente PP</firma-doc>
+  <firma-coord>Fernández, Laura Beatriz – Coordinadora de Carrera TSP</firma-coord>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PRÁCTICA PROFESIONALIZANTE (UC es PP pura – activa)
+  ════════════════════════════════════════════════════════════ -->
+  <pp-activa>si</pp-activa>
+  <practica-profesionalizante>
+
+    <pp-tipo>PP en Contexto Real (empresa / organismo externo)</pp-tipo>
+
+    <pp-carga>128</pp-carga>
+    <!-- Toda la carga horaria de la UC es PP según diseño curricular Res. 2457/19 -->
+
+    <pp-norma>Decreto Provincial N° 1559/17 – Art. 3 (definición y finalidad de la PP) · Art. 4 inc. c (PP en contexto real con organización externa) · Art. 9 (convenios institucionales con organizaciones) · Art. 10 (designación del docente tutor y sus funciones) · Art. 11 (evaluación y condiciones de acreditación de la PP) · Art. 12 (instancia de recuperatorio) · Plan Institucional de PP del IES N° 18 aprobado por Acta CD N° 08/2025 · Convenios Marco con organizaciones locales N° 02/2024 (vigente)</pp-norma>
+
+    <pp-propositos>• Consolidar, integrar y transferir en un contexto laboral real la totalidad de los saberes y competencias desarrollados a lo largo de la carrera, tal como establece el Decreto 1559/17 Art. 3.
+• Experimentar el ejercicio profesional completo del programador en todas sus dimensiones: técnica, comunicacional, ética y colaborativa, desde el análisis inicial de requerimientos hasta la entrega formal de un producto funcional a un cliente real.
+• Desarrollar la capacidad de gestionar la incertidumbre, los cambios de requerimientos, los conflictos de equipo y las restricciones propias de los proyectos de software en contextos reales, donde no existen "enunciados con solución única".
+• Construir una experiencia profesional documentada, demostrable y evaluada que facilite y acelere la inserción laboral del egresado, actuando como primera referencia profesional concreta en el curriculum vitae.
+• Contribuir al desarrollo de organizaciones del entorno social y productivo local, materializando el compromiso de la institución con la comunidad (Decreto 1559/17 Art. 3, dimensión social de la PP).</pp-propositos>
+
+    <pp-competencias>• Relevar, analizar, priorizar y documentar requerimientos funcionales y no funcionales de una organización real mediante entrevistas, observación y análisis de documentos existentes.
+• Diseñar la arquitectura de una solución de software adecuada al contexto: selección de tecnologías justificada, diagrama de componentes, modelo de datos, definición de interfaces.
+• Implementar el sistema utilizando buenas prácticas profesionales: código limpio, commits descriptivos y frecuentes, testing unitario automatizado, revisión de código entre pares.
+• Gestionar el proyecto con metodología Scrum: definición y refinamiento del backlog, planificación de sprints, daily scrums, sprint review y retrospectiva con el cliente.
+• Redactar documentación técnica de calidad profesional: SRS según IEEE 830, documento de diseño, manual de usuario, informe técnico final.
+• Exponer y defender soluciones técnicas ante audiencias mixtas: stakeholders no técnicos (cliente), pares técnicos y tribunal evaluador académico.
+• Ejercer la profesión con responsabilidad ética: confidencialidad de la información del cliente, cumplimiento de compromisos, comunicación honesta sobre el estado del proyecto.</pp-competencias>
+
+    <pp-actividades>FASE 1 – INICIO Y RELEVAMIENTO (Semanas 1 a 4 / 16 hs):
+• Presentación institucional ante la organización cliente. Firma del acuerdo de confidencialidad y del acta de inicio de proyecto.
+• Conformación de equipos (3-4 integrantes) y asignación de roles Scrum iniciales (rotativos cada sprint).
+• Conducción de entrevistas de relevamiento con usuarios y responsables de la organización (mínimo 2 entrevistas formales documentadas por equipo).
+• Análisis de documentos existentes: formularios, planillas, sistemas actuales, procesos de negocio.
+• Redacción colaborativa del SRS completo (plantilla IEEE 830). Revisión con el docente tutor y validación formal con firma del representante de la organización cliente.
+• ENTREGA Sprint 0: SRS validado + acta de inicio firmada (fin sem. 4).
+
+FASE 2 – DISEÑO Y PLANIFICACIÓN (Semanas 5 a 7 / 12 hs):
+• Diseño de la arquitectura del sistema: selección y justificación del stack tecnológico, diagrama de componentes, modelo de datos (DER + esquema relacional normalizado), mockups de interfaz de usuario (alta fidelidad).
+• Construcción del Product Backlog completo con historias de usuario, criterios de aceptación y estimación en story points.
+• Planificación del Sprint 1.
+• ENTREGA Sprint 1: documento de diseño completo aprobado por tutor y cliente (fin sem. 7).
+
+FASE 3 – IMPLEMENTACIÓN ITERATIVA – 5 SPRINTS (Semanas 8 a 22 / 60 hs):
+• Sprint 2 (sem. 8-10): módulos core del sistema. Configuración del entorno de desarrollo, estructura del proyecto, primer incremento funcional demostrable.
+• Sprint 3 (sem. 11-13): módulos secundarios y lógica de negocio. Testing unitario de los módulos desarrollados.
+• Sprint 4 (sem. 14-16): integración de módulos, pruebas de integración, ajustes según feedback del Sprint 3.
+• Sprint 5 (sem. 17-19): funcionalidades avanzadas y optimización. Testing de rendimiento básico.
+• Sprint 6 (sem. 20-22): módulos de reportes / exportación / funcionalidades secundarias priorizadas por el cliente. Congelamiento de nuevos requerimientos (feature freeze).
+• En cada sprint: revisión con cliente (demo del incremento, 45 min.), retrospectiva del equipo (30 min.), actualización del tablero Kanban y bitácora individual.
+
+FASE 4 – CIERRE, ENTREGA Y DOCUMENTACIÓN (Semanas 23 a 26 / 16 hs):
+• Pruebas de aceptación con usuarios reales de la organización en su entorno de trabajo.
+• Correcciones post-prueba y estabilización del sistema.
+• Capacitación formal a los usuarios de la organización cliente (mínimo 2 horas, con material didáctico preparado por el equipo).
+• Despliegue del sistema en el entorno de producción acordado.
+• Redacción del informe técnico final y del manual de usuario.
+• Entrega formal del sistema, la documentación y el repositorio Git al representante de la organización. Firma del acta de recepción.
+
+FASE 5 – PRESENTACIÓN Y DEFENSA (Semana 27 / 4 hs de preparación + 45 min. de defensa):
+• Preparación de la presentación oral (15-20 diapositivas, estructura: contexto, problema, solución, demo, aprendizajes, conclusiones).
+• Presentación y defensa ante tribunal evaluador institucional (30 min. exposición del equipo + 15 min. preguntas del tribunal).
+• El tribunal está integrado por: docente tutor, coordinadora de carrera y representante de la organización cliente.</pp-actividades>
+
+    <pp-contexto>MODALIDAD: PP en contexto real con organizaciones externas (Decreto 1559/17 Art. 4 inc. c y Art. 9).
+
+ORGANIZACIONES CLIENTE ASIGNADAS PARA 2026 (una por equipo):
+• Equipo 1 (4 integrantes): Mutual del Personal Docente "Enseñar" de Rosario.
+  Proyecto: sistema de gestión de socios, cuotas y préstamos personales.
+  Convenio específico N° 01/2026 – firmado el 02/03/2026.
+  Supervisor externo: Lic. Rodríguez, Patricia (Gerenta Administrativa).
+
+• Equipo 2 (3 integrantes): Centro Comunitario "La Orilla" – Barrio Triángulo, Rosario.
+  Proyecto: plataforma web de inscripción a talleres, seguimiento de asistencia y comunicación con familias.
+  Convenio específico N° 02/2026 – firmado el 02/03/2026.
+  Supervisor externo: Sr. Morales, Héctor (Coordinador del Centro).
+
+• Equipo 3 (4 integrantes): Cooperativa de Trabajo "TecnoSur Ltda." – Rosario.
+  Proyecto: sistema de facturación, gestión de órdenes de trabajo y seguimiento de clientes (CRM básico).
+  Convenio específico N° 03/2026 – firmado el 03/03/2026.
+  Supervisor externo: Ing. López, Mónica (Referente Tecnológica de la Cooperativa).
+
+Los encuentros con la organización cliente se realizan en la sede de la organización o en el instituto según acuerdo previo. El docente tutor acompaña el primer encuentro de cada equipo y puede participar en las revisiones de sprint a demanda de los equipos. Copias de los convenios y actas en Secretaría Académica del instituto.</pp-contexto>
+
+    <pp-tutoria>ENCUENTROS DE TUTORÍA PRESENCIAL:
+• Frecuencia: 1 encuentro semanal de 2 horas en sede del instituto (miércoles 20:00-22:00 hs).
+• Estructura de cada tutoría: 15 min. check-in individual (revisión de bitácora), 60 min. trabajo grupal con cada equipo (resolución de obstáculos, revisión de código, preparación de la revisión de sprint siguiente), 15 min. espacio abierto de consulta.
+• En semanas de revisión de sprint: el encuentro de tutoría es reemplazado por la reunión de sprint review con el cliente (1,5 hs., puede ser presencial en la organización o por videoconferencia).
+
+INSTRUMENTO DE SEGUIMIENTO INDIVIDUAL:
+• Bitácora en plataforma Moodle: entrada obligatoria cada viernes antes de las 23:59 hs. Estructura de cada entrada: (1) tareas realizadas esta semana y su estado (completado / en progreso / bloqueado), (2) obstáculos encontrados y cómo se resolvieron o qué se necesita para resolverlos, (3) plan para la semana siguiente, (4) porcentaje de avance estimado del sprint actual, (5) reflexión sobre el propio desempeño (2-3 oraciones). El docente lee y responde las bitácoras con un breve comentario antes del martes siguiente.
+
+SEGUIMIENTO GRUPAL:
+• Tablero Kanban en Trello: acceso compartido con el docente tutor. Se espera que refleje el estado real del proyecto en todo momento.
+• Repositorio Git: el docente tutor tiene acceso como colaborador. Se revisa el historial de commits semanalmente como indicador de participación individual.
+
+COMUNICACIÓN CON SUPERVISORES EXTERNOS:
+• El docente tutor establece contacto mínimo mensual (email o reunión breve de 20 min.) con el supervisor de cada organización para informar el avance del proyecto y gestionar eventuales conflictos o cambios de requerimientos.
+• Ante problemas significativos (cambio de alcance, conflictos de equipo, dificultades de acceso a la organización), el docente tutor escala a la Coordinación de Carrera en un plazo no mayor a 48 hs.</pp-tutoria>
+
+    <pp-productos>PRODUCTOS INDIVIDUALES (evaluados por estudiante):
+• Bitácora de avance completa: mínimo 26 entradas semanales con la estructura establecida, disponibles en Moodle al finalizar la Fase 3. Cada entrada faltante descuenta 0,5 puntos de la nota de proceso.
+• Sección de autoinforme al final del informe técnico grupal (2-3 pp. por integrante): descripción del rol asumido en cada sprint, principales aprendizajes técnicos y actitudinales, dificultades superadas y aspectos a mejorar como profesional.
+
+PRODUCTOS GRUPALES (evaluados por equipo):
+• Sprint 0 – SRS completo: plantilla IEEE 830, mínimo 15 pp., con casos de uso y/o historias de usuario, firmado por el representante cliente – entrega fin sem. 4.
+• Sprint 1 – Documento de diseño arquitectónico: diagrama de componentes, modelo de datos (DER + relacional), mockups de alta fidelidad, justificación del stack tecnológico – entrega fin sem. 7.
+• Actas de revisión de sprints 2 a 6: formulario institucional firmado por cliente, tutor y equipo – entrega al finalizar cada sprint.
+• Sistema funcional: repositorio Git (rama main protegida, commits descriptivos, README completo con instrucciones de instalación y uso) + ejecutable instalado en el entorno de producción de la organización cliente o acceso a instancia desplegada en la nube.
+• Informe técnico final (PDF, 30-50 pp.): estructura estandarizada que incluye portada, resumen ejecutivo, índice, descripción de la organización y el problema, SRS actualizado, documento de diseño final, descripción de la implementación, resultados de las pruebas de aceptación, manual de usuario, lecciones aprendidas, conclusiones, bibliografía, autoinformes individuales como anexo.
+• Presentación oral en formato digital (15-20 diapositivas): incluye demo en vivo del sistema funcional (o grabación de respaldo en caso de problemas técnicos imprevistos).</pp-productos>
+
+    <pp-criterios-eval>PROCESO Y SEGUIMIENTO CONTINUO (30%):
+• Bitácora individual (10%): regularidad (todas las entradas presentes), profundidad reflexiva, evidencia de autonomía creciente a lo largo del año, honestidad sobre dificultades. Rúbrica de 4 niveles disponible en Moodle desde sem. 1.
+• Actas de sprint (10%): completitud de los objetivos comprometidos en cada sprint (ratio comprometido/entregado), calidad de la comunicación con el cliente en la revisión, capacidad de ajuste ante el feedback recibido.
+• Participación en tutorías (10%): asistencia, actitud profesional, iniciativa para plantear problemas, capacidad de autogestión entre encuentros.
+
+PRODUCTO FINAL (40%):
+• Calidad técnica del sistema (20%): correctitud funcional (cumplimiento del SRS), arquitectura coherente con el diseño, código documentado y legible, cobertura de tests unitarios (mínimo 60% de las funciones core), ausencia de bugs críticos en la demo.
+• Informe técnico escrito (10%): estructura completa, redacción técnica precisa y accesible, cumplimiento de la plantilla, correcta referenciación de fuentes.
+• Repositorio Git (10%): historial con commits significativos de TODOS los integrantes en TODOS los sprints, mensajes de commit descriptivos, organización en ramas, README completo y actualizado.
+
+PRESENTACIÓN Y DEFENSA ORAL (20%):
+• Claridad expositiva y estructura lógica de la presentación: 5%
+• Dominio técnico del contenido y capacidad de respuesta a preguntas del tribunal: 10%
+• Calidad de la demo en vivo del sistema: 5%
+
+INFORME DEL SUPERVISOR EXTERNO (10%):
+• Evaluación del desempeño profesional, puntualidad y respeto de los compromisos: 4%
+• Calidad de la comunicación con la organización y actitud ante el feedback: 3%
+• Valoración general del producto entregado y su utilidad real para la organización: 3%
+• Concepto global mínimo "Satisfactorio" (CONDICIÓN EXCLUYENTE para acceder a la defensa).</pp-criterios-eval>
+
+    <pp-acred>CONDICIONES DE ACREDITACIÓN (Decreto 1559/17 Art. 11):
+• Nota final ponderada ≥ 6 (seis) sobre 10 (según distribución detallada en ponderaciones).
+• Entrega completa de TODOS los productos individuales y grupales listados, en los plazos establecidos.
+• Concepto mínimo "Satisfactorio" en el informe del supervisor externo (CONDICIÓN EXCLUYENTE: sin este concepto el estudiante/equipo no puede acceder a la defensa oral, debiendo resolver la situación en el recuperatorio).
+• Asistencia mínima al 75% de los encuentros de tutoría presencial.
+• Participación en todas las revisiones de sprint (inasistencia justificada con reemplazo acordado por escrito con el tutor con 48 hs de anticipación como mínimo).
+
+RECUPERATORIO (Decreto 1559/17 Art. 12):
+La instancia de recuperatorio puede incluir, según lo determine el tribunal:
+a) Reentrega de productos observados con correcciones documentadas.
+b) Nueva instancia de defensa oral ante el mismo tribunal.
+c) En casos graves (concepto "Insatisfactorio" del supervisor externo): renegociación del proyecto con una nueva organización cliente y extensión del período de práctica al siguiente ciclo lectivo (implica recursar la UC).
+Plazo del recuperatorio: turno de exámenes de octubre/noviembre 2026 (primera fecha: 12/10/2026).
+
+ACLARACIÓN PARA EL TRIBUNAL: La nota individual puede diferenciarse de la nota grupal si el análisis de la bitácora y el historial de commits evidencia participación significativamente desigual entre integrantes. En ese caso el tribunal puede aplicar un factor de corrección individual de hasta ±1,5 puntos respecto de la nota grupal, previa justificación documentada en el acta de evaluación.</pp-acred>
+
+  </practica-profesionalizante>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       RESUMEN DE UNIDADES
+       (En PP pura las "unidades" son las FASES del proyecto,
+        no unidades temáticas de contenido teórico)
+  ════════════════════════════════════════════════════════════ -->
+  <unidades>
+
+    <unidad>
+      <unidad>Fase 1</unidad>
+      <titulo>Inicio, Vínculo con el Cliente y Relevamiento de Requisitos</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <contenidos>Presentación institucional · Acuerdo de confidencialidad · Técnicas de elicitación de requisitos · SRS IEEE 830 · Product Backlog inicial</contenidos>
+      <instancias>Entrega Sprint 0 – SRS validado por el cliente (fin sem. 4)</instancias>
+      <ponderacion>10</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>Fase 2</unidad>
+      <titulo>Diseño Arquitectónico y Planificación del Proyecto</titulo>
+      <duracion>3 sem / 12 hs</duracion>
+      <contenidos>Arquitectura del sistema · Diagrama de componentes · Modelo de datos · Mockups UI · Product Backlog completo · Planificación Sprint 1</contenidos>
+      <instancias>Entrega Sprint 1 – Documento de diseño aprobado (fin sem. 7)</instancias>
+      <ponderacion>10</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>Fase 3</unidad>
+      <titulo>Implementación Iterativa – Sprints 2 al 6</titulo>
+      <duracion>15 sem / 60 hs (5 sprints de 3 semanas c/u)</duracion>
+      <contenidos>Desarrollo incremental por historias de usuario · Testing unitario · Control de versiones Git · Revisiones de sprint con el cliente · Retrospectivas</contenidos>
+      <instancias>5 actas de revisión de sprint firmadas (sem. 10, 13, 16, 19, 22) · Bitácora individual continua</instancias>
+      <ponderacion>50</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>Fase 4</unidad>
+      <titulo>Cierre, Entrega Formal y Documentación Final</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <contenidos>Pruebas de aceptación con usuarios reales · Correcciones post-prueba · Capacitación a usuarios · Despliegue en producción · Informe técnico final · Manual de usuario</contenidos>
+      <instancias>Entrega formal del sistema + Informe técnico + Acta de recepción firmada (fin sem. 26)</instancias>
+      <ponderacion>20</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>Fase 5</unidad>
+      <titulo>Presentación y Defensa ante Tribunal Evaluador</titulo>
+      <duracion>1 sem / 4 hs preparación + 45 min. defensa</duracion>
+      <contenidos>Presentación oral · Demo en vivo del sistema · Defensa ante tribunal · Autoevaluación del proceso</contenidos>
+      <instancias>Defensa oral ante tribunal (sem. 27) – Instancia de acreditación (Decreto 1559/17 Art. 11)</instancias>
+      <ponderacion>10</ponderacion>
+    </unidad>
+
+  </unidades>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FICHAS DETALLADAS
+  ════════════════════════════════════════════════════════════ -->
+  <fichas>
+
+    <ficha>
+      <unidad>Fase 1</unidad>
+      <titulo>Inicio, Vínculo con el Cliente y Relevamiento de Requisitos</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <objetivos>• Establecer el vínculo profesional con la organización cliente en los términos formales requeridos por el Decreto 1559/17 Art. 9: presentación institucional, firma del acuerdo de confidencialidad y del acta de inicio de proyecto.
+• Relevar de manera sistemática los requerimientos del sistema mediante técnicas formales de elicitación (entrevistas estructuradas, análisis de documentos, observación de procesos).
+• Producir un SRS completo según la plantilla IEEE 830, validado y firmado por el representante de la organización cliente, como base contractual del proyecto.</objetivos>
+      <contenidos>Conceptual: Técnicas de elicitación de requerimientos: entrevistas (estructuradas, semiestructuradas), cuestionarios, análisis de documentos, observación de procesos, prototipado rápido. Tipos de requisitos: funcionales, no funcionales, de interfaz, de rendimiento, de seguridad. Estructura del SRS según IEEE 830. Casos de uso y/o historias de usuario: formato, criterios de aceptación, priorización con MoSCoW. Gestión de stakeholders: identificación, mapa de influencia/interés, estrategia de comunicación.
+Procedimental: Preparación y conducción de entrevistas profesionales (guión previo, toma de notas, acta de la entrevista). Análisis y síntesis de información heterogénea en requerimientos formales. Redacción técnica colaborativa del SRS (Google Docs). Validación del SRS con el cliente: técnica de lectura estructurada. Construcción del Product Backlog inicial en Trello.
+Actitudinal: Profesionalismo en el primer contacto con la organización: puntualidad, presentación personal, respeto por los tiempos y la cultura organizacional del cliente. Honestidad sobre las capacidades y limitaciones del equipo al comprometerse con el alcance del proyecto. Confidencialidad y responsabilidad en el manejo de información sensible de la organización.</contenidos>
+      <actividades>• Sem. 1 (tutoría): presentación del marco de la PP, asignación de equipos y organizaciones cliente. Lectura y análisis del Decreto 1559/17. Preparación del primer encuentro con el cliente (rol playing de entrevistas en el aula).
+• Sem. 1 (fuera de tutoría): visita inicial a la organización cliente. Presentación institucional, firma del acuerdo de confidencialidad y del acta de inicio. Primera entrevista de relevamiento.
+• Sem. 2: segunda entrevista de relevamiento + análisis de documentos existentes de la organización (formularios, planillas, procesos actuales). Tutoría: revisión del material recopilado con el docente.
+• Sem. 3: redacción colaborativa del SRS. Tutoría: revisión del borrador con el docente (devolución escrita en 24 hs). Correcciones.
+• Sem. 4: validación del SRS con el cliente (reunión de lectura estructurada). Firma del SRS y del acta de inicio de la Fase 2. ENTREGA Sprint 0.
+• TIC: Google Docs para la redacción colaborativa del SRS. Trello para el Product Backlog inicial. Grabación de entrevistas (con consentimiento del entrevistado).
+• ESI/Inclusión: se trabaja el concepto de "diseño inclusivo" desde el relevamiento: los formularios y sistemas deben contemplar diversidad de género, accesibilidad y diversidad cultural en los datos que gestionan. Se reflexiona sobre los sesgos que pueden introducirse en el diseño del sistema si no se relevan estas dimensiones desde el inicio.</actividades>
+      <recursos>• Plantilla SRS adaptada IEEE 830 (PDF + Google Docs editable, disponible en Moodle)
+• Guía de conducción de entrevistas de relevamiento (apunte de cátedra, Moodle)
+• Formulario de acuerdo de confidencialidad (plantilla institucional, Secretaría Académica)
+• Formulario de acta de inicio de proyecto (plantilla institucional, Secretaría Académica)
+• Trello (trello.com) – cuenta gratuita
+• Pressman y Maxim cap. 5 y 6 (Ingeniería de requisitos)</recursos>
+      <estrategias>Formativa: revisión del borrador del SRS por el docente tutor en sem. 3 con devolución escrita detallada (rúbrica de 6 criterios) en 24 hs. Simulación de entrevista en sem. 1 con feedback del grupo.
+Sumativa: entrega del Sprint 0 (SRS validado + acta de inicio firmada) al final de sem. 4. Evaluado con rúbrica específica (disponible en Moodle desde sem. 1) que pondera completitud, claridad, verificabilidad de los requerimientos y formato IEEE 830.</estrategias>
+      <evidencias>• SRS completo (PDF, mínimo 15 pp.) firmado por el representante cliente y el equipo – Moodle fin sem. 4.
+• Actas de las 2 entrevistas de relevamiento (formato libre pero con: fecha, participantes, preguntas y respuestas principales, compromisos asumidos) – Moodle fin sem. 4.
+• Acta de inicio del proyecto firmada por el cliente y el docente tutor – original en Secretaría Académica.
+• Bitácora individual: entradas de sem. 1 a 4 (4 entradas) – Moodle, viernes de cada semana.</evidencias>
+      <fechas>Sem. 1 (03/03): tutoría inicial + visita cliente · Sem. 2 (10/03): 2ª entrevista + análisis documentos · Sem. 3 (17/03): redacción SRS + revisión tutor · Sem. 4 (24/03): validación cliente + ENTREGA Sprint 0</fechas>
+      <minimos>Gestión de proyectos de software. Relevamiento y documentación de requisitos. Trabajo en equipo en contexto profesional. (Res. 2457/19 – Contenidos mínimos PP III · Decreto 1559/17 Art. 3)</minimos>
+      <adaptaciones>Integrante del Equipo 2 con diagnóstico de TEA leve: se anticipa con 72 hs de antelación la agenda detallada de cada encuentro con el cliente (formato escrito, enviada por Moodle). El docente tutor acompaña presencialmente el primer contacto con la organización y actúa como mediador si surgen dificultades en la comunicación.
+Para el resto de los equipos: sin adaptaciones específicas previstas al momento de la planificación. Se revisará individualmente al inicio del cursado.</adaptaciones>
+    </ficha>
+
+    <ficha>
+      <unidad>Fase 3</unidad>
+      <titulo>Implementación Iterativa – Sprints 2 al 6</titulo>
+      <duracion>15 sem / 60 hs (5 sprints de 3 semanas cada uno)</duracion>
+      <objetivos>• Implementar el sistema de software de forma incremental y demostrable, cumpliendo los objetivos comprometidos en cada sprint y entregando valor real al cliente en cada iteración.
+• Aplicar buenas prácticas de desarrollo profesional de manera consistente: código limpio, commits descriptivos y frecuentes, testing unitario automatizado, revisión de código entre pares.
+• Gestionar el proyecto con el marco Scrum de manera autónoma: planificación de sprints, daily scrums (al menos 3 por semana entre los integrantes del equipo), revisión de sprint con el cliente y retrospectiva del equipo.
+• Ajustar el producto de manera responsable ante el feedback del cliente en cada revisión de sprint, desarrollando flexibilidad ante cambios de requerimientos sin perder el foco en el alcance comprometido.</objetivos>
+      <contenidos>Conceptual: Ciclo Scrum completo: sprint planning, daily scrum, sprint review, sprint retrospective. Definition of Done (DoD) y Definition of Ready (DoR). Deuda técnica: concepto, causas y gestión. Refactorización: cuándo y cómo. Testing: unitario, integración, aceptación (criterios de aceptación de las historias de usuario). Integración continua básica. Despliegue continuo básico. Gestión de conflictos en equipos de proyecto: técnicas de resolución.
+Procedimental: Implementación por historias de usuario priorizadas según el backlog. Control de versiones con Git Flow (ramas de feature, integración en develop, releases en main). Escritura de tests unitarios automatizados (framework según tecnología del equipo: pytest, JUnit, Jest, etc.). Actualización diaria del tablero Kanban. Preparación y conducción de la sprint review con el cliente. Facilitación de la retrospectiva (herramienta: Start/Stop/Continue).
+Actitudinal: Cumplimiento de los compromisos asumidos ante el equipo y el cliente al inicio de cada sprint, comunicando proactivamente cualquier impedimento que ponga en riesgo el objetivo del sprint. Capacidad de dar y recibir feedback técnico constructivo en la revisión de código entre pares. Responsabilidad profesional ante plazos reales con un cliente real.</contenidos>
+      <actividades>• Tutorías semanales: revisión del estado del sprint (tablero Kanban + repositorio Git), resolución de obstáculos técnicos o de equipo, preparación de la revisión de sprint siguiente (cada 3 semanas).
+• Sprint review cada 3 semanas: demo del incremento al cliente (45 min.), retroalimentación del cliente, ajuste del backlog. Puede ser presencial en la organización o por videoconferencia.
+• Retrospectiva del equipo al finalizar cada sprint (30 min., formato Start/Stop/Continue, registro en Moodle).
+• TIC: Git con rama main protegida (pull requests obligatorios para mergear a main). Tablero Trello actualizado en tiempo real. Testing automatizado con el framework elegido por el equipo. CI básica con GitHub Actions (opcional pero valorado positivamente en la evaluación del repositorio).
+• ESI/Inclusión: en cada sprint review se incluye un punto de agenda sobre "inclusión y accesibilidad" del incremento: ¿el sistema es usable por personas con distintas capacidades? ¿Los textos, colores y contrastes son accesibles? El equipo registra las decisiones de accesibilidad tomadas en el README del repositorio.
+• Para el integrante del Equipo 2 con TEA: estructura fija y predecible del encuentro de tutoría (15 min. individual + 45 min. grupal + 10 min. síntesis y próximos pasos). Agenda enviada por escrito con 48 hs de anticipación.</actividades>
+      <recursos>• Repositorio Git del equipo (GitHub – cuenta educativa gratuita: github.com/education)
+• Tablero Kanban en Trello (acceso compartido con docente tutor)
+• Entorno de desarrollo acordado por equipo (VS Code + lenguaje/framework elegido en Fase 2)
+• Framework de testing del stack tecnológico elegido
+• Formulario de acta de revisión de sprint (Moodle institucional)
+• La Guía Scrum (Schwaber y Sutherland, 2020 – descarga gratuita en scrumguides.org)
+• Clean Code – fragmentos seleccionados (Moodle)</recursos>
+      <estrategias>Formativa: revisión semanal de la bitácora individual y el tablero Kanban por el docente tutor, con comentario escrito en Moodle antes del encuentro de tutoría siguiente. Revisión del historial de commits del repositorio como indicador objetivo de participación individual. Devolución oral en cada tutoría sobre el estado técnico del proyecto.
+Sumativa: acta de revisión de sprint firmada por cliente, equipo y tutor al finalizar cada sprint (5 actas – sem. 10, 13, 16, 19 y 22). Cada acta registra el porcentaje de completitud de los objetivos comprometidos, el feedback del cliente y los compromisos para el sprint siguiente.</estrategias>
+      <evidencias>• 5 actas de revisión de sprint firmadas (formulario institucional) – Secretaría Académica + copia digital en Moodle, al finalizar cada sprint.
+• Repositorio Git con historial de commits de TODOS los integrantes en cada sprint. Rama main con historial limpio. README completo y actualizado.
+• Tablero Kanban con el estado de las historias de usuario de cada sprint (captura de pantalla al inicio y al cierre de cada sprint en la bitácora individual).
+• Bitácora individual: entradas de sem. 8 a 22 (15 entradas obligatorias).</evidencias>
+      <fechas>Sprint 2: sem. 8-10 (14/04-05/05) – acta sem. 10 · Sprint 3: sem. 11-13 (12/05-02/06) – acta sem. 13 · Sprint 4: sem. 14-16 (09/06-30/06) – acta sem. 16 · Sprint 5: sem. 17-19 (14/07-04/08) – acta sem. 19 · Sprint 6: sem. 20-22 (11/08-01/09) – acta sem. 22</fechas>
+      <minimos>Implementación de soluciones de software. Gestión ágil de proyectos. Testing y aseguramiento de calidad. Control de versiones. Trabajo en equipo profesional. (Res. 2457/19 – Contenidos mínimos PP III · Decreto 1559/17 Art. 6)</minimos>
+      <adaptaciones>Se mantiene la adaptación del integrante con TEA: agenda semanal anticipada por escrito y estructura fija del encuentro de tutoría.
+Para estudiantes que trabajan en relación de dependencia y tienen dificultades para cumplir con el horario de las sprint reviews con el cliente: se negociarán modalidades alternativas (videoconferencia fuera del horario de tutoría) con acuerdo previo del docente tutor y el supervisor externo. Esta situación debe comunicarse en la primera semana del sprint afectado, no a posteriori.</adaptaciones>
+    </ficha>
+
+  </fichas>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CRONOGRAMA – refleja hitos del proyecto, no clases teóricas
+  ════════════════════════════════════════════════════════════ -->
+  <cronograma>
+    <fila><fecha>Sem. 1 – 03/03</fecha><tema>Inicio PP · Presentación institucional al cliente</tema><actividad>Tutoría: marco PP + asignación equipos · Visita inicial a la organización + firma acuerdo confidencialidad</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 2 – 10/03</fecha><tema>Fase 1 – Relevamiento</tema><actividad>2ª entrevista de relevamiento + análisis de documentos de la organización</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 3 – 17/03</fecha><tema>Fase 1 – Redacción SRS</tema><actividad>Redacción colaborativa del SRS · Revisión tutor con devolución escrita</actividad><evaluacion>Borrador SRS (revisión formativa)</evaluacion></fila>
+    <fila><fecha>Sem. 4 – 24/03</fecha><tema>Fase 1 – Validación y entrega Sprint 0</tema><actividad>Reunión de validación del SRS con el cliente · Firma del acta de inicio</actividad><evaluacion>ENTREGA Sprint 0 – SRS validado y firmado</evaluacion></fila>
+    <fila><fecha>Sem. 5 – 31/03</fecha><tema>Fase 2 – Diseño arquitectónico</tema><actividad>Diagrama de componentes · Selección y justificación del stack tecnológico · Modelo de datos</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 6 – 07/04</fecha><tema>Fase 2 – Mockups y backlog</tema><actividad>Mockups de alta fidelidad · Construcción del Product Backlog completo con estimaciones</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 7 – 14/04</fecha><tema>Fase 2 – Entrega Sprint 1 · Inicio implementación</tema><actividad>Validación del documento de diseño con el cliente · Planificación Sprint 2</actividad><evaluacion>ENTREGA Sprint 1 – Documento de diseño aprobado</evaluacion></fila>
+    <fila><fecha>Sem. 8-9 – 21/04-28/04</fecha><tema>Fase 3 – Sprint 2 (implementación módulos core)</tema><actividad>Desarrollo incremental · Configuración entorno + estructura del proyecto · Commits diarios</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 10 – 05/05</fecha><tema>Fase 3 – Sprint 2: revisión con cliente</tema><actividad>Demo del primer incremento funcional al cliente · Retroalimentación · Planificación Sprint 3</actividad><evaluacion>Acta de revisión Sprint 2 (firmada cliente + equipo + tutor)</evaluacion></fila>
+    <fila><fecha>Sem. 11-12 – 12/05-19/05</fecha><tema>Fase 3 – Sprint 3 (módulos secundarios)</tema><actividad>Implementación · Testing unitario de módulos del Sprint 2 · Correcciones según feedback</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 13 – 02/06</fecha><tema>Fase 3 – Sprint 3: revisión con cliente</tema><actividad>Demo Sprint 3 · Retroalimentación · Planificación Sprint 4</actividad><evaluacion>Acta de revisión Sprint 3</evaluacion></fila>
+    <fila><fecha>Sem. 14-15 – 09/06-16/06</fecha><tema>Fase 3 – Sprint 4 (integración de módulos)</tema><actividad>Integración · Pruebas de integración · Refactorización de deuda técnica acumulada</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 16 – 30/06</fecha><tema>Fase 3 – Sprint 4: revisión con cliente</tema><actividad>Demo Sprint 4 · Retroalimentación · Planificación Sprint 5</actividad><evaluacion>Acta de revisión Sprint 4</evaluacion></fila>
+    <fila><fecha>Sem. 17-18 – 14/07-21/07</fecha><tema>Fase 3 – Sprint 5 (funcionalidades avanzadas)</tema><actividad>Implementación · Testing de rendimiento básico · Optimización</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 19 – 04/08</fecha><tema>Fase 3 – Sprint 5: revisión con cliente</tema><actividad>Demo Sprint 5 · Retroalimentación · Planificación Sprint 6</actividad><evaluacion>Acta de revisión Sprint 5</evaluacion></fila>
+    <fila><fecha>Sem. 20-21 – 11/08-18/08</fecha><tema>Fase 3 – Sprint 6 (módulos finales · feature freeze)</tema><actividad>Últimas funcionalidades · Congelamiento de nuevos requerimientos</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 22 – 01/09</fecha><tema>Fase 3 – Sprint 6: revisión con cliente · Cierre desarrollo</tema><actividad>Demo Sprint 6 · Validación final del alcance · Inicio Fase 4</actividad><evaluacion>Acta de revisión Sprint 6 (última)</evaluacion></fila>
+    <fila><fecha>Sem. 23 – 08/09</fecha><tema>Fase 4 – Pruebas de aceptación con usuarios reales</tema><actividad>Testing de aceptación en sede de la organización con usuarios finales · Registro de bugs y correcciones</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 24 – 15/09</fecha><tema>Fase 4 – Correcciones post-prueba · Documentación final</tema><actividad>Correcciones prioritarias · Inicio redacción informe técnico final y manual de usuario</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 25 – 22/09</fecha><tema>Fase 4 – Capacitación a usuarios · Despliegue</tema><actividad>Capacitación formal a usuarios (mínimo 2 hs.) · Despliegue en entorno de producción</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 26 – 29/09</fecha><tema>Fase 4 – Entrega formal a la organización cliente</tema><actividad>Entrega del sistema + documentación + repositorio · Firma del acta de recepción</actividad><evaluacion>ENTREGA FINAL – Sistema funcional + Informe técnico + Acta de recepción firmada</evaluacion></fila>
+    <fila><fecha>Sem. 27 – 06/10</fecha><tema>Fase 5 – Defensa ante tribunal evaluador institucional</tema><actividad>Presentación oral (30 min.) + Demo en vivo + Preguntas del tribunal (15 min.)</actividad><evaluacion>DEFENSA ORAL – Instancia de acreditación (Decreto 1559/17 Art. 11)</evaluacion></fila>
+    <fila><fecha>12/10/2026</fecha><tema>Recuperatorio (si aplica)</tema><actividad>Reentrega de productos observados y/o nueva instancia de defensa oral</actividad><evaluacion>Recuperatorio (Decreto 1559/17 Art. 12)</evaluacion></fila>
+  </cronograma>
+
+</planificacion>

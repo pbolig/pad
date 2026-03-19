@@ -633,6 +633,16 @@ button:hover { filter: brightness(.93); }
           </div>
 
           <div class="field">
+            <label>Email del Docente</label>
+            <input id="email-docente" type="email" placeholder="ejemplo@correo.com" />
+          </div>
+
+          <div class="field">
+            <label>Teléfono del Docente</label>
+            <input id="tel-docente" type="tel" placeholder="+54 341 ..." />
+          </div>
+
+          <div class="field">
             <label>
               Carga horaria anual (hs reloj)
               <span class="norm">Plan de estudios</span>
@@ -1317,10 +1327,8 @@ button:hover { filter: brightness(.93); }
       <div class="controls-bar">
         <button class="btn-mint" id="print-pdf">🖨 Imprimir / Guardar PDF</button>
         <div class="divider"></div>
-        <button class="btn-sky" id="export-xml">⬇ Exportar XML</button>
-        <button class="btn-ghost" id="import-xml-btn">⬆ Importar XML</button>
-        <input id="import-xml" type="file" accept=".xml" style="display:none" />
-        <button class="btn-lav" id="download-sample-xml">⬇ Descargar XML de ejemplo</button>
+        <button class="btn-sky" id="save-firebase">☁ Sincronizar con la Nube</button>
+        <button class="btn-lav" id="load-sample-btn">📋 Cargar Planilla de Ejemplo</button>
         <div class="divider"></div>
         <button class="btn-danger" id="reset-form">🗑 Limpiar todo</button>
       </div>
@@ -1515,10 +1523,214 @@ button:hover { filter: brightness(.93); }
   </div>
 </template>
 
-<script>
-/* \u2500\u2500 UTILS \u2500\u2500 */
+<script type="module">
+/* ── UTILS ── */
 const qs  = (s, ctx=document) => ctx.querySelector(s);
 const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+
+/* ── FIREBASE CONFIG (Placeholder para el usuario) ── */
+const FIREBASE_CFG = {
+  apiKey: "PONER_AQUI_API_KEY",
+  authDomain: "PONER_AQUI_AUTH_DOMAIN",
+  databaseURL: "PONER_AQUI_DATABASE_URL",
+  projectId: "PONER_AQUI_PROJECT_ID",
+  appId: "PONER_AQUI_APP_ID"
+};
+
+/* ── DATOS DE EJEMPLO (Basados en XML) ── */
+const SAMPLE_DATA = {
+  materia: {
+    anio: "2026",
+    jurisdiccion: "Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)",
+    instituto: "Instituto Superior de Formación Docente y Técnica Nº 18 \"Dr. Antenor Tello\" – Rosario",
+    "anio-cursada": "2° Año – 1° Cuatrimestre",
+    carrera: "Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)",
+    materia: "Base de Datos I – Modelado, Diseño e Implementación",
+    comision: "Comisión A – Turno Noche",
+    docente: "Sánchez, Martín Alejandro – DNI 27.334.891 – Titular",
+    "email-docente": "m.sanchez@ejemplo.edu.ar",
+    "tel-docente": "+54 341 4556677",
+    carga: "96",
+    modalidad: "Presencial",
+    ram: "Decreto N° 4199/2015 – Art. 28 (Condiciones de acreditación) · Art. 32 (Asistencia mínima 75%) · Art. 35 (Examen final) · Art. 38 (Régimen de regularidad)",
+    aprob: "Aprobada CD el 11/03/2026 – Acta N° 02/2026 – Expte. N° 0055-S-2026",
+    "correl-cursar": "• Programación I (regularizada – cursado aprobado)\n• Matemática Discreta (regularizada – cursado aprobado)\n• Introducción a los Sistemas de Información (aprobada con examen final)",
+    "correl-final": "• Programación I (examen final aprobado)\n• Matemática Discreta (examen final aprobado)\nNOTA: el estudiante debe tener ambas materias con examen final rendido y aprobado antes de presentarse al examen final de Base de Datos I, independientemente de haber cursado y regularizado la presente.",
+    "correl-simult": "• Programación II (puede cursarse en el mismo cuatrimestre, no es co-requisito estricto)\n• Sin co-requisitos formales obligatorios según plan de estudios Res. 2457/19",
+    "plan-url": "https://drive.google.com/file/d/1EjEmploPlanEstudiosBD1_TSP/view?usp=sharing",
+    objgen: "• Comprender los fundamentos teóricos del modelo relacional y los principios del diseño de bases de datos...\n• Aplicar técnicas de modelado entidad-relación y normalización...",
+    competencias: "Competencia 1 – Análisis de requerimientos...\nCompetencia 2 – Diseño e implementación...\nCompetencia 3 – Uso de herramientas y lenguajes...\nCompetencia 5 – Comunicación técnica escrita...",
+    perfil: "Esta unidad curricular es núcleo de la formación del Técnico Superior en Programación...",
+    metodologia: "Enfoque constructivista con resolución de problemas reales. Aprendizaje Basado en Problemas (ABP)...",
+    criterios: "CONDICIONES DE REGULARIDAD (RAM Art. 38):\n• Asistencia mínima al 75%...\n• Aprobación de los 2 parciales escritos con nota ≥ 4...",
+    instrumentos: "• 2 Parciales escritos individuales...\n• Trabajos prácticos de laboratorio semanales grupares...",
+    ponderaciones: "Para la nota de cursado (condición de regularidad):\n• Parcial 1: 25% · Parcial 2: 25% · Trabajos prácticos: 30% · Trabajo integrador parcial: 20% = 100%",
+    "biblio-ob": "Silberschatz, A., Korth, H. F. y Sudarshan, S. (2019). Fundamentos de Bases de Datos (7ª ed.). McGraw-Hill.",
+    "biblio-comp": "PostgreSQL – Documentación oficial en español...\nMySQL 8.0 Reference Manual...",
+    "firma-doc": "Sánchez, Martín Alejandro – DNI 27.334.891 – Titular",
+    "firma-coord": "Fernández, Laura Beatriz – Coordinadora de Carrera TSP",
+    "pp-activa": "no"
+  },
+  pp: {
+    anio: "2026",
+    jurisdiccion: "Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)",
+    instituto: "Instituto Superior de Formación Docente y Técnica Nº 18 \"Dr. Antenor Tello\" – Rosario",
+    "anio-cursada": "3° Año – Anual",
+    carrera: "Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)",
+    materia: "Práctica Profesionalizante III – Desarrollo de Proyecto en Contexto Real",
+    comision: "Comisión Única – Turno Noche",
+    docente: "Villalba, Marcela Inés – DNI 30.112.456 – Titular",
+    "email-docente": "m.villalba@ejemplo.edu.ar",
+    "tel-docente": "+54 341 99887766",
+    carga: "128",
+    modalidad: "Mixta (presencial + contexto real)",
+    ram: "Decreto Provincial N° 1559/17 – Reglamento de Práctica Profesionalizante",
+    aprob: "Aprobada CD el 09/03/2026 – Acta N° 01/2026",
+    "correl-cursar": "• Programación II (aprobada con examen final)\n• Base de Datos I (aprobada con examen final)\n• Ingeniería de Software I (regularizada)\n• Práctica Profesionalizante II (aprobada)",
+    "correl-final": "• Programación II (examen final aprobado)\n• Base de Datos I (examen final aprobado)\n• Ingeniería de Software I (examen final aprobado)",
+    "correl-simult": "• Proyecto de Software (cursado simultáneo articulado)",
+    "plan-url": "https://drive.google.com/file/d/1EjEmploPlanEstudiosPP3_TSP/view?usp=sharing",
+    objgen: "• Desarrollar un sistema de software completo en contexto organizacional real...\n• Gestionar el ciclo completo de desarrollo de software...",
+    competencias: "Competencia 1 – Identificación y análisis de problemas...\nCompetencia 2 – Diseño de arquitecturas de software...\nCompetencia 4 – Gestión de proyectos con Scrum...",
+    perfil: "Esta UC es el espacio de síntesis del perfil de egreso del Técnico Superior en Programación...",
+    metodologia: "Aprendizaje Basado en Proyectos (ABP) en contexto real. Tutorías grupales e individuales...",
+    criterios: "RÉGIMEN ESPECIAL PP – Decreto N° 1559/17 Art. 11.\n• Asistencia mínima al 75%...\n• Nota final ponderada ≥ 6...",
+    instrumentos: "• Bitácora de avance individual\n• Actas de revisión de sprint\n• Sistema funcional funcional\n• Informe técnico final\n• Defensa oral",
+    ponderaciones: "Proceso: 30% · Producto Final: 40% · Presentación y Defensa: 20% · Informe Supervisor: 10% = 100%",
+    "biblio-ob": "Schwaber, K. y Sutherland, J. (2020). La Guía Scrum.\nDecreto Provincial N° 1559/17.",
+    "biblio-comp": "IEEE Std 830-1998 (SRS).\nAtlassian – Guías Scrum.",
+    "firma-doc": "Villalba, Marcela Inés – DNI 30.112.456 – Titular · Referente PP",
+    "firma-coord": "Fernández, Laura Beatriz – Coordinadora de Carrera TSP",
+    "pp-activa": "si",
+    "pp-tipo": "PP en Contexto Real (empresa / organismo)",
+    "pp-carga": "128",
+    "pp-norma": "Decreto Provincial N° 1559/17",
+    "pp-propositos": "• Consolidar, integrar y transferir saberes en contexto real...\n• Experimentar el ejercicio profesional completo...",
+    "pp-competencias": "• Relevar y documentar requerimientos...\n• Diseñar arquitecturas de software...\n• Implementar con buenas prácticas...",
+    "pp-actividades": "FASE 1: Relevamiento y SRS (Semanas 1-4)\nFASE 2: Diseño (Semanas 5-7)\nFASE 3: Implementación Iterativa (Semanas 8-22)",
+    "pp-contexto": "Organizaciones locales: Mutual Enseñar, Centro La Orilla, Cooperativa TecnoSur.",
+    "pp-tutoria": "Encuentros semanales (Miércoles 20:00). Bitácora individual obligatoria.",
+    "pp-productos": "SRS Validado, Documento de Diseño, Sistema Funcional, Informe Técnico Final.",
+    "pp-criterios-eval": "Proceso (30%), Producto (40%), Defensa (20%), Supervisor (10%).",
+    "pp-acred": "Nota ≥ 6. Concepto Satisfactorio del supervisor externo."
+  }
+};
+
+import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, set, get, onValue }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+let db = null;
+
+async function initFirebase() {
+  if (!FIREBASE_CFG.apiKey || FIREBASE_CFG.apiKey.includes("PONER_AQUI")) {
+    console.log("Firebase no configurado.");
+    return;
+  }
+  try {
+    const app = initializeApp(FIREBASE_CFG, 'pad-app');
+    db = getDatabase(app);
+    console.log("Firebase inicializado.");
+    
+    // Auto-load on connect
+    const planRef = ref(db, 'planificaciones/current');
+    onValue(planRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        console.log("Datos recuperados de la nube.");
+        loadObjectToForm(data);
+      }
+    });
+  } catch (err) {
+    console.error("Error al conectar con Firebase:", err);
+  }
+}
+
+function loadObjectToForm(o) {
+  // Limpiar tablas y fichas para evitar duplicados en la carga
+  qs('#tabla-unidades tbody').innerHTML = '';
+  qs('#fichas-container').innerHTML = '';
+  qs('#cronograma tbody').innerHTML = '';
+
+  FLAT_FIELDS.forEach(id => {
+    const el = qs('#' + id);
+    if (el) el.value = o[id] || '';
+  });
+  
+  const ppActiva = o['pp-activa'] === 'si';
+  qs('#pp-toggle').checked = ppActiva;
+  qs('#pp-body').style.display = ppActiva ? 'block' : 'none';
+  qs('#sec-pp-card').style.opacity = ppActiva ? '1' : '0.6';
+
+  PP_FIELDS.forEach(id => {
+    const el = qs('#' + id);
+    if (el) el.value = o[id] || '';
+  });
+
+  if (o.unidades) {
+    o.unidades.forEach(u => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td contenteditable="true" style="text-align:center;">${u.unidad}</td>`
+        + `<td contenteditable="true">${u.titulo}</td>`
+        + `<td contenteditable="true">${u.duracion}</td>`
+        + `<td contenteditable="true">${u.contenidos}</td>`
+        + `<td contenteditable="true">${u.instancias}</td>`
+        + `<td contenteditable="true" style="text-align:center;">${u.ponderacion}</td>`;
+      qs('#tabla-unidades tbody').appendChild(tr);
+    });
+  }
+
+  if (o.fichas) {
+    o.fichas.forEach(f => window.addFicha(f));
+  }
+
+  if (o.cronograma) {
+    o.cronograma.forEach(c => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td contenteditable="true">${c.fecha}</td>`
+        + `<td contenteditable="true">${c.tema}</td>`
+        + `<td contenteditable="true">${c.actividad}</td>`
+        + `<td contenteditable="true">${c.evaluacion}</td>`;
+      qs('#cronograma tbody').appendChild(tr);
+    });
+  }
+  
+  if (typeof updateMasthead === 'function') updateMasthead();
+}
+
+// Global functions for buttons
+window.saveToFirebase = async () => {
+  if (!db) {
+    alert("Firebase no está configurado. Editá FIREBASE_CFG en el código.");
+    return;
+  }
+  try {
+    const o = formToObject();
+    await set(ref(db, 'planificaciones/current'), o);
+    alert("Planificación sincronizada con la nube correctamente.");
+  } catch (err) {
+    alert("Error al guardar: " + err.message);
+  }
+};
+
+window.loadSampleData = () => {
+  const op = prompt("¿Qué tipo de planilla de ejemplo querés cargar?\n\na) Formato Materia (Regular)\nb) Prácticas Profesionalizantes\n\n(Escribí 'a' o 'b')");
+  if (!op) return;
+  
+  let data = null;
+  if (op.toLowerCase() === 'a') data = SAMPLE_DATA.materia;
+  else if (op.toLowerCase() === 'b') data = SAMPLE_DATA.pp;
+  else {
+    alert("Opción no válida.");
+    return;
+  }
+
+  if (data) {
+    if (confirm("Se cargarán datos ficticios de ejemplo. Se perderán los cambios no guardados. ¿Continuar?")) {
+      loadObjectToForm(data);
+    }
+  }
+};
 
 document.addEventListener('DOMContentLoaded', function() {
 
@@ -1569,7 +1781,7 @@ qs('#clear-rows').addEventListener('click', function(){ tablaBody.innerHTML=''; 
 var fichasContainer = qs('#fichas-container');
 var tplFicha = qs('#tpl-ficha');
 
-function addFicha(pre) {
+window.addFicha = function(pre) { // Made global for loadObjectToForm
   pre = pre || {};
   var node = tplFicha.content.cloneNode(true);
   var el = node.querySelector('.ficha-card');
@@ -1590,7 +1802,7 @@ function addFicha(pre) {
   fichasContainer.appendChild(node);
   updateFichaNum();
 }
-qs('#add-ficha').addEventListener('click', function(){ addFicha(); });
+qs('#add-ficha').addEventListener('click', function(){ window.addFicha(); });
 
 function updateFichaNum() {
   qsa('#fichas-container .ficha-card').forEach(function(c,i){

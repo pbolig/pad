@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<planificacion>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       ENCABEZADO INSTITUCIONAL
+  ════════════════════════════════════════════════════════════ -->
+  <anio>2026</anio>
+  <jurisdiccion>Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)</jurisdiccion>
+  <instituto>Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello" – Rosario</instituto>
+  <anio-cursada>2° Año – 1° Cuatrimestre</anio-cursada>
+  <carrera>Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</carrera>
+  <materia>Base de Datos I – Modelado, Diseño e Implementación</materia>
+  <comision>Comisión A – Turno Noche</comision>
+  <docente>Sánchez, Martín Alejandro – DNI 27.334.891 – Titular</docente>
+  <carga>96</carga>
+  <modalidad>Presencial</modalidad>
+  <ram>Decreto N° 4199/2015 – Art. 28 (Condiciones de acreditación) · Art. 32 (Asistencia mínima 75%) · Art. 35 (Examen final) · Art. 38 (Régimen de regularidad)</ram>
+  <aprob>Aprobada CD el 11/03/2026 – Acta N° 02/2026 – Expte. N° 0055-S-2026</aprob>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CORRELATIVIDADES
+  ════════════════════════════════════════════════════════════ -->
+  <correl-cursar>• Programación I (regularizada – cursado aprobado)
+• Matemática Discreta (regularizada – cursado aprobado)
+• Introducción a los Sistemas de Información (aprobada con examen final)</correl-cursar>
+
+  <correl-final>• Programación I (examen final aprobado)
+• Matemática Discreta (examen final aprobado)
+NOTA: el estudiante debe tener ambas materias con examen final rendido y aprobado antes de presentarse al examen final de Base de Datos I, independientemente de haber cursado y regularizado la presente.</correl-final>
+
+  <correl-simult>• Programación II (puede cursarse en el mismo cuatrimestre, no es co-requisito estricto)
+• Sin co-requisitos formales obligatorios según plan de estudios Res. 2457/19</correl-simult>
+
+  <plan-url>https://drive.google.com/file/d/1EjEmploPlanEstudiosBD1_TSP/view?usp=sharing</plan-url>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MARCO CURRICULAR Y PEDAGÓGICO
+  ════════════════════════════════════════════════════════════ -->
+  <objgen>• Comprender los fundamentos teóricos del modelo relacional y los principios del diseño de bases de datos, desde el modelo conceptual hasta la implementación física.
+• Aplicar técnicas de modelado entidad-relación y normalización (hasta 3FN/BCNF) para el diseño de esquemas de bases de datos robustos y eficientes.
+• Desarrollar habilidades en el uso del lenguaje SQL para la definición, manipulación y consulta de datos en sistemas gestores relacionales (PostgreSQL / MySQL).
+• Analizar críticamente el diseño de una base de datos existente, identificando anomalías, redundancias y oportunidades de optimización.
+• Fomentar hábitos de documentación técnica, trabajo colaborativo y criterio profesional en la toma de decisiones de diseño.</objgen>
+
+  <competencias>Competencia 1 – Análisis de requerimientos de información en organizaciones reales y su traducción a modelos de datos.
+Competencia 2 – Diseño e implementación de soluciones de software que involucren persistencia y gestión de datos estructurados.
+Competencia 3 – Uso de herramientas y lenguajes estándar de la industria para el desarrollo de sistemas de información.
+Competencia 5 – Comunicación técnica escrita: documentación de modelos, esquemas y decisiones de diseño.</competencias>
+
+  <perfil>Esta unidad curricular es núcleo de la formación del Técnico Superior en Programación: ningún sistema de software de mediana o gran escala prescinde de una base de datos bien diseñada. La UC habilita al egresado para modelar la capa de persistencia de cualquier sistema, interactuar con DBAs en entornos laborales reales y tomar decisiones fundamentadas sobre diseño, indexación y optimización de consultas, contribuyendo directamente a las Competencias 1, 2 y 3 del perfil de egreso (Res. 2457/19).</perfil>
+
+  <metodologia>Enfoque constructivista con resolución de problemas reales de creciente complejidad. La metodología central es el APRENDIZAJE BASADO EN PROBLEMAS (ABP): cada unidad se articula alrededor de un caso de negocio real (e-commerce, sistema hospitalario, gestión educativa) sobre el que se aplican progresivamente las técnicas de modelado, diseño e implementación. Los encuentros presenciales alternan exposición dialogada (30%) con trabajo práctico en laboratorio (70%). Se utiliza la plataforma Moodle para distribución de materiales, entrega de trabajos y comunicación asincrónica. El trabajo en pares (pair programming aplicado al diseño) es la modalidad predominante en las actividades de laboratorio.</metodologia>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       RÉGIMEN DE EVALUACIÓN
+  ════════════════════════════════════════════════════════════ -->
+  <criterios>CONDICIONES DE REGULARIDAD (RAM Art. 38):
+• Asistencia mínima al 75% de los encuentros presenciales (RAM Art. 32). Con menos del 75% el estudiante pierde la regularidad y deberá recursar.
+• Aprobación de los 2 parciales escritos con nota ≥ 4 (cuatro), o sus recuperatorios correspondientes. Quien desaprueba ambas instancias (parcial + recuperatorio) de una misma evaluación pierde la regularidad.
+• Entrega y aprobación del 80% de los trabajos prácticos de laboratorio con nota ≥ 4 (cuatro).
+
+CONDICIONES DE ACREDITACIÓN (RAM Art. 28 y 35):
+• El estudiante regular accede al examen final ante tribunal, donde debe obtener nota ≥ 6 (seis) para acreditar la UC.
+• El examen final es oral-escrito: resolución de un caso práctico de modelado y diseño (parte escrita, 40 min.) + defensa oral ante tribunal (20 min.).
+• El estudiante libre puede presentarse al examen final libre bajo las condiciones del Art. 36 del RAM (instancia escrita eliminatoria + oral).</criterios>
+
+  <instrumentos>• 2 Parciales escritos individuales (Unidades 1-2 y Unidades 3-4), con 1 recuperatorio cada uno
+• Trabajos prácticos de laboratorio semanales grupales (parejas): 8 prácticos a lo largo del cuatrimestre
+• Trabajo integrador parcial grupal (3 integrantes): diseño completo de una BD para un caso real, entregado en la semana 12
+• Examen final oral-escrito ante tribunal (estudiantes regulares y libres)</instrumentos>
+
+  <ponderaciones>Para la nota de cursado (condición de regularidad):
+• Parcial 1: 25% · Parcial 2: 25% · Trabajos prácticos: 30% · Trabajo integrador parcial: 20% = 100%
+La nota de cursado NO es la nota de acreditación. La acreditación definitiva se obtiene en el examen final (RAM Art. 35), donde la nota del final es la nota de la materia.</ponderaciones>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       BIBLIOGRAFÍA
+  ════════════════════════════════════════════════════════════ -->
+  <biblio-ob>Silberschatz, A., Korth, H. F. y Sudarshan, S. (2019). Fundamentos de Bases de Datos (7ª ed.). McGraw-Hill.
+Date, C. J. (2004). Introducción a los Sistemas de Bases de Datos (8ª ed.). Pearson Educación.
+Elmasri, R. y Navathe, S. B. (2016). Fundamentos de Sistemas de Bases de Datos (7ª ed.). Pearson.</biblio-ob>
+
+  <biblio-comp>PostgreSQL – Documentación oficial en español (postgresql.org/docs/current) [Acceso: mar. 2026]
+MySQL 8.0 Reference Manual (dev.mysql.com/doc/refman/8.0/en) [Acceso: mar. 2026]
+SQLZoo – Ejercicios SQL interactivos (sqlzoo.net) [Acceso: mar. 2026]
+Lucidchart – Herramienta online de diagramas ER (lucidchart.com) [Acceso: mar. 2026]
+Khan Academy – SQL (khanacademy.org/computing/computer-programming/sql) [Acceso: mar. 2026]</biblio-comp>
+
+  <firma-doc>Sánchez, Martín Alejandro – DNI 27.334.891 – Titular</firma-doc>
+  <firma-coord>Fernández, Laura Beatriz – Coordinadora de Carrera TSP</firma-coord>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PRÁCTICA PROFESIONALIZANTE (no aplica a esta UC)
+  ════════════════════════════════════════════════════════════ -->
+  <pp-activa>no</pp-activa>
+  <practica-profesionalizante>
+    <pp-tipo></pp-tipo>
+    <pp-carga></pp-carga>
+    <pp-norma></pp-norma>
+    <pp-propositos></pp-propositos>
+    <pp-competencias></pp-competencias>
+    <pp-actividades></pp-actividades>
+    <pp-contexto></pp-contexto>
+    <pp-tutoria></pp-tutoria>
+    <pp-productos></pp-productos>
+    <pp-criterios-eval></pp-criterios-eval>
+    <pp-acred></pp-acred>
+  </practica-profesionalizante>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       RESUMEN DE UNIDADES
+  ════════════════════════════════════════════════════════════ -->
+  <unidades>
+
+    <unidad>
+      <unidad>1</unidad>
+      <titulo>Fundamentos de Bases de Datos y Modelo Entidad-Relación</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <contenidos>Concepto de BD y SGBD · Arquitectura ANSI/SPARC · Modelo ER: entidades, atributos, relaciones, cardinalidades · Diagrama ER extendido (EER)</contenidos>
+      <instancias>Evaluación diagnóstica (sem. 1) · Práctico 1 (sem. 3) · Práctico 2 (sem. 4)</instancias>
+      <ponderacion>20</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>2</unidad>
+      <titulo>Modelo Relacional y Normalización</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <contenidos>Modelo relacional: relaciones, claves, restricciones · Conversión ER a relacional · Dependencias funcionales · Formas normales 1FN, 2FN, 3FN, BCNF · Anomalías de actualización</contenidos>
+      <instancias>Práctico 3 (sem. 6) · Práctico 4 (sem. 8) · Parcial 1 (sem. 9)</instancias>
+      <ponderacion>25</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>3</unidad>
+      <titulo>SQL: Definición y Manipulación de Datos</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <contenidos>DDL: CREATE, ALTER, DROP, constraints · DML: INSERT, UPDATE, DELETE · DQL: SELECT, WHERE, JOIN (todos los tipos), GROUP BY, HAVING, subconsultas · Vistas e índices básicos</contenidos>
+      <instancias>Práctico 5 (sem. 11) · Práctico 6 (sem. 12) · Trabajo integrador parcial (sem. 12)</instancias>
+      <ponderacion>30</ponderacion>
+    </unidad>
+
+    <unidad>
+      <unidad>4</unidad>
+      <titulo>SQL Avanzado, Transacciones e Introducción a BD No Relacionales</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <contenidos>Procedimientos almacenados y triggers · Control de transacciones (ACID) · Bloqueos y niveles de aislamiento · Introducción a bases de datos NoSQL: tipos, casos de uso, comparación con el modelo relacional</contenidos>
+      <instancias>Práctico 7 (sem. 14) · Práctico 8 (sem. 15) · Parcial 2 (sem. 16)</instancias>
+      <ponderacion>25</ponderacion>
+    </unidad>
+
+  </unidades>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FICHAS DETALLADAS POR UNIDAD
+  ════════════════════════════════════════════════════════════ -->
+  <fichas>
+
+    <ficha>
+      <unidad>1</unidad>
+      <titulo>Fundamentos de Bases de Datos y Modelo Entidad-Relación</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <objetivos>• Distinguir el rol de un SGBD respecto al almacenamiento de datos en archivos planos, fundamentando las ventajas del enfoque de base de datos en escenarios reales.
+• Identificar y aplicar correctamente los componentes del modelo Entidad-Relación (entidades, atributos, relaciones, cardinalidades, participación) para representar requerimientos de información de un dominio de problema dado.
+• Construir diagramas ER completos y sin ambigüedades para casos de complejidad media (5-10 entidades), utilizando la notación estándar adoptada por la cátedra (Chen o Crow's Foot, según se defina).
+• Reconocer las características del modelo EER (especialización, generalización, herencia) y aplicarlas en casos donde la jerarquía de entidades resulte pertinente.</objetivos>
+      <contenidos>Conceptual: Concepto de dato, información y base de datos. Limitaciones del enfoque de archivos. Objetivos y funciones de un SGBD. Arquitectura ANSI/SPARC (tres niveles: externo, conceptual, interno). Independencia de datos. Roles: DBA, programador de aplicaciones, usuario final. Modelo Entidad-Relación: entidades fuertes y débiles, tipos de atributos (simple, compuesto, multivaluado, derivado), relaciones binarias y n-arias, cardinalidad (1:1, 1:N, N:M), participación (total y parcial). Modelo EER: especialización/generalización, herencia de atributos.
+Procedimental: Lectura e interpretación de requerimientos informales. Identificación de entidades, atributos y relaciones a partir de texto narrativo. Construcción de diagramas ER con herramienta digital (Lucidchart / draw.io). Crítica y corrección de diagramas con errores inducidos. Conversión inicial de ER a tablas (anticipación de Unidad 2).
+Actitudinal: Precisión y cuidado en la notación gráfica como reflejo del rigor profesional. Disposición para revisar y corregir el propio trabajo a partir del feedback. Valoración del modelado como etapa crítica que condiciona la calidad de todo el sistema.</contenidos>
+      <actividades>• Sem. 1: clase expositiva dialogada sobre motivación y arquitectura ANSI/SPARC. Actividad grupal: análisis de casos reales de falla por mal diseño de BD (inclusión de perspectiva ética).
+• Sem. 2: introducción al modelo ER con casos de complejidad creciente. Trabajo en pares: modelado de un sistema de biblioteca universitaria a partir de requerimientos en prosa.
+• Sem. 3: laboratorio – modelado con Lucidchart. Cada pareja modela un sistema diferente (e-commerce, hospital, club deportivo). Revisión cruzada entre pares.
+• Sem. 4: EER y casos con jerarquías. Cierre de la unidad: corrección de diagramas con errores inducidos (actividad de evaluación formativa).
+• TIC: uso de Lucidchart o draw.io para todos los diagramas. Entrega en Moodle en formato PDF + archivo editable.
+• ESI/Inclusión: en los casos de análisis de falla se incorporan ejemplos de sesgos en el diseño de datos (género en formularios, accesibilidad de sistemas).</actividades>
+      <recursos>• Apunte de cátedra Unidad 1 (PDF, disponible en Moodle desde sem. 1)
+• Silberschatz et al. cap. 1 y 6 (Fundamentos de BD, 7ª ed.)
+• Lucidchart (lucidchart.com) – cuenta gratuita educativa
+• draw.io / diagrams.net – alternativa gratuita sin registro
+• Presentaciones de clase (Moodle, acceso permanente)</recursos>
+      <estrategias>Diagnóstica: cuestionario Moodle sem. 1 – conocimientos previos sobre archivos, tablas y datos (autoevaluativo, sin nota).
+Formativa continua: revisión cruzada de diagramas en sem. 3 (rúbrica de 5 criterios compartida con los estudiantes). Devolución escrita del docente en 48 hs.
+Sumativa: Práctico 1 (sem. 3) – modelado ER individual de un caso dado, entrega en Moodle, nota de 1 a 10. Práctico 2 (sem. 4) – corrección de un diagrama con errores inducidos, individual.</estrategias>
+      <evidencias>• Práctico 1: diagrama ER completo (PDF + archivo editable) para el caso "Sistema de gestión de turnos médicos" – entrega Moodle sem. 3, nota mínima 4.
+• Práctico 2: informe de corrección del diagrama con errores (documento escrito, mínimo 1 página) – entrega Moodle sem. 4, nota mínima 4.
+• Participación en la revisión cruzada de sem. 3 (registro de asistencia y rúbrica completada).</evidencias>
+      <fechas>Sem. 1 (03/03): inicio, diagnóstico, motivación · Sem. 2 (10/03): modelo ER · Sem. 3 (17/03): laboratorio + entrega Práctico 1 · Sem. 4 (24/03): EER + entrega Práctico 2</fechas>
+      <minimos>Bases de datos relacionales: conceptos fundamentales, modelo entidad-relación, modelo relacional, lenguaje SQL. (Res. Prov. 2457/19 – Contenidos mínimos UC Base de Datos I)</minimos>
+      <adaptaciones>Estudiante con baja visión (Comisión A, 1 caso): todos los materiales en fuente mínima 16pt, diagramas ER con alto contraste. Los archivos de Lucidchart deben ser compatibles con zoom 200% sin pérdida de legibilidad.
+Para el resto de la comisión: sin adaptaciones específicas previstas al momento de la planificación. Se revisará al inicio del cursado según composición real del grupo.</adaptaciones>
+    </ficha>
+
+    <ficha>
+      <unidad>2</unidad>
+      <titulo>Modelo Relacional y Normalización</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <objetivos>• Convertir un diagrama ER/EER completo al esquema relacional aplicando las reglas de mapeo de forma sistemática y justificada.
+• Identificar dependencias funcionales en un esquema de relaciones dado y aplicar el proceso de normalización hasta la Forma Normal de Boyce-Codd (BCNF).
+• Detectar y explicar las anomalías de inserción, actualización y eliminación en esquemas no normalizados, fundamentando la necesidad de la normalización.
+• Evaluar críticamente cuándo puede ser apropiada la desnormalización controlada, reconociendo el equilibrio entre integridad y performance.</objetivos>
+      <contenidos>Conceptual: Estructura del modelo relacional: relación (tabla), tupla, atributo, dominio. Claves: candidata, primaria, foránea, alternativa. Restricciones de integridad: entidad, referencial, dominio. Reglas de mapeo ER a relacional (entidades fuertes, débiles, relaciones 1:1, 1:N, N:M, atributos multivaluados). Dependencias funcionales: definición, cierre, cobertura minimal. Proceso de normalización: 1FN, 2FN, 3FN, BCNF. Anomalías de actualización. Desnormalización: concepto y casos justificados.
+Procedimental: Conversión sistemática de diagramas ER a esquemas relacionales documentados. Identificación de dependencias funcionales en tablas con datos de ejemplo. Aplicación paso a paso del proceso de normalización con documentación de cada decisión. Verificación de la 3FN/BCNF y corrección de esquemas no normalizados.
+Actitudinal: Rigor analítico en la identificación de dependencias. Capacidad de justificar decisiones de diseño con argumentos técnicos precisos. Reconocimiento de que no existe una única solución correcta en diseño de BD, sino soluciones más o menos adecuadas según el contexto.</contenidos>
+      <actividades>• Sem. 5: conversión ER-Relacional: los estudiantes convierten el diagrama de la Unidad 1 al esquema relacional completo con notación estándar.
+• Sem. 6: introducción a dependencias funcionales y 1FN/2FN. Laboratorio: identificación de DFs en tablas "desnormalizadas" provistas por el docente (casos de facturas, inscripciones, pedidos).
+• Sem. 7: 3FN y BCNF. Trabajo en pares: normalización completa de un esquema con 6-8 relaciones. Exposición de resultados al grupo (5 min por pareja).
+• Sem. 8: casos de desnormalización y síntesis. Actividad de debate: ¿cuándo NO normalizar? Casos de la industria.
+• Sem. 9: PARCIAL 1 (abarca Unidades 1 y 2). Duración 2 hs. Modalidad individual, con material de consulta limitado (apunte de notación).
+• TIC: hojas de cálculo para documentar DFs y seguimiento del proceso de normalización paso a paso.
+• Inclusión: las tablas de ejemplo incluyen datos de contextos diversos (organizaciones sociales, cooperativas, instituciones educativas) para ampliar la perspectiva sobre los sistemas de información.</actividades>
+      <recursos>• Apunte de cátedra Unidad 2: reglas de mapeo y proceso de normalización (PDF, Moodle)
+• Silberschatz et al. cap. 7 y 8 (Diseño relacional de BD y normalización)
+• Date cap. 10-12 (Dependencias funcionales y normalización)
+• Planilla de seguimiento del proceso de normalización (template Excel/Sheets, Moodle)</recursos>
+      <estrategias>Formativa: corrección comentada de la conversión ER-Relacional (sem. 5) con devolución escrita antes de sem. 7. Presentación oral de sem. 7 evaluada con rúbrica (sin nota numérica, solo devolución cualitativa).
+Sumativa: Práctico 3 (sem. 6) – identificación de DFs y normalización hasta 2FN, individual. Práctico 4 (sem. 8) – normalización completa hasta BCNF de un esquema de mediana complejidad, individual. Parcial 1 (sem. 9) – abarca diseño ER + conversión relacional + normalización, individual, duración 2 hs.</estrategias>
+      <evidencias>• Práctico 3: informe de normalización hasta 2FN con justificación de cada paso – Moodle sem. 6, nota mínima 4.
+• Práctico 4: esquema relacional normalizado hasta BCNF con documentación de DFs y proceso – Moodle sem. 8, nota mínima 4.
+• Parcial 1: examen escrito individual sem. 9 – nota mínima 4 para mantener regularidad. Recuperatorio: sem. 10.</evidencias>
+      <fechas>Sem. 5 (31/03): conversión ER-Relacional · Sem. 6 (07/04): DFs + entrega P3 · Sem. 7 (14/04): 3FN-BCNF · Sem. 8 (28/04): desnormalización + entrega P4 · Sem. 9 (05/05): PARCIAL 1 · Sem. 10 (12/05): recuperatorio P1 (si aplica)</fechas>
+      <minimos>Modelo relacional. Normalización. Dependencias funcionales. (Res. 2457/19 – Contenidos mínimos UC Base de Datos I)</minimos>
+      <adaptaciones>Se mantiene la adaptación de material en alto contraste y fuente ampliada para el estudiante con baja visión. El Parcial 1 se administra con 15 minutos adicionales si el estudiante lo solicita formalmente a la Coordinación antes de la fecha del examen.</adaptaciones>
+    </ficha>
+
+    <ficha>
+      <unidad>3</unidad>
+      <titulo>SQL: Definición y Manipulación de Datos</titulo>
+      <duracion>5 sem / 20 hs</duracion>
+      <objetivos>• Crear, modificar y eliminar objetos de base de datos (tablas, vistas, índices) utilizando el sublenguaje DDL de SQL con la sintaxis del SGBD PostgreSQL.
+• Insertar, actualizar y eliminar registros con DML garantizando la integridad referencial y el cumplimiento de las constraints definidas.
+• Construir consultas SELECT de complejidad creciente, incluyendo joins de todos los tipos, funciones de agregación, subconsultas correlacionadas y no correlacionadas, y operadores de conjunto.
+• Crear y utilizar vistas para simplificar consultas complejas y controlar el acceso a los datos.</objetivos>
+      <contenidos>Conceptual: Sublenguajes de SQL: DDL, DML, DQL, DCL, TCL. DDL: CREATE TABLE (tipos de datos, constraints: PK, FK, UNIQUE, NOT NULL, CHECK, DEFAULT), ALTER TABLE, DROP TABLE. DML: INSERT (fila simple y múltiple), UPDATE (con condiciones y subselects), DELETE (con FK). DQL: SELECT completo (proyección, selección, ordenamiento). JOIN: INNER, LEFT/RIGHT OUTER, FULL OUTER, CROSS, auto-join. Funciones de agregación: COUNT, SUM, AVG, MIN, MAX. GROUP BY y HAVING. Subconsultas: escalares, de fila, de tabla, correlacionadas, IN/NOT IN, EXISTS/NOT EXISTS. Operadores de conjunto: UNION, INTERSECT, EXCEPT. Vistas: CREATE VIEW, usos y limitaciones. Índices: concepto, tipos (B-tree, Hash), creación y costo-beneficio.
+Procedimental: Instalación y configuración básica de PostgreSQL y pgAdmin. Creación de esquemas de BD completos con DDL. Carga de datos con scripts INSERT. Resolución de 40+ consultas SQL de complejidad creciente sobre casos reales. Diseño de vistas para casos de uso específicos.
+Actitudinal: Precisión en la escritura de código SQL: indentación, nomenclatura, comentarios. Hábito de verificar los resultados de DML antes de hacer commit. Valoración de la consulta eficiente como responsabilidad profesional.</contenidos>
+      <actividades>• Sem. 10: DDL + DML. Laboratorio: los estudiantes crean en PostgreSQL la BD diseñada en Unidades 1-2 y cargan datos de prueba realistas.
+• Sem. 11: SELECT básico + JOINs. Laboratorio guiado: 15 consultas con complejidad creciente sobre la BD del caso e-commerce.
+• Sem. 12: Subconsultas, agregaciones y vistas. Laboratorio autónomo: 15 consultas adicionales. Entrega del Trabajo Integrador Parcial.
+• Sem. 13: SQL avanzado: índices, EXPLAIN ANALYZE (plan de ejecución básico), buenas prácticas de escritura SQL.
+• Sem. 14: taller de repaso y resolución de consultas difíciles. Preparación para Parcial 2.
+• TIC: PostgreSQL 16 + pgAdmin 4 (instalación local o instancia en Railway/ElephantSQL gratuita). Scripts SQL versionados en repositorio Git personal.
+• ESI/Inclusión: los datasets utilizados en los laboratorios son diversos e inclusivos (nombres de distintas culturas, sin binarismo de género en los campos de datos donde no sea necesario).</actividades>
+      <recursos>• Apunte de cátedra Unidad 3: SQL completo con ejemplos (PDF, Moodle – 60 pp.)
+• SQLZoo – ejercicios interactivos online (sqlzoo.net)
+• PostgreSQL 16 + pgAdmin 4 (descarga gratuita)
+• Dataset "E-commerce Rosario" (dataset de práctica generado por la cátedra, Moodle)
+• Silberschatz et al. cap. 3, 4 y 5 (SQL)</recursos>
+      <estrategias>Formativa: corrección automática de consultas con scripts de verificación en Moodle (Quiz SQL). Devolución inmediata.
+Sumativa: Práctico 5 (sem. 11) – 10 consultas DDL+DML, individual. Práctico 6 (sem. 12) – 10 consultas SELECT con JOINs y subconsultas, individual. Trabajo integrador parcial grupal (sem. 12): diseño + implementación SQL completa de una BD para un caso real asignado.</estrategias>
+      <evidencias>• Práctico 5: script SQL con DDL + DML funcional ejecutable en PostgreSQL – Moodle sem. 11, nota mínima 4.
+• Práctico 6: script SQL con consultas SELECT – Moodle sem. 12, nota mínima 4.
+• Trabajo integrador parcial: informe de diseño (ER + relacional normalizado) + script SQL completo (DDL + datos + 20 consultas) + presentación breve al grupo (10 min) – entrega sem. 12.</evidencias>
+      <fechas>Sem. 10 (19/05): DDL+DML+P5 · Sem. 11 (26/05): JOINs · Sem. 12 (02/06): subconsultas+P6+integrador · Sem. 13 (09/06): SQL avanzado · Sem. 14 (16/06): repaso</fechas>
+      <minimos>Lenguaje SQL: DDL, DML, consultas, subconsultas, vistas. (Res. 2457/19 – Contenidos mínimos UC Base de Datos I)</minimos>
+      <adaptaciones>Sin adaptaciones específicas adicionales para esta unidad. Se mantienen las ya establecidas. Para el Trabajo Integrador Parcial se ofrecen casos alternativos a los grupos que presenten dificultades de acceso tecnológico (posibilidad de usar instancia en la nube en lugar de instalación local).</adaptaciones>
+    </ficha>
+
+    <ficha>
+      <unidad>4</unidad>
+      <titulo>SQL Avanzado, Transacciones e Introducción a BD No Relacionales</titulo>
+      <duracion>4 sem / 16 hs</duracion>
+      <objetivos>• Crear y utilizar procedimientos almacenados y triggers en PostgreSQL para encapsular lógica de negocio en la capa de datos.
+• Comprender el concepto de transacción y las propiedades ACID, aplicando correctamente BEGIN, COMMIT y ROLLBACK en escenarios de concurrencia.
+• Identificar los principales tipos de bases de datos NoSQL (documentales, clave-valor, columnares, de grafos) y los casos de uso donde su uso es más apropiado que el modelo relacional.
+• Comparar críticamente el modelo relacional y el NoSQL, fundamentando la elección de uno u otro en función de los requerimientos de un sistema dado.</objetivos>
+      <contenidos>Conceptual: Procedimientos almacenados en PostgreSQL (PL/pgSQL): estructura, parámetros, variables, control de flujo. Triggers: concepto, tipos (BEFORE/AFTER, ROW/STATEMENT), casos de uso. Transacciones: concepto, propiedades ACID (Atomicidad, Consistencia, Aislamiento, Durabilidad). Niveles de aislamiento: READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ, SERIALIZABLE. Problemas de concurrencia: dirty read, non-repeatable read, phantom read. Bloqueos optimistas y pesimistas. NoSQL: concepto, motivación (escalabilidad, esquema flexible, Big Data). Tipos: documental (MongoDB), clave-valor (Redis), columnar (Cassandra), grafo (Neo4j). Teorema CAP. Comparación SQL vs NoSQL: cuándo usar cada paradigma.
+Procedimental: Escritura de procedimientos almacenados básicos en PL/pgSQL. Diseño e implementación de triggers de auditoría. Simulación de escenarios de concurrencia con transacciones. Exploración guiada de MongoDB Atlas (operaciones CRUD básicas comparadas con SQL).
+Actitudinal: Comprensión de que no existe "la mejor tecnología" sino la más adecuada al problema. Apertura hacia nuevas tecnologías sin abandonar el criterio técnico fundamentado.</contenidos>
+      <actividades>• Sem. 15: procedimientos almacenados y triggers. Laboratorio: implementación de un trigger de auditoría sobre la BD del caso práctico de la Unidad 3.
+• Sem. 16: transacciones y concurrencia. Laboratorio: simulación de conflictos de concurrencia en dos sesiones de psql simultáneas.
+• Sem. 17: NoSQL. Actividad comparativa: los estudiantes resuelven el mismo caso (gestión de un catálogo de productos) primero en SQL y luego en MongoDB Atlas (gratuito). Reflexión grupal sobre ventajas/desventajas.
+• Sem. 18: PARCIAL 2 (abarca Unidades 3 y 4). Duración 2 hs. Individual. Recuperatorio: sem. 19.
+• TIC: MongoDB Atlas (instancia gratuita en la nube, sin instalación local). Comparación lado a lado SQL vs MQL (MongoDB Query Language).
+• Inclusión: para los estudiantes que trabajan en empresas con sistemas legados, se abre espacio de reflexión sobre migraciones reales y el valor de conocer ambos paradigmas.</actividades>
+      <recursos>• Apunte de cátedra Unidad 4: procedimientos, triggers y NoSQL (PDF, Moodle)
+• Documentación PL/pgSQL (postgresql.org/docs/current/plpgsql.html)
+• MongoDB Atlas (cloud.mongodb.com) – cuenta gratuita
+• MongoDB University – curso M001 gratuito (university.mongodb.com)
+• Silberschatz et al. cap. 9 (Procesamiento de transacciones) y cap. 24 (Sistemas NoSQL)</recursos>
+      <estrategias>Formativa: revisión del trigger de auditoría (sem. 15) con devolución oral en el laboratorio. Reflexión escrita sobre el caso comparativo SQL/NoSQL (sem. 17), evaluada cualitativamente.
+Sumativa: Práctico 7 (sem. 15) – trigger de auditoría funcional en PostgreSQL, individual. Práctico 8 (sem. 17) – análisis comparativo SQL/NoSQL para un caso dado, individual. Parcial 2 (sem. 18): transacciones + SQL avanzado + NoSQL conceptual.</estrategias>
+      <evidencias>• Práctico 7: script PL/pgSQL con procedimiento almacenado + trigger funcional y demostrado – Moodle sem. 15, nota mínima 4.
+• Práctico 8: informe comparativo SQL/NoSQL (2-3 pp.) con justificación técnica fundamentada – Moodle sem. 17, nota mínima 4.
+• Parcial 2: examen escrito individual sem. 18 – nota mínima 4. Recuperatorio: sem. 19.</evidencias>
+      <fechas>Sem. 15 (23/06): stored proc + triggers + P7 · Sem. 16 (30/06): transacciones · Sem. 17 (07/07): NoSQL + P8 · Sem. 18 (14/07): PARCIAL 2 · Sem. 19 (21/07): recuperatorio (si aplica)</fechas>
+      <minimos>Procedimientos almacenados. Transacciones. Bases de datos NoSQL. (Res. 2457/19 – Contenidos mínimos UC Base de Datos I)</minimos>
+      <adaptaciones>Sin adaptaciones adicionales. Se recuerda que el Parcial 2 también puede administrarse con tiempo adicional para el estudiante con baja visión, previa solicitud formal con 48 hs de anticipación a la Coordinación.</adaptaciones>
+    </ficha>
+
+  </fichas>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       CRONOGRAMA ANUAL
+  ════════════════════════════════════════════════════════════ -->
+  <cronograma>
+    <fila><fecha>Sem. 1 – 03/03</fecha><tema>Presentación · Fundamentos de BD · Arquitectura ANSI/SPARC</tema><actividad>Clase expositiva + diagnóstico Moodle</actividad><evaluacion>Diagnóstico (autoevaluativo)</evaluacion></fila>
+    <fila><fecha>Sem. 2 – 10/03</fecha><tema>U1 – Modelo ER: entidades, atributos, relaciones</tema><actividad>Clase + laboratorio pares – caso biblioteca</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 3 – 17/03</fecha><tema>U1 – ER completo: cardinalidades y participación</tema><actividad>Laboratorio Lucidchart + revisión cruzada</actividad><evaluacion>Entrega Práctico 1</evaluacion></fila>
+    <fila><fecha>Sem. 4 – 24/03</fecha><tema>U1 – Modelo EER: especialización y generalización</tema><actividad>Casos con jerarquías + corrección de diagramas con errores</actividad><evaluacion>Entrega Práctico 2</evaluacion></fila>
+    <fila><fecha>Sem. 5 – 31/03</fecha><tema>U2 – Conversión ER a Relacional</tema><actividad>Laboratorio: conversión del modelo de U1</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 6 – 07/04</fecha><tema>U2 – Dependencias funcionales · 1FN y 2FN</tema><actividad>Laboratorio: identificación de DFs en tablas reales</actividad><evaluacion>Entrega Práctico 3</evaluacion></fila>
+    <fila><fecha>Sem. 7 – 14/04</fecha><tema>U2 – 3FN y BCNF</tema><actividad>Normalización en pares + exposición de resultados</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 8 – 28/04</fecha><tema>U2 – Desnormalización y síntesis</tema><actividad>Debate: cuándo no normalizar</actividad><evaluacion>Entrega Práctico 4</evaluacion></fila>
+    <fila><fecha>Sem. 9 – 05/05</fecha><tema>Repaso U1 y U2</tema><actividad>Resolución de casos integradores en clase</actividad><evaluacion>PARCIAL 1 (2 hs, individual)</evaluacion></fila>
+    <fila><fecha>Sem. 10 – 12/05</fecha><tema>U3 – DDL: CREATE TABLE, constraints</tema><actividad>Laboratorio PostgreSQL: creación del esquema del caso e-commerce</actividad><evaluacion>Recuperatorio Parcial 1 (si aplica)</evaluacion></fila>
+    <fila><fecha>Sem. 11 – 19/05</fecha><tema>U3 – DML + SELECT básico + JOINs</tema><actividad>Laboratorio guiado: 15 consultas sobre caso e-commerce</actividad><evaluacion>Entrega Práctico 5</evaluacion></fila>
+    <fila><fecha>Sem. 12 – 26/05</fecha><tema>U3 – Subconsultas, agregaciones y vistas</tema><actividad>Laboratorio autónomo: 15 consultas + presentación integrador</actividad><evaluacion>Entrega Práctico 6 + Trabajo Integrador Parcial</evaluacion></fila>
+    <fila><fecha>Sem. 13 – 02/06</fecha><tema>U3 – SQL avanzado: índices y plan de ejecución</tema><actividad>Laboratorio: EXPLAIN ANALYZE + optimización de consultas lentas</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 14 – 09/06</fecha><tema>U4 – Procedimientos almacenados y triggers (PL/pgSQL)</tema><actividad>Laboratorio: trigger de auditoría sobre BD propia</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 15 – 16/06</fecha><tema>U4 – Transacciones y control de concurrencia</tema><actividad>Simulación de conflictos en dos sesiones psql simultáneas</actividad><evaluacion>Entrega Práctico 7</evaluacion></fila>
+    <fila><fecha>Sem. 16 – 23/06</fecha><tema>U4 – Introducción a NoSQL: tipos y casos de uso</tema><actividad>Laboratorio comparativo SQL/MongoDB Atlas</actividad><evaluacion>—</evaluacion></fila>
+    <fila><fecha>Sem. 17 – 30/06</fecha><tema>U4 – Comparación SQL vs NoSQL · Síntesis del cuatrimestre</tema><actividad>Actividad comparativa + reflexión grupal</actividad><evaluacion>Entrega Práctico 8</evaluacion></fila>
+    <fila><fecha>Sem. 18 – 07/07</fecha><tema>Repaso U3 y U4</tema><actividad>Resolución de casos integradores en clase</actividad><evaluacion>PARCIAL 2 (2 hs, individual)</evaluacion></fila>
+    <fila><fecha>Sem. 19 – 14/07</fecha><tema>Cierre y devolución final</tema><actividad>Entrega de notas finales del cursado</actividad><evaluacion>Recuperatorio Parcial 2 (si aplica)</evaluacion></fila>
+  </cronograma>
+
+</planificacion>
