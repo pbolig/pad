@@ -821,7 +821,7 @@ button:hover { filter: brightness(.93); }
                 <span class="tt-eg">Ej.: Programación I – Lenguajes y Paradigmas</span>
               </span></span>
             </label>
-            <input id="materia" type="text" placeholder="Nombre de la unidad curricular" />
+            <input id="materia-readonly" type="text" placeholder="Seleccione asignatura arriba..." readonly style="background:var(--neutral-50); cursor:not-allowed;" />
           </div>
 
           <div class="field">
@@ -1922,6 +1922,8 @@ function updateMasthead() {
   setT('#masthead-instituto', inst || 'Planificación Anual de Cátedra');
   setT('#masthead-carrera', carrera || 'Carrera no especificada');
   setT('#masthead-materia', materia || 'Asignatura no especificada');
+  const matFixed = qs('#materia-readonly');
+  if(matFixed) matFixed.value = materia;
   setT('#masthead-anio-cursada', anioC || '');
   setT('#masthead-modalidad', modal || '');
   setT('#masthead-siglas', inst ? initials(inst) : '–');
@@ -2182,13 +2184,20 @@ async function loadExistingPlan(id) {
     setLoading(true);
     const snap = await get(ref(db, `planificaciones_data/${id}`));
     if (snap.exists()) {
+      const data = snap.val();
       resetForm();
-      loadObjectToForm(snap.val());
+      
+      // Load career and wait for subjects before loadObjectToForm
+      if (data.carrera) {
+        qs('#carrera').value = data.carrera;
+        await loadSubjects(data.carrera);
+      }
+      
+      loadObjectToForm(data);
       ACTIVE_PLAN_ID = id;
       setAppState('EDIT');
       qs('#modal-recover').style.display = 'none';
-      const career = qs('#carrera').value;
-      if (career) await loadSubjects(career);
+      
       // Wait a bit to ensure selects are populated then update header
       setTimeout(updateMasthead, 100);
     } else {
