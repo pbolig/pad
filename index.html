@@ -128,18 +128,7 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
 .hero-btn.edit   { background: var(--sky); color: var(--sky-text); }
 .hero-btn small { font-weight: 400; font-family: var(--font-body); opacity: .8; font-size: 13px; }
 
-.search-container { position: relative; max-width: 500px; margin: 0 auto; }
-.search-input {
-  width: 100%;
-  padding: 16px 20px 16px 60px;
-  border-radius: 30px;
-  border: 1.5px solid var(--neutral-200);
-  font-size: 16px;
-  outline: none;
-  background: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-.search-icon { position: absolute; left: 24px; top: 16px; opacity: .4; pointer-events: none; font-size: 18px; }
+/* Search styles moved to end of CSS for specificity */
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -591,6 +580,20 @@ button:hover { filter: brightness(.93); }
   line-height: 1.6;
 }
 .norm-banner strong { color: #0d3352; }
+
+/* ── SEARCH BAR (SPECIFIC) ── */
+.search-container { position: relative; max-width: 500px; margin: 0 auto; }
+input.search-input {
+  width: 100%;
+  padding: 16px 20px 16px 64px !important; /* !important to be 100% sure against base styles */
+  border-radius: 30px;
+  border: 1.5px solid var(--neutral-200) !important;
+  font-size: 16px;
+  outline: none;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.search-icon { position: absolute; left: 24px; top: 16px; opacity: .6; pointer-events: none; font-size: 19px; z-index: 5; }
 </style>
 </head>
 <body class="state-home">
@@ -606,7 +609,7 @@ button:hover { filter: brightness(.93); }
       <span>📋 Crear nueva Planificación</span>
       <small>Empezar una planilla de cero</small>
     </button>
-    <button class="hero-btn edit" id="home-edit-btn">
+    <button class="hero-btn edit" id="home-edit-btn" style="display:none !important;">
       <span>📂 Editar Planificación existente</span>
       <small>Buscar y recuperar planillas guardadas</small>
     </button>
@@ -687,7 +690,7 @@ button:hover { filter: brightness(.93); }
       <div class="controls-bar">
         <!-- Botones Modo Inicio -->
         <button class="hero-btn create btn-plan-idle" id="hdr-create-btn" style="flex-direction:row; padding:8px 16px; font-size:14px; min-width:auto; border-radius:20px;">📋 Crear Nueva</button>
-        <button class="hero-btn edit btn-plan-idle" id="hdr-edit-btn" style="flex-direction:row; padding:8px 16px; font-size:14px; min-width:auto; border-radius:20px;">📂 Editar Existente</button>
+        <button class="hero-btn edit btn-plan-idle" id="hdr-edit-btn" style="display:none !important; flex-direction:row; padding:8px 16px; font-size:14px; min-width:auto; border-radius:20px;">📂 Editar Existente</button>
         
         <!-- Botones Modo Activo -->
         <button class="btn-mint btn-plan-active" id="print-pdf">🖨 Imprimir / PDF</button>
@@ -2154,8 +2157,10 @@ async function handleSmartSearch(q) {
     
     for (const id in all) {
       const p = all[id];
-      if ((p.docente && p.docente.toLowerCase().includes(lowQ)) || 
-          (p.materia && p.materia.toLowerCase().includes(lowQ))) {
+      const matchText = [p.docente, p.materia, p.anio, p.carrera, p.comision, p.instituto]
+        .filter(Boolean).join(' ').toLowerCase();
+      
+      if (matchText.includes(lowQ)) {
         results.push({ id, ...p });
       }
     }
@@ -2170,7 +2175,7 @@ async function handleSmartSearch(q) {
         item.style.borderBottom = '1px solid #eee';
         item.style.cursor = 'pointer';
         item.className = 'search-item';
-        item.innerHTML = `<strong>${r.materia}</strong><br><small>${r.docente} (${r.anio})</small>`;
+        item.innerHTML = `<strong>${r.materia}</strong><br><small>${r.docente} (${r.anio})</small><br><span style="font-size:10px; opacity:0.7;">${r.instituto || ''}</span>`;
         item.onclick = (e) => { e.stopPropagation(); loadExistingPlan(r.id); };
         resDiv.appendChild(item);
       });
@@ -2258,6 +2263,7 @@ window.saveToFirebase = async () => {
       docente: o.docente || 'Sin nombre',
       materia: o.materia || 'Sin materia',
       anio: o.anio || '2026',
+      instituto: o.instituto || '',
       carrera: o.carrera || '',
       comision: o.comision || ''
     };
