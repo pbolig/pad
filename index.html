@@ -131,7 +131,7 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
 .search-container { position: relative; max-width: 500px; margin: 0 auto; }
 .search-input {
   width: 100%;
-  padding: 16px 20px 16px 56px; /* Aumentado padding-left */
+  padding: 16px 20px 16px 60px;
   border-radius: 30px;
   border: 1.5px solid var(--neutral-200);
   font-size: 16px;
@@ -139,7 +139,7 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
   background: var(--white);
   box-shadow: var(--shadow-sm);
 }
-.search-icon { position: absolute; left: 18px; top: 16px; opacity: .4; pointer-events: none; }
+.search-icon { position: absolute; left: 24px; top: 16px; opacity: .4; pointer-events: none; font-size: 18px; }
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -1981,7 +1981,11 @@ const setAppState = (mode) => {
 
 const resetForm = () => {
   qsa('input,textarea,select').forEach(i => {
-    if (i.type !== 'file') i.value = '';
+    if (i.id === 'anio') i.value = new Date().getFullYear().toString();
+    else if (i.id === 'jurisdiccion') i.value = "Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)";
+    else if (i.id === 'instituto') i.value = "Instituto Superior de Educación y Técnica Nº 57 – Rosario";
+    else if (i.id === 'anio-cursada') i.value = "Terciario - Anual";
+    else if (i.type !== 'file') i.value = '';
   });
   const t1 = qs('#units-body'); if(t1) t1.innerHTML = '';
   const t2 = qs('#fichas-container'); if(t2) t2.innerHTML = '';
