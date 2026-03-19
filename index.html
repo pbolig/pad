@@ -2105,14 +2105,27 @@ async function loadSubjects(career) {
 // ── DOCENTE MANAGEMENT ──
 let DOCENTES_CACHE = {};
 
+function sanitizeKey(s) {
+  return (s || '').toString().replace(/[.#$\[\]\/]/g, '_');
+}
+
 async function loadDocentes() {
   if (!db) return;
   try {
     const snap = await get(ref(db, 'docentes'));
-    DOCENTES_CACHE = snap.val() || {};
+    const raw = snap.val() || {};
+    DOCENTES_CACHE = {};
     const dl = qs('#docentes-list');
     if (!dl) return;
     dl.innerHTML = '';
+    
+    Object.keys(raw).forEach(k => {
+      const d = raw[k];
+      if (d && d.name) {
+        DOCENTES_CACHE[d.name] = d;
+      }
+    });
+
     Object.keys(DOCENTES_CACHE).sort().forEach(name => {
       const opt = document.createElement('option');
       opt.value = name;
@@ -2302,13 +2315,14 @@ window.saveToFirebase = async () => {
     
     // Save/Update Docente info
     if (o.docente) {
-      const docenteKey = o.docente.trim();
+      const docenteName = o.docente.trim();
+      const docenteKey = sanitizeKey(docenteName);
       await set(ref(db, `docentes/${docenteKey}`), {
-        name: o.docente,
+        name: docenteName,
         email: o['email-docente'] || '',
         tel: o['tel-docente'] || ''
       });
-      loadDocentes(); // Refresh local list
+      loadDocentes();
     }
     
     ACTIVE_PLAN_ID = id;
