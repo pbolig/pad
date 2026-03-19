@@ -2296,11 +2296,13 @@ document.addEventListener('DOMContentLoaded', function() {
   fichasContainer = qs('#fichas-container');
   cronoBody = qs('#crono-body');
 
-  const bModal = qs('#modalidad');
-  if (bModal) {
-    bModal.addEventListener('change', updateMasthead);
-    bModal.addEventListener('input',  updateMasthead);
-  }
+  ['anio','jurisdiccion','instituto','anio-cursada','carrera','materia','modalidad'].forEach(function(id){
+    var el = qs('#'+id);
+    if(el) {
+      el.addEventListener('input', updateMasthead);
+      el.addEventListener('change', updateMasthead);
+    }
+  });
 
 const bAddRow = qs('#add-row');
 if (bAddRow) bAddRow.onclick = function() {
