@@ -70,6 +70,19 @@ html, body {
   print-color-adjust: exact;
 }
 
+/* Header Fijo para Controles */
+.sticky-controls {
+  position: sticky;
+  top: 10px;
+  z-index: 1000;
+  box-shadow: var(--shadow-lg) !important;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.95) !important;
+  backdrop-filter: blur(8px);
+}
+.sticky-controls .section-body { padding: 12px 20px; }
+.sticky-controls .controls-bar { margin: 0; }
+
 /* ── CONTAINER ──────────────────────────────────────── */
 .container {
   max-width: 1220px;
@@ -1321,20 +1334,17 @@ button:hover { filter: brightness(.93); }
     </div>
   </div>
 
-  <!-- ══ CONTROLES ════════════════════════════════════════ -->
-  <div class="section-card no-print" style="margin-top:14px;">
+  <!-- ══ CONTROLES (Header Fijo) ══════════════════════════ -->
+  <div class="section-card no-print sticky-controls">
     <div class="section-body">
       <div class="controls-bar">
         <button class="btn-mint" id="print-pdf">🖨 Imprimir / Guardar PDF</button>
         <div class="divider"></div>
-        <button class="btn-sky" id="save-firebase">☁ Sincronizar con la Nube</button>
+        <button class="btn-sky" id="save-firebase">☁ Guardar Planificación Completa</button>
         <button class="btn-lav" id="load-sample-btn">📋 Cargar Planilla de Ejemplo</button>
         <div class="divider"></div>
         <button class="btn-danger" id="reset-form">🗑 Limpiar todo</button>
       </div>
-      <p style="margin-top:10px; color:var(--neutral-500); font-size:12px;">
-        💡 <strong>Para imprimir en A4 apaisado:</strong> usar Chrome o Edge → Imprimir → Orientación: Horizontal → Escala: 80-90% → Activar "Gráficos de fondo".
-      </p>
     </div>
   </div>
 
@@ -1837,19 +1847,7 @@ qs('#open-plan-url').addEventListener('click', function(){
   else alert('Primero ingres\u00E1 el enlace al plan de estudios.');
 });
 
-/* \u2500\u2500 XML: campos planos \u2500\u2500 */
-var FLAT_FIELDS = [
-  'anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision',
-  'docente','carga','modalidad','ram','aprob',
-  'correl-cursar','correl-final','correl-simult','plan-url',
-  'objgen','competencias','perfil','metodologia',
-  'criterios','instrumentos','ponderaciones',
-  'biblio-ob','biblio-comp','firma-doc','firma-coord'
-];
-var PP_FIELDS = [
-  'pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias',
-  'pp-actividades','pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'
-];
+/* ── END FIELDS ── */
 
 function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -1888,200 +1886,9 @@ function formToObject() {
   return o;
 }
 
-function objectToXml(o) {
-  var x = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n';
-  FLAT_FIELDS.forEach(function(k){ x += '  <'+k+'>'+esc(o[k])+'</'+k+'>\n'; });
-  x += '  <pp-activa>'+esc(o['pp-activa'])+'</pp-activa>\n';
-  x += '  <practica-profesionalizante>\n';
-  PP_FIELDS.forEach(function(k){ x += '    <'+k+'>'+esc(o[k])+'</'+k+'>\n'; });
-  x += '  </practica-profesionalizante>\n';
-  x += '  <unidades>\n';
-  o.unidades.forEach(function(u){
-    x += '    <unidad>\n';
-    ['unidad','titulo','duracion','contenidos','instancias','ponderacion'].forEach(function(k){
-      x += '      <'+k+'>'+esc(u[k])+'</'+k+'>\n';
-    });
-    x += '    </unidad>\n';
-  });
-  x += '  </unidades>\n  <fichas>\n';
-  o.fichas.forEach(function(f){
-    x += '    <ficha>\n';
-    ['unidad','titulo','duracion','objetivos','contenidos','actividades','recursos',
-     'estrategias','evidencias','fechas','minimos','adaptaciones'].forEach(function(k){
-      x += '      <'+k+'>'+esc(f[k])+'</'+k+'>\n';
-    });
-    x += '    </ficha>\n';
-  });
-  x += '  </fichas>\n  <cronograma>\n';
-  o.cronograma.forEach(function(c){
-    x += '    <fila>\n';
-    ['fecha','tema','actividad','evaluacion'].forEach(function(k){
-      x += '      <'+k+'>'+esc(c[k])+'</'+k+'>\n';
-    });
-    x += '    </fila>\n';
-  });
-  x += '  </cronograma>\n</planificacion>\n';
-  return x;
-}
-
-/* \u2500\u2500 DOWNLOAD (3 m\u00E9todos para m\u00E1xima compatibilidad) \u2500\u2500 */
-function downloadFile(name, content) {
-  try {
-    var blob = new Blob([content], {type:'application/xml;charset=utf-8'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url; a.download = name;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
-    return;
-  } catch(e1){}
-  try {
-    var b64 = btoa(unescape(encodeURIComponent(content)));
-    var a2 = document.createElement('a');
-    a2.href = 'data:application/xml;charset=utf-8;base64,'+b64;
-    a2.download = name;
-    document.body.appendChild(a2); a2.click(); a2.remove();
-    return;
-  } catch(e2){}
-  var w = window.open('','_blank');
-  if(w){ w.document.open('text/xml'); w.document.write(content); w.document.close(); }
-}
-
-/* \u2500\u2500 EXPORT \u2500\u2500 */
-qs('#export-xml').addEventListener('click', function(){
-  downloadFile('planificacion_export.xml', objectToXml(formToObject()));
-});
-
-/* \u2500\u2500 IMPORT \u2500\u2500 */
-qs('#import-xml-btn').addEventListener('click', function(){ qs('#import-xml').click(); });
-qs('#import-xml').addEventListener('change', function(ev){
-  var f = ev.target.files[0]; if(!f) return;
-  var r = new FileReader();
-  r.onload = function(e){
-    try {
-      var doc = new DOMParser().parseFromString(e.target.result,'application/xml');
-      if(doc.querySelector('parsererror')) throw new Error('XML inv\u00E1lido');
-      FLAT_FIELDS.forEach(function(id){
-        // Use getElementsByTagName on the XML doc to avoid conflicts with HTML ids
-        var nodes=doc.getElementsByTagName(id);
-        var el=qs('#'+id);
-        if(nodes.length>0 && el) el.value=nodes[0].textContent;
-      });
-      var ppActivaNodes=doc.getElementsByTagName('pp-activa'); var ppActiva=ppActivaNodes.length>0 && ppActivaNodes[0].textContent==='si';
-      qs('#pp-toggle').checked = ppActiva;
-      qs('#pp-body').style.display = ppActiva ? 'block' : 'none';
-      qs('#sec-pp-card').style.opacity = ppActiva ? '1' : '0.6';
-      var ppNode = doc.querySelector('practica-profesionalizante');
-      if(ppNode){
-        PP_FIELDS.forEach(function(id){
-          var nodes=ppNode.getElementsByTagName(id);
-          var el=qs('#'+id);
-          if(nodes.length>0 && el) el.value=nodes[0].textContent;
-        });
-      }
-      tablaBody.innerHTML='';
-      doc.querySelectorAll('unidades > unidad').forEach(function(u){
-        var tr=document.createElement('tr');
-        function g(k){ return u.querySelector(k)?u.querySelector(k).textContent:''; }
-        tr.innerHTML='<td contenteditable="true" style="text-align:center;">'+g('unidad')+'</td>'
-          +'<td contenteditable="true">'+g('titulo')+'</td>'
-          +'<td contenteditable="true">'+g('duracion')+'</td>'
-          +'<td contenteditable="true">'+g('contenidos')+'</td>'
-          +'<td contenteditable="true">'+g('instancias')+'</td>'
-          +'<td contenteditable="true" style="text-align:center;">'+g('ponderacion')+'</td>';
-        tablaBody.appendChild(tr);
-      });
-      fichasContainer.innerHTML='';
-      doc.querySelectorAll('fichas > ficha').forEach(function(f){
-        function g(k){ return f.querySelector(k)?f.querySelector(k).textContent:''; }
-        addFicha({unidad:g('unidad'),titulo:g('titulo'),duracion:g('duracion'),
-          objetivos:g('objetivos'),contenidos:g('contenidos'),actividades:g('actividades'),
-          recursos:g('recursos'),estrategias:g('estrategias'),evidencias:g('evidencias'),
-          fechas:g('fechas'),minimos:g('minimos'),adaptaciones:g('adaptaciones')});
-      });
-      cronoBody.innerHTML='';
-      doc.querySelectorAll('cronograma > fila').forEach(function(row){
-        var tr=document.createElement('tr');
-        function g(k){ return row.querySelector(k)?row.querySelector(k).textContent:''; }
-        tr.innerHTML='<td contenteditable="true">'+g('fecha')+'</td>'
-          +'<td contenteditable="true">'+g('tema')+'</td>'
-          +'<td contenteditable="true">'+g('actividad')+'</td>'
-          +'<td contenteditable="true">'+g('evaluacion')+'</td>';
-        cronoBody.appendChild(tr);
-      });
-      updateFichaNum();
-      updateMasthead();
-      alert('\u2705 Importaci\u00F3n completada correctamente.');
-    } catch(err){ alert('\u274C Error al importar XML: '+err.message); }
-  };
-  r.readAsText(f,'utf-8');
-});
-
-/* \u2500\u2500 DOWNLOAD SAMPLE XML \u2500\u2500 */
-qs('#download-sample-xml').addEventListener('click', function(){
-  var s = '<?xml version="1.0" encoding="UTF-8"?>\n<planificacion>\n'
-    +'  <anio>2026</anio>\n'
-    +'  <jurisdiccion>Ministerio de Educaci\u00F3n \u2013 Provincia de Santa Fe \u2013 DES</jurisdiccion>\n'
-    +'  <instituto>Instituto Superior de Formaci\u00F3n Docente y T\u00E9cnica N\u00BA 18 "Dr. Antenor Tello"</instituto>\n'
-    +'  <anio-cursada>1\u00B0 A\u00F1o \u2013 2\u00B0 Cuatrimestre</anio-cursada>\n'
-    +'  <carrera>Tecnicatura Superior en Programaci\u00F3n (Res. Prov. N\u00B0 2457/2019)</carrera>\n'
-    +'  <materia>Programaci\u00F3n I \u2013 Lenguajes y Paradigmas</materia>\n'
-    +'  <comision>Comisi\u00F3n A \u2013 Turno Noche</comision>\n'
-    +'  <docente>P\u00E9rez, Ana Luc\u00EDa \u2013 DNI 28.456.789 \u2013 Titular</docente>\n'
-    +'  <carga>96</carga>\n'
-    +'  <modalidad>Mixta (presencial + virtual)</modalidad>\n'
-    +'  <ram>Decreto N\u00B0 4199/2015 \u2013 Art. 28 \u00B7 Art. 32 (Asistencia 75%)</ram>\n'
-    +'  <aprob>Aprobada CD el 14/03/2026 \u2013 Acta N\u00B0 02/2026 \u2013 Expte. N\u00B0 0078-S-2026</aprob>\n'
-    +'  <correl-cursar>\u2022 Matem\u00E1tica I (regularizada)\n\u2022 Introducci\u00F3n a la Programaci\u00F3n (aprobada)</correl-cursar>\n'
-    +'  <correl-final>\u2022 Matem\u00E1tica I (examen final aprobado)\n\u2022 Introducci\u00F3n a la Programaci\u00F3n (examen final aprobado)</correl-final>\n'
-    +'  <correl-simult>\u2022 Laboratorio de Programaci\u00F3n (mismo cuatrimestre)</correl-simult>\n'
-    +'  <plan-url>https://drive.google.com/file/d/EJEMPLO_ID/view</plan-url>\n'
-    +'  <objgen>\u2022 Comprender los fundamentos del pensamiento computacional.\n\u2022 Implementar soluciones en lenguajes de alto nivel.</objgen>\n'
-    +'  <competencias>Competencia 3 \u2013 Dise\u00F1o e implementaci\u00F3n de soluciones inform\u00E1ticas.</competencias>\n'
-    +'  <perfil>Esta asignatura aporta al perfil del T\u00E9cnico Superior en Programaci\u00F3n.</perfil>\n'
-    +'  <metodologia>Enfoque constructivista con resoluci\u00F3n de problemas reales.</metodologia>\n'
-    +'  <criterios>\u2022 Asistencia \u2265 75% (RAM Art. 32)\n\u2022 Nota m\u00EDnima: 6 (seis)</criterios>\n'
-    +'  <instrumentos>\u2022 2 Parciales escritos \u00B7 Trabajos pr\u00E1cticos \u00B7 Proyecto integrador</instrumentos>\n'
-    +'  <ponderaciones>Parciales 40% \u00B7 Pr\u00E1cticos 30% \u00B7 Proyecto 20% \u00B7 Participaci\u00F3n 10%</ponderaciones>\n'
-    +'  <biblio-ob>Cormen, T. et al. (2009). Introduction to Algorithms. MIT Press.</biblio-ob>\n'
-    +'  <biblio-comp>CS50x \u2013 Harvard (cs50.harvard.edu)</biblio-comp>\n'
-    +'  <firma-doc>P\u00E9rez, Ana Luc\u00EDa \u2013 DNI 28.456.789 \u2013 Titular</firma-doc>\n'
-    +'  <firma-coord>Garc\u00EDa, Roberto \u2013 Coordinador de Carrera</firma-coord>\n'
-    +'  <pp-activa>no</pp-activa>\n'
-    +'  <practica-profesionalizante>\n'
-    +'    <pp-tipo></pp-tipo>\n    <pp-carga></pp-carga>\n    <pp-norma></pp-norma>\n'
-    +'    <pp-propositos></pp-propositos>\n    <pp-competencias></pp-competencias>\n'
-    +'    <pp-actividades></pp-actividades>\n    <pp-contexto></pp-contexto>\n'
-    +'    <pp-tutoria></pp-tutoria>\n    <pp-productos></pp-productos>\n'
-    +'    <pp-criterios-eval></pp-criterios-eval>\n    <pp-acred></pp-acred>\n'
-    +'  </practica-profesionalizante>\n'
-    +'  <unidades>\n'
-    +'    <unidad>\n      <unidad>1</unidad>\n      <titulo>Introducci\u00F3n al Pensamiento Computacional</titulo>\n'
-    +'      <duracion>4 sem / 16 hs</duracion>\n      <contenidos>Algoritmos; Variables; Estructuras de control</contenidos>\n'
-    +'      <instancias>Diagn\u00F3stico; Parcial 1</instancias>\n      <ponderacion>30</ponderacion>\n    </unidad>\n'
-    +'  </unidades>\n'
-    +'  <fichas>\n    <ficha>\n'
-    +'      <unidad>1</unidad>\n      <titulo>Introducci\u00F3n al Pensamiento Computacional</titulo>\n'
-    +'      <duracion>4 sem / 16 hs</duracion>\n'
-    +'      <objetivos>\u2022 Identificar los componentes de un algoritmo.\n\u2022 Dise\u00F1ar pseudoc\u00F3digos.</objetivos>\n'
-    +'      <contenidos>Conceptual: Algoritmo, variable.\nProcedimental: Pseudoc\u00F3digo.\nActitudinal: Trabajo colaborativo.</contenidos>\n'
-    +'      <actividades>\u2022 Resoluci\u00F3n de problemas grupales\n\u2022 Uso de IDE en l\u00EDnea (TIC)</actividades>\n'
-    +'      <recursos>\u2022 Manual del docente\n\u2022 Plataforma Moodle institucional</recursos>\n'
-    +'      <estrategias>Diagn\u00F3stica: sem. 1 \u00B7 Formativa: pr\u00E1cticos \u00B7 Sumativa: parcial sem. 4</estrategias>\n'
-    +'      <evidencias>\u2022 3 Pr\u00E1cticos resueltos\n\u2022 Parcial escrito aprobado \u2265 6</evidencias>\n'
-    +'      <fechas>Sem. 1 (04/03): diagn\u00F3stico \u00B7 Sem. 4 (25/03): parcial 1</fechas>\n'
-    +'      <minimos>Algoritmos y estructuras de datos. (Res. 2457/19)</minimos>\n'
-    +'      <adaptaciones>Sin adaptaciones espec\u00EDficas previstas al momento de la planificaci\u00F3n.</adaptaciones>\n'
-    +'    </ficha>\n  </fichas>\n'
-    +'  <cronograma>\n    <fila>\n'
-    +'      <fecha>Semana 1 \u2013 04/03</fecha>\n      <tema>Unidad 1 \u2013 Introducci\u00F3n</tema>\n'
-    +'      <actividad>Clase expositiva \u00B7 Diagn\u00F3stico inicial</actividad>\n'
-    +'      <evaluacion>Evaluaci\u00F3n diagn\u00F3stica</evaluacion>\n'
-    +'    </fila>\n  </cronograma>\n</planificacion>';
-  downloadFile('planificacion_ejemplo.xml', s);
-});
-
-/* \u2500\u2500 PRINT \u2500\u2500 */
+/* ── CONTROLES FINAL ── */
+qs('#save-firebase').addEventListener('click', window.saveToFirebase);
+qs('#load-sample-btn').addEventListener('click', window.loadSampleData);
 qs('#print-pdf').addEventListener('click', function(){ window.print(); });
 
 /* \u2500\u2500 RESET \u2500\u2500 */
