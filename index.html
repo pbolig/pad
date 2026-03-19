@@ -72,21 +72,26 @@ html, body {
 
 /* Header Fijo para Controles */
 .sticky-controls {
-  position: sticky;
-  top: 10px;
-  z-index: 1000;
-  box-shadow: var(--shadow-lg) !important;
-  margin-bottom: 20px;
-  background: rgba(255,255,255,0.95) !important;
-  backdrop-filter: blur(8px);
+  position: fixed;
+  top: 0;
+  z-index: 2000; /* Asegurar que esté por encima de todo */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+  background: rgba(255,255,255,0.96) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 2px solid var(--sky-dark);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  width: 100%;
+  max-width: 1220px;
+  left: 50%;
+  transform: translateX(-50%);
 }
-.sticky-controls .section-body { padding: 12px 20px; }
-.sticky-controls .controls-bar { margin: 0; }
+.sticky-controls .section-body { padding: 8px 20px; }
+.sticky-controls .controls-bar { margin: 0; justify-content: center; }
 
 /* ── CONTAINER ──────────────────────────────────────── */
 .container {
   max-width: 1220px;
-  margin: 24px auto;
+  margin: 80px auto 24px; /* Aumentado para compensar el header fijo */
   padding: 0 16px 40px;
 }
 
@@ -265,6 +270,8 @@ label .norm {
 }
 input[type="text"],
 input[type="number"],
+input[type="email"],
+input[type="tel"],
 select,
 textarea {
   width: 100%;
@@ -660,12 +667,26 @@ button:hover { filter: brightness(.93); }
           </div>
 
           <div class="field">
-            <label>Email del Docente</label>
+            <label>
+              Email del Docente
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Correo electrónico</span>
+                Para contacto institucional y notificaciones de la base de datos.
+              </span></span>
+            </label>
             <input id="email-docente" type="email" placeholder="ejemplo@correo.com" />
           </div>
 
           <div class="field">
-            <label>Teléfono del Docente</label>
+            <label>
+              Teléfono del Docente
+              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
+              <span class="tooltip-box">
+                <span class="tt-title">Teléfono / WhatsApp</span>
+                Número de contacto directo del docente.
+              </span></span>
+            </label>
             <input id="tel-docente" type="tel" placeholder="+54 341 ..." />
           </div>
 
@@ -1535,9 +1556,21 @@ button:hover { filter: brightness(.93); }
 </template>
 
 <script type="module">
-/* ── UTILS ── */
 const qs  = (s, ctx=document) => ctx.querySelector(s);
 const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+
+const FLAT_FIELDS = [
+  'anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision',
+  'docente', 'email-docente', 'tel-docente', 'carga', 'modalidad', 'ram', 'aprob',
+  'correl-cursar','correl-final','correl-simult','plan-url',
+  'objgen','competencias','perfil','metodologia',
+  'criterios','instrumentos','ponderaciones',
+  'biblio-ob','biblio-comp','firma-doc','firma-coord'
+];
+const PP_FIELDS = [
+  'pp-tipo','pp-carga','pp-norma','pp-propositos','pp-competencias',
+  'pp-actividades','pp-contexto','pp-tutoria','pp-productos','pp-criterios-eval','pp-acred'
+];
 
 /* ── FIREBASE CONFIG (Placeholder para el usuario) ── */
 const FIREBASE_CFG = {
@@ -1632,6 +1665,14 @@ import { getDatabase, ref, set, get, onValue }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 let db = null;
+let saveTimeout = null;
+
+const debounce = (fn, delay) => {
+  return (...args) => {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => fn(...args), delay);
+  };
+};
 
 async function initFirebase() {
   if (!FIREBASE_CFG.apiKey || FIREBASE_CFG.apiKey.includes("PONER_AQUI")) {
@@ -1706,7 +1747,11 @@ function loadObjectToForm(o) {
     });
   }
   
+  
   if (typeof updateMasthead === 'function') updateMasthead();
+  
+  // Real-time sync if initialized
+  if (db) debounce(saveToFirebase, 500)();
 }
 
 // Global functions for buttons
@@ -1718,9 +1763,9 @@ window.saveToFirebase = async () => {
   try {
     const o = formToObject();
     await set(ref(db, 'planificaciones/current'), o);
-    alert("Planificación sincronizada con la nube correctamente.");
+    console.log("Planificación sincronizada con la nube.");
   } catch (err) {
-    alert("Error al guardar: " + err.message);
+    console.error("Error al sincronizar:", err);
   }
 };
 
@@ -1920,6 +1965,18 @@ addFicha({
 });
 qs('#add-row').click();
 qs('#add-crono').click();
+
+  updateFichaNum();
+  
+  // Setup Auto-save for all inputs
+  qsa('input, textarea, select').forEach(el => {
+    el.addEventListener('input', () => {
+      if (db) debounce(saveToFirebase, 2000)();
+    });
+  });
+
+  // INITIALIZE FIREBASE
+  initFirebase();
 
 }); // end DOMContentLoaded
 </script>
