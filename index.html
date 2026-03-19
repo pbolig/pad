@@ -1858,8 +1858,73 @@ let saveTimeout = null;
 // APP STATE
 let APP_MODE = 'HOME'; // HOME, CREATE, EDIT
 let ACTIVE_PLAN_ID = null;
+let tablaBody, fichasContainer, cronoBody;
 
 const setLoading = (s) => qs('#loader').style.display = s ? 'flex' : 'none';
+
+/* ── FUNCIONES DE UTILIDAD MÓDULOS ── */
+function initials(name) {
+  return name.trim().split(/\s+/).filter(w=>w.length>3).slice(0,3)
+    .map(w=>w[0].toUpperCase()).join('') || name.slice(0,2).toUpperCase() || '?';
+}
+
+function updateMasthead() {
+  const getV = (id) => { const el = qs(id); return el ? el.value.trim() : ''; };
+  const setT = (id, val) => { const el = qs(id); if(el) el.textContent = val; };
+  
+  var anio    = getV('#anio');
+  var juris   = getV('#jurisdiccion');
+  var inst    = getV('#instituto');
+  var carrera = getV('#carrera');
+  var materia = getV('#materia');
+  var anioC   = getV('#anio-cursada');
+  var modal   = getV('#modalidad');
+  
+  setT('#anio-display', anio || '–');
+  setT('#masthead-jurisdiccion', juris || 'Ministerio de Educación – Nivel Superior No Universitario');
+  setT('#masthead-instituto', inst || 'Planificación Anual de Cátedra');
+  setT('#masthead-carrera', carrera || 'Carrera no especificada');
+  setT('#masthead-materia', materia || 'Asignatura no especificada');
+  setT('#masthead-anio-cursada', anioC || '');
+  setT('#masthead-modalidad', modal || '');
+  setT('#masthead-siglas', inst ? initials(inst) : '–');
+  
+  const sep2 = qs('#masthead-sep2');
+  if(sep2) sep2.style.display = (anioC && modal) ? '' : 'none';
+}
+
+function updateFichaNum() {
+  qsa('#fichas-container .ficha-card').forEach(function(c,i){
+    var sp = c.querySelector('.unidad-num');
+    if(sp) sp.textContent = i+1;
+  });
+}
+
+window.addFicha = function(pre) {
+  pre = pre || {};
+  const tpl = qs('#tpl-ficha');
+  if (!tpl) return console.error("Template #tpl-ficha no encontrado");
+  var node = tpl.content.cloneNode(true);
+  var el = node.querySelector('.ficha-card');
+  var map = {
+    'f-unidad':'unidad','f-titulo':'titulo','f-duracion':'duracion',
+    'f-objetivos':'objetivos','f-contenidos':'contenidos','f-actividades':'actividades',
+    'f-recursos':'recursos','f-estrategias':'estrategias','f-evidencias':'evidencias',
+    'f-fechas':'fechas','f-minimos':'minimos','f-adaptaciones':'adaptaciones'
+  };
+  Object.keys(map).forEach(function(cls){
+    var key = map[cls];
+    const target = el.querySelector('.'+cls);
+    if(target && pre[key]) target.value = pre[key];
+  });
+  const bRem = node.querySelector('.btn-remove');
+  if (bRem) bRem.onclick = function(ev){
+    ev.target.closest('.ficha-card').remove();
+    updateFichaNum();
+  };
+  if (fichasContainer) fichasContainer.appendChild(node);
+  updateFichaNum();
+}
 
 const setAppState = (mode) => {
   console.log("Setting App State:", mode);
@@ -2179,48 +2244,21 @@ window.loadSampleData = () => {
 
 document.addEventListener('DOMContentLoaded', function() {
   console.log("PAD APP v1.1 LOADING...");
+  
+  // Cache globals
+  tablaBody = qs('#units-body');
+  fichasContainer = qs('#fichas-container');
+  cronoBody = qs('#crono-body');
 
-/* \u2500\u2500 MASTHEAD LIVE UPDATE \u2500\u2500 */
-function initials(name) {
-  return name.trim().split(/\s+/).filter(w=>w.length>3).slice(0,3)
-    .map(w=>w[0].toUpperCase()).join('') || name.slice(0,2).toUpperCase() || '?';
-}
-function updateMasthead() {
-  const getV = (id) => { const el = qs(id); return el ? el.value.trim() : ''; };
-  const setT = (id, val) => { const el = qs(id); if(el) el.textContent = val; };
-  
-  var anio    = getV('#anio');
-  var juris   = getV('#jurisdiccion');
-  var inst    = getV('#instituto');
-  var carrera = getV('#carrera');
-  var materia = getV('#materia');
-  var anioC   = getV('#anio-cursada');
-  var modal   = getV('#modalidad');
-  
-  setT('#anio-display', anio || '–');
-  setT('#masthead-jurisdiccion', juris || 'Ministerio de Educación – Nivel Superior No Universitario');
-  setT('#masthead-instituto', inst || 'Planificación Anual de Cátedra');
-  setT('#masthead-carrera', carrera || 'Carrera no especificada');
-  setT('#masthead-materia', materia || 'Asignatura no especificada');
-  setT('#masthead-anio-cursada', anioC || '');
-  setT('#masthead-modalidad', modal || '');
-  setT('#masthead-siglas', inst ? initials(inst) : '–');
-  
-  const sep2 = qs('#masthead-sep2');
-  if(sep2) sep2.style.display = (anioC && modal) ? '' : 'none';
-}
-['anio','jurisdiccion','instituto','anio-cursada','carrera'].forEach(function(id){
-  var el = qs('#'+id); if(el) el.addEventListener('input', updateMasthead);
-  if(el && el.tagName === 'SELECT') el.addEventListener('change', updateMasthead);
-});
-const bModal = qs('#modalidad');
-if (bModal) {
-  bModal.addEventListener('change', updateMasthead);
-  bModal.addEventListener('input',  updateMasthead);
-}
+  const bModal = qs('#modalidad');
+  if (bModal) {
+    bModal.addEventListener('change', updateMasthead);
+    bModal.addEventListener('input',  updateMasthead);
+  }
 
 const bAddRow = qs('#add-row');
 if (bAddRow) bAddRow.onclick = function() {
+  if (!tablaBody) tablaBody = qs('#units-body');
   if (!tablaBody) return;
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true" style="text-align:center;">1</td>'
@@ -2234,47 +2272,13 @@ if (bAddRow) bAddRow.onclick = function() {
 const bClearRows = qs('#clear-rows');
 if (bClearRows) bClearRows.onclick = function(){ if(tablaBody) tablaBody.innerHTML=''; };
 
-/* \u2500\u2500 FICHAS \u2500\u2500 */
-var fichasContainer = qs('#fichas-container');
-
-window.addFicha = function(pre) {
-  pre = pre || {};
-  const tpl = qs('#tpl-ficha');
-  if (!tpl) return console.error("Template #tpl-ficha no encontrado");
-  var node = tpl.content.cloneNode(true);
-  var el = node.querySelector('.ficha-card');
-  var map = {
-    'f-unidad':'unidad','f-titulo':'titulo','f-duracion':'duracion',
-    'f-objetivos':'objetivos','f-contenidos':'contenidos','f-actividades':'actividades',
-    'f-recursos':'recursos','f-estrategias':'estrategias','f-evidencias':'evidencias',
-    'f-fechas':'fechas','f-minimos':'minimos','f-adaptaciones':'adaptaciones'
-  };
-  Object.keys(map).forEach(function(cls){
-    var key = map[cls];
-    if(pre[key]) el.querySelector('.'+cls).value = pre[key];
-  });
-  const bRem = node.querySelector('.btn-remove');
-  if (bRem) bRem.onclick = function(ev){
-    ev.target.closest('.ficha-card').remove();
-    updateFichaNum();
-  };
-  fichasContainer.appendChild(node);
-  updateFichaNum();
-}
-const bAddFicha = qs('#add-ficha');
-if (bAddFicha) bAddFicha.onclick = function(){ window.addFicha(); };
-
-function updateFichaNum() {
-  qsa('#fichas-container .ficha-card').forEach(function(c,i){
-    var sp = c.querySelector('.unidad-num');
-    if(sp) sp.textContent = i+1;
-  });
-}
+// updateFichaNum is now global
 
 /* ── CRONOGRAMA ── */
-var cronoBody = qs('#crono-body');
+cronoBody = qs('#crono-body');
 const bAddCrono = qs('#add-crono');
 if (bAddCrono) bAddCrono.onclick = function(){
+  if (!cronoBody) cronoBody = qs('#crono-body');
   if (!cronoBody) return;
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true">Semana 1</td>'
