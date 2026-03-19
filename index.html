@@ -2118,6 +2118,7 @@ async function loadDocentes() {
     const snap = await get(ref(db, 'docentes'));
     const raw = snap.val() || {};
     DOCENTES_CACHE = {};
+    const displayNames = {}; // nKey -> name
     const dl = qs('#docentes-list');
     if (!dl) return;
     dl.innerHTML = '';
@@ -2125,11 +2126,13 @@ async function loadDocentes() {
     Object.keys(raw).forEach(k => {
       const d = raw[k];
       if (d && d.name) {
+        const nKey = normalizeKey(d.name);
+        displayNames[nKey] = d.name; // Keep formatting of last one
         DOCENTES_CACHE[d.name] = d;
       }
     });
 
-    Object.keys(DOCENTES_CACHE).sort().forEach(name => {
+    Object.values(displayNames).sort().forEach(name => {
       const opt = document.createElement('option');
       opt.value = name;
       dl.appendChild(opt);
@@ -2143,8 +2146,9 @@ function handleDocenteInput(e) {
     const d = DOCENTES_CACHE[val];
     const elMail = qs('#email-docente');
     const elTel = qs('#tel-docente');
-    if (elMail && !elMail.value) elMail.value = d.email || '';
-    if (elTel && !elTel.value) elTel.value = d.tel || '';
+    // Force override to ensure data is applied
+    if (elMail) elMail.value = d.email || '';
+    if (elTel) elTel.value = d.tel || '';
   }
 }
 
