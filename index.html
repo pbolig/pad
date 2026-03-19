@@ -2105,8 +2105,11 @@ async function loadSubjects(career) {
 // ── DOCENTE MANAGEMENT ──
 let DOCENTES_CACHE = {};
 
-function sanitizeKey(s) {
-  return (s || '').toString().replace(/[.#$\[\]\/]/g, '_');
+function normalizeKey(s) {
+  if (!s) return '';
+  return s.toString().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]/g, '');
 }
 
 async function loadDocentes() {
@@ -2316,7 +2319,7 @@ window.saveToFirebase = async () => {
     // Save/Update Docente info
     if (o.docente) {
       const docenteName = o.docente.trim();
-      const docenteKey = sanitizeKey(docenteName);
+      const docenteKey = normalizeKey(docenteName);
       await set(ref(db, `docentes/${docenteKey}`), {
         name: docenteName,
         email: o['email-docente'] || '',
