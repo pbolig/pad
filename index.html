@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Planificación Anual – Nivel Superior Santa Fe</title>
+<title>PAD - Planificación Anual Docente</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── PRINT ──────────────────────────────────────────── */
@@ -131,7 +131,7 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
 .search-container { position: relative; max-width: 500px; margin: 0 auto; }
 .search-input {
   width: 100%;
-  padding: 16px 20px 16px 48px;
+  padding: 16px 20px 16px 56px; /* Aumentado padding-left */
   border-radius: 30px;
   border: 1.5px solid var(--neutral-200);
   font-size: 16px;
@@ -171,6 +171,29 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
   cursor: pointer; opacity: .7; transition: opacity .2s;
 }
 .btn-icon:hover { opacity: 1; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .grid.g-3, .grid.g-2 { grid-template-columns: 1fr !important; }
+  .span-2, .span-3, .span-full { grid-column: span 1 !important; }
+  .home-actions { flex-direction: column; gap: 16px; }
+  .hero-btn { width: 100%; min-width: auto; padding: 16px 20px; }
+  #home-screen { margin: 80px 10px 40px; padding: 20px; }
+  #home-screen h1 { font-size: 24px; }
+  .sticky-controls .controls-bar { flex-wrap: wrap; gap: 8px; }
+  .container { margin-top: 100px; padding: 0 10px 40px; }
+}
+
+/* ── SPINNER ── */
+#loader {
+  display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255,255,255,0.7); z-index: 5000; align-items: center; justify-content: center;
+}
+.spinner {
+  width: 48px; height: 48px; border: 5px solid var(--neutral-200);
+  border-top: 5px solid var(--sky-text); border-radius: 50%; animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* ── CONTAINER ──────────────────────────────────────── */
 .container {
@@ -572,9 +595,12 @@ button:hover { filter: brightness(.93); }
 </head>
 <body class="state-home">
 
+<!-- ── SPINNER DE CARGA ── -->
+<div id="loader"><div class="spinner"></div></div>
+
 <!-- ══ PANTALLA DE INICIO ══════════════════════════════ -->
 <div id="home-screen">
-  <h1>Bienvenido al Gestor PAD</h1>
+  <h1>PAD - Planificación Anual Docente</h1>
   <div class="home-actions">
     <button class="hero-btn create" id="home-create-btn">
       <span>📋 Crear nueva Planificación</span>
@@ -590,6 +616,10 @@ button:hover { filter: brightness(.93); }
     <span class="search-icon">🔍</span>
     <input type="text" class="search-input" id="smart-search" placeholder="Buscar por Docente o Asignatura..." />
     <div id="search-results" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border-radius:12px; margin-top:8px; box-shadow:var(--shadow-lg); z-index:100; max-height:300px; overflow-y:auto; text-align:left;"></div>
+  </div>
+  
+  <div id="fb-status" style="margin-top:24px; font-size:13px; color:var(--neutral-500); font-weight:600;">
+    Conectando a Firebase...
   </div>
 </div>
 
@@ -1325,7 +1355,7 @@ button:hover { filter: brightness(.93); }
               <th style="width:80px">Ponderación (%)</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="units-body"></tbody>
         </table>
       </div>
       <div class="controls-bar no-print">
@@ -1444,7 +1474,7 @@ button:hover { filter: brightness(.93); }
               <th style="width:160px">Evaluación prevista</th>
             </tr>
           </thead>
-          <tbody></tbody>
+          <tbody id="crono-body"></tbody>
         </table>
       </div>
       <div class="controls-bar no-print">
@@ -1827,14 +1857,19 @@ let saveTimeout = null;
 let APP_MODE = 'HOME'; // HOME, CREATE, EDIT
 let ACTIVE_PLAN_ID = null;
 
+const setLoading = (s) => qs('#loader').style.display = s ? 'flex' : 'none';
+
 const setAppState = (mode) => {
+  console.log("Setting App State:", mode);
   APP_MODE = mode;
   document.body.className = `state-${mode.toLowerCase()}`;
   if (mode === 'HOME') {
     ACTIVE_PLAN_ID = null;
     resetForm();
-    qs('#smart-search').value = '';
-    qs('#search-results').style.display = 'none';
+    const ss = qs('#smart-search');
+    if (ss) ss.value = '';
+    const sr = qs('#search-results');
+    if (sr) sr.style.display = 'none';
   }
 };
 
@@ -1842,9 +1877,9 @@ const resetForm = () => {
   qsa('input,textarea,select').forEach(i => {
     if (i.type !== 'file') i.value = '';
   });
-  const t1 = qs('#tablaBody'); if(t1) t1.innerHTML = '';
-  const t2 = qs('#fichasContainer'); if(t2) t2.innerHTML = '';
-  const t3 = qs('#cronoBody'); if(t3) t3.innerHTML = '';
+  const t1 = qs('#units-body'); if(t1) t1.innerHTML = '';
+  const t2 = qs('#fichas-container'); if(t2) t2.innerHTML = '';
+  const t3 = qs('#crono-body'); if(t3) t3.innerHTML = '';
   qs('#pp-toggle').checked = false;
   qs('#pp-body').style.display = 'none';
   qs('#sec-pp-card').style.opacity = '0.6';
@@ -1859,34 +1894,27 @@ const debounce = (fn, delay) => {
 };
 
 async function initFirebase() {
+  const st = qs('#fb-status');
   if (!FIREBASE_CFG.apiKey || FIREBASE_CFG.apiKey.includes("PONER_AQUI")) {
-    console.log("Firebase no configurado.");
-    return;
+    if (st) st.innerHTML = '<span style="color:var(--rose-text)">⚠️ Firebase no configurado. Editá FIREBASE_CFG en el código.</span>';
+    return false;
   }
   try {
     const app = initializeApp(FIREBASE_CFG, 'pad-app');
     db = getDatabase(app);
-    console.log("Firebase inicializado.");
-    
-    // Auto-load on connect
-    const planRef = ref(db, 'planificaciones/current');
-    onValue(planRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        console.log("Datos recuperados de la nube.");
-        loadObjectToForm(data);
-      }
-    });
+    if (st) st.innerHTML = '<span style="color:var(--mint-text)">✅ Firebase Conectado</span>';
+    return true;
   } catch (err) {
-    console.error("Error al conectar con Firebase:", err);
+    if (st) st.innerHTML = '<span style="color:var(--rose-text)">❌ Error de conexión</span>';
+    return false;
   }
 }
 
 function loadObjectToForm(o) {
   // Limpiar tablas y fichas para evitar duplicados en la carga
-  qs('#tabla-unidades tbody').innerHTML = '';
+  qs('#units-body').innerHTML = '';
   qs('#fichas-container').innerHTML = '';
-  qs('#cronograma tbody').innerHTML = '';
+  qs('#crono-body').innerHTML = '';
 
   FLAT_FIELDS.forEach(id => {
     const el = qs('#' + id);
@@ -1912,7 +1940,7 @@ function loadObjectToForm(o) {
         + `<td contenteditable="true">${u.contenidos}</td>`
         + `<td contenteditable="true">${u.instancias}</td>`
         + `<td contenteditable="true" style="text-align:center;">${u.ponderacion}</td>`;
-      qs('#tabla-unidades tbody').appendChild(tr);
+      qs('#units-body').appendChild(tr);
     });
   }
 
@@ -1927,7 +1955,7 @@ function loadObjectToForm(o) {
         + `<td contenteditable="true">${c.tema}</td>`
         + `<td contenteditable="true">${c.actividad}</td>`
         + `<td contenteditable="true">${c.evaluacion}</td>`;
-      qs('#cronograma tbody').appendChild(tr);
+      qs('#crono-body').appendChild(tr);
     });
   }
   
@@ -1944,15 +1972,21 @@ function loadObjectToForm(o) {
 // ── SUBJECT MANAGEMENT ──
 async function loadSubjects(career) {
   if (!db || !career) return;
-  const snap = await get(ref(db, `materias/${career}`));
-  const list = snap.val() || [];
-  const sel = qs('#materia');
-  sel.innerHTML = '<option value="">— Seleccione Materia —</option>';
-  list.sort().forEach(m => {
-    const opt = document.createElement('option');
-    opt.textContent = m;
-    sel.appendChild(opt);
-  });
+  try {
+    setLoading(true);
+    const snap = await get(ref(db, `materias/${career}`));
+    const list = snap.val() || [];
+    const sel = qs('#materia');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">— Seleccione Materia —</option>';
+    list.sort().forEach(m => {
+      const opt = document.createElement('option');
+      opt.textContent = m;
+      sel.appendChild(opt);
+    });
+  } finally {
+    setLoading(false);
+  }
 }
 
 async function addSubject() {
@@ -2002,50 +2036,64 @@ async function handleSmartSearch(q) {
     qs('#search-results').style.display = 'none';
     return;
   }
-  const snap = await get(ref(db, 'planificaciones_index'));
-  const all = snap.val() || {};
-  const results = [];
-  const lowQ = q.toLowerCase();
-  
-  for (const id in all) {
-    const p = all[id];
-    if (p.docente.toLowerCase().includes(lowQ) || p.materia.toLowerCase().includes(lowQ)) {
-      results.push({ id, ...p });
+  try {
+    const snap = await get(ref(db, 'planificaciones_index'));
+    const all = snap.val() || {};
+    const results = [];
+    const lowQ = q.toLowerCase();
+    
+    for (const id in all) {
+      const p = all[id];
+      if ((p.docente && p.docente.toLowerCase().includes(lowQ)) || 
+          (p.materia && p.materia.toLowerCase().includes(lowQ))) {
+        results.push({ id, ...p });
+      }
     }
-  }
-  
-  const resDiv = qs('#search-results');
-  resDiv.innerHTML = '';
-  if (results.length > 0) {
-    resDiv.style.display = 'block';
-    results.forEach(r => {
-      const item = document.createElement('div');
-      item.style.padding = '10px 15px';
-      item.style.borderBottom = '1px solid #eee';
-      item.style.cursor = 'pointer';
-      item.innerHTML = `<strong>${r.materia}</strong><br><small>${r.docente} (${r.anio})</small>`;
-      item.onclick = () => loadExistingPlan(r.id);
-      resDiv.appendChild(item);
-    });
-  } else {
-    resDiv.style.display = 'none';
+    
+    const resDiv = qs('#search-results');
+    resDiv.innerHTML = '';
+    if (results.length > 0) {
+      resDiv.style.display = 'block';
+      results.forEach(r => {
+        const item = document.createElement('div');
+        item.style.padding = '12px 16px';
+        item.style.borderBottom = '1px solid #eee';
+        item.style.cursor = 'pointer';
+        item.className = 'search-item';
+        item.innerHTML = `<strong>${r.materia}</strong><br><small>${r.docente} (${r.anio})</small>`;
+        item.onclick = (e) => { e.stopPropagation(); loadExistingPlan(r.id); };
+        resDiv.appendChild(item);
+      });
+    } else {
+      resDiv.style.display = 'none';
+    }
+  } catch (err) {
+    console.error("Search error:", err);
   }
 }
 
 async function loadExistingPlan(id) {
   if (!db) return;
-  const snap = await get(ref(db, `planificaciones_data/${id}`));
-  if (snap.exists()) {
-    resetForm();
-    loadObjectToForm(snap.val());
-    ACTIVE_PLAN_ID = id;
-    setAppState('EDIT');
-    qs('#modal-recover').style.display = 'none';
-    // Important: check if career has subjects and load them
-    const career = qs('#carrera').value;
-    if (career) loadSubjects(career);
-  } else {
-    alert("No se encontró la planificación.");
+  try {
+    setLoading(true);
+    const snap = await get(ref(db, `planificaciones_data/${id}`));
+    if (snap.exists()) {
+      resetForm();
+      loadObjectToForm(snap.val());
+      ACTIVE_PLAN_ID = id;
+      setAppState('EDIT');
+      qs('#modal-recover').style.display = 'none';
+      const career = qs('#carrera').value;
+      if (career) await loadSubjects(career);
+      // Wait a bit to ensure selects are populated then update header
+      setTimeout(updateMasthead, 100);
+    } else {
+      alert("No se encontró la planificación.");
+    }
+  } catch (err) {
+    alert("Error al cargar: " + err.message);
+  } finally {
+    setLoading(false);
   }
 }
 
@@ -2078,15 +2126,17 @@ async function populateFilters() {
 
 // Global functions for buttons
 window.saveToFirebase = async () => {
-  if (!db) return;
+  if (!db) {
+    alert("Firebase no está configurado. Por favor, editá el código e ingresá tus credenciales en FIREBASE_CFG.");
+    return;
+  }
   try {
+    setLoading(true);
     const o = formToObject();
     const id = ACTIVE_PLAN_ID || `plan_${Date.now()}`;
     
-    // 1. Guardar Datos Completos
     await set(ref(db, `planificaciones_data/${id}`), o);
     
-    // 2. Actualizar Índice de Búsqueda
     const indexData = {
       docente: o.docente || 'Sin nombre',
       materia: o.materia || 'Sin materia',
@@ -2101,6 +2151,8 @@ window.saveToFirebase = async () => {
     if (APP_MODE === 'CREATE') setAppState('EDIT');
   } catch (err) {
     alert("Error al guardar: " + err.message);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -2155,19 +2207,20 @@ function updateMasthead() {
 qs('#modalidad').addEventListener('change', updateMasthead);
 qs('#modalidad').addEventListener('input',  updateMasthead);
 
-/* \u2500\u2500 TABLA UNIDADES \u2500\u2500 */
-var tablaBody = qs('#tabla-unidades tbody');
+/* ── TABLA UNIDADES ── */
+var tablaBody = qs('#units-body');
 qs('#add-row').addEventListener('click', function() {
+  if (!tablaBody) return;
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true" style="text-align:center;">1</td>'
-    +'<td contenteditable="true">T\u00EDtulo de la unidad</td>'
+    +'<td contenteditable="true">Título de la unidad</td>'
     +'<td contenteditable="true">4 sem / 16 hs</td>'
-    +'<td contenteditable="true">Contenidos vertebradores\u2026</td>'
-    +'<td contenteditable="true">Diagn\u00F3stico \u00B7 Parcial 1</td>'
+    +'<td contenteditable="true">Contenidos vertebradores…</td>'
+    +'<td contenteditable="true">Diagnóstico · Parcial 1</td>'
     +'<td contenteditable="true" style="text-align:center;">30</td>';
   tablaBody.appendChild(tr);
 });
-qs('#clear-rows').addEventListener('click', function(){ tablaBody.innerHTML=''; });
+qs('#clear-rows').addEventListener('click', function(){ if(tablaBody) tablaBody.innerHTML=''; });
 
 /* \u2500\u2500 FICHAS \u2500\u2500 */
 var fichasContainer = qs('#fichas-container');
@@ -2203,17 +2256,18 @@ function updateFichaNum() {
   });
 }
 
-/* \u2500\u2500 CRONOGRAMA \u2500\u2500 */
-var cronoBody = qs('#cronograma tbody');
+/* ── CRONOGRAMA ── */
+var cronoBody = qs('#crono-body');
 qs('#add-crono').addEventListener('click', function(){
+  if (!cronoBody) return;
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true">Semana 1</td>'
-    +'<td contenteditable="true">Unidad 1 \u2013 Introducci\u00F3n</td>'
-    +'<td contenteditable="true">Clase expositiva \u00B7 Diagn\u00F3stico</td>'
-    +'<td contenteditable="true">Evaluaci\u00F3n diagn\u00F3stica</td>';
+    +'<td contenteditable="true">Unidad 1 – Introducción</td>'
+    +'<td contenteditable="true">Clase expositiva · Diagnóstico</td>'
+    +'<td contenteditable="true">Evaluación diagnóstica</td>';
   cronoBody.appendChild(tr);
 });
-qs('#clear-crono').addEventListener('click', function(){ cronoBody.innerHTML=''; });
+qs('#clear-crono').addEventListener('click', function(){ if(cronoBody) cronoBody.innerHTML=''; });
 
 /* \u2500\u2500 PP TOGGLE \u2500\u2500 */
 qs('#pp-toggle').addEventListener('change', function(e){
@@ -2238,7 +2292,7 @@ function formToObject() {
   FLAT_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
   o['pp-activa'] = qs('#pp-toggle').checked ? 'si' : 'no';
   PP_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
-  o.unidades = qsa('#tabla-unidades tbody tr').map(function(tr){
+  o.unidades = qsa('#units-body tr').map(function(tr){
     var c = Array.from(tr.children);
     return {unidad:c[0].textContent.trim(), titulo:c[1].textContent.trim(),
             duracion:c[2].textContent.trim(), contenidos:c[3].textContent.trim(),
@@ -2260,7 +2314,7 @@ function formToObject() {
       adaptaciones:s.querySelector('.f-adaptaciones').value||''
     };
   });
-  o.cronograma = qsa('#cronograma tbody tr').map(function(tr){
+  o.cronograma = qsa('#crono-body tr').map(function(tr){
     var c = Array.from(tr.children);
     return {fecha:c[0].textContent.trim(), tema:c[1].textContent.trim(),
             actividad:c[2].textContent.trim(), evaluacion:c[3].textContent.trim()};
@@ -2275,11 +2329,13 @@ qs('#print-pdf').addEventListener('click', function(){ window.print(); });
 
 /* \u2500\u2500 RESET \u2500\u2500 */
 qs('#reset-form').addEventListener('click', function(){
-  if(!confirm('\u00BFLimpiar todo el formulario? Esta acci\u00F3n no se puede deshacer.')) return;
+  if(!confirm('¿Limpiar todo el formulario? Esta acción no se puede deshacer.')) return;
   document.querySelectorAll('input,textarea,select').forEach(function(i){
     if(i.type!=='file') i.value='';
   });
-  tablaBody.innerHTML=''; fichasContainer.innerHTML=''; cronoBody.innerHTML='';
+  if(qs('#units-body')) qs('#units-body').innerHTML='';
+  if(qs('#fichas-container')) qs('#fichas-container').innerHTML='';
+  if(qs('#crono-body')) qs('#crono-body').innerHTML='';
   qs('#pp-toggle').checked=false;
   qs('#pp-body').style.display='none';
   qs('#sec-pp-card').style.opacity='0.6';
@@ -2326,16 +2382,21 @@ qs('#add-crono').click();
     }
   };
 
-  qs('#smart-search').oninput = (e) => handleSmartSearch(e.target.value);
+  // Smart search results
+  const ss = qs('#smart-search');
+  if (ss) ss.oninput = (e) => handleSmartSearch(e.target.value);
 
   // SUBJECT MANAGER
-  qs('#carrera').onchange = (e) => loadSubjects(e.target.value);
-  qs('#sub-add').onclick = (e) => { e.preventDefault(); addSubject(); };
-  qs('#sub-edit').onclick = (e) => { e.preventDefault(); editSubject(); };
-  qs('#sub-del').onclick = (e) => { e.preventDefault(); delSubject(); };
+  const carSel = qs('#carrera');
+  if (carSel) carSel.onchange = (e) => loadSubjects(e.target.value);
+  
+  const bAdd = qs('#sub-add');  if(bAdd) bAdd.onclick = (e) => { e.preventDefault(); addSubject(); };
+  const bEdit = qs('#sub-edit'); if(bEdit) bEdit.onclick = (e) => { e.preventDefault(); editSubject(); };
+  const bDel = qs('#sub-del');  if(bDel) bDel.onclick = (e) => { e.preventDefault(); delSubject(); };
   
   // MODAL FILTERS
-  qs('#modal-load-btn').onclick = async () => {
+  const bModLoad = qs('#modal-load-btn');
+  if (bModLoad) bModLoad.onclick = async () => {
     const filters = {
       anio: qs('#filter-anio').value,
       carrera: qs('#filter-carrera').value,
@@ -2343,36 +2404,36 @@ qs('#add-crono').click();
       comision: qs('#filter-comision').value,
       docente: qs('#filter-docente').value
     };
-    
     if (!filters.anio || !filters.carrera || !filters.materia) {
       return alert("Por favor, seleccioná al menos Año, Carrera y Materia.");
     }
-    
-    const snap = await get(ref(db, 'planificaciones_index'));
-    const all = snap.val() || {};
-    let foundId = null;
-    
-    for (const id in all) {
-      const p = all[id];
-      const match = (!filters.anio || p.anio === filters.anio) &&
-                    (!filters.carrera || p.carrera === filters.carrera) &&
-                    (!filters.materia || p.materia === filters.materia) &&
-                    (!filters.comision || p.comision === filters.comision) &&
-                    (!filters.docente || p.docente === filters.docente);
-      if (match) { foundId = id; break; }
-    }
-    
-    if (foundId) {
-      loadExistingPlan(foundId);
-    } else {
-      alert("No se encontró ninguna planificación que coincida con esos filtros.");
+    setLoading(true);
+    try {
+      const snap = await get(ref(db, 'planificaciones_index'));
+      const all = snap.val() || {};
+      let foundId = null;
+      for (const id in all) {
+        const p = all[id];
+        const match = (!filters.anio || p.anio === filters.anio) &&
+                      (!filters.carrera || p.carrera === filters.carrera) &&
+                      (!filters.materia || p.materia === filters.materia) &&
+                      (!filters.comision || p.comision === filters.comision) &&
+                      (!filters.docente || p.docente === filters.docente);
+        if (match) { foundId = id; break; }
+      }
+      if (foundId) loadExistingPlan(foundId);
+      else alert("No se encontró ninguna planificación que coincida con esos filtros.");
+    } finally {
+      setLoading(false);
     }
   };
   
-  // INITIALIZE FIREBASE
-  initFirebase();
-  
-  setAppState('HOME');
+  // INITIALIZE
+  (async () => {
+    const ok = await initFirebase();
+    setAppState('HOME');
+    console.log("App initialized. Mode: HOME. Firebase OK:", ok);
+  })();
 
 }); // end DOMContentLoaded
 </script>
