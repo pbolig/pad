@@ -646,8 +646,8 @@ input.search-input {
     <input type="text" class="search-input" id="smart-search" placeholder="Buscar por Docente o Asignatura..." />
     <div id="search-results" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border-radius:12px; margin-top:8px; box-shadow:var(--shadow-lg); z-index:100; max-height:300px; overflow-y:auto; text-align:left;"></div>
   </div>
-  
-    Conectando...
+  <div id="fb-status" style="margin-top:10px; font-size:13px; opacity:0.8;">
+    <span style="color:var(--sky-text)">Conectando...</span>
   </div>
 </div>
 
@@ -724,6 +724,7 @@ input.search-input {
         <button class="btn-lav btn-plan-active" id="load-sample-btn">📋 Cargar Ejemplo</button>
         <div class="divider btn-plan-active"></div>
         <button class="btn-danger btn-plan-active" id="cancel-plan-btn">❌ Salir / Cancelar</button>
+        <div id="fb-status-nav" style="margin-left:auto; font-size:12px; opacity:0.7; display:flex; align-items:center;"></div>
       </div>
     </div>
   </div>
@@ -2035,18 +2036,20 @@ const debounce = (fn, delay) => {
 };
 
 async function initFirebase() {
-  const st = qs('#fb-status');
+  const ids = ['#fb-status', '#fb-status-nav'];
+  const updateStatus = (html) => ids.forEach(id => { const el = qs(id); if(el) el.innerHTML = html; });
+  
   if (!FIREBASE_CFG.apiKey || FIREBASE_CFG.apiKey.includes("PONER_AQUI")) {
-    if (st) st.innerHTML = '<span style="color:var(--rose-text)">⚠️ Firebase no configurado. Editá FIREBASE_CFG en el código.</span>';
+    updateStatus('<span style="color:var(--rose-text)">⚠️ Firebase no configurado</span>');
     return false;
   }
   try {
     const app = initializeApp(FIREBASE_CFG, 'pad-app');
     db = getDatabase(app);
-    if (st) st.innerHTML = '<span style="color:var(--mint-text)">✅ Conectado</span>';
+    updateStatus('<span style="color:var(--mint-text)">✅ Conectado</span>');
     return true;
   } catch (err) {
-    if (st) st.innerHTML = '<span style="color:var(--rose-text)">❌ Error de conexión</span>';
+    updateStatus('<span style="color:var(--rose-text)">❌ Error de conexión</span>');
     return false;
   }
 }
