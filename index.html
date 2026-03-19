@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>PAD - Planificación Anual Docente</title>
+<title>PAD - Planificación Anual Docente (v1.1)</title>
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 /* ── PRINT ──────────────────────────────────────────── */
@@ -1760,11 +1760,13 @@ const PP_FIELDS = [
 
 /* ── FIREBASE CONFIG (Placeholder para el usuario) ── */
 const FIREBASE_CFG = {
-  apiKey: "PONER_AQUI_API_KEY",
-  authDomain: "PONER_AQUI_AUTH_DOMAIN",
-  databaseURL: "PONER_AQUI_DATABASE_URL",
-  projectId: "PONER_AQUI_PROJECT_ID",
-  appId: "PONER_AQUI_APP_ID"
+  apiKey: "AIzaSyCK2kKnvVbaZiPUpZIIWNkU9uI7vsLZ1Fs",
+  authDomain: "gestionpad-e867b.firebaseapp.com",
+  projectId: "gestionpad-e867b",
+  storageBucket: "gestionpad-e867b.firebasestorage.app",
+  messagingSenderId: "531756954485",
+  appId: "1:531756954485:web:f7b3ad30d659102b3b193c",
+  databaseURL: "https://gestionpad-e867b-default-rtdb.firebaseio.com"
 };
 
 /* ── DATOS DE EJEMPLO (Basados en XML) ── */
@@ -2176,6 +2178,7 @@ window.loadSampleData = () => {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.log("PAD APP v1.1 LOADING...");
 
 /* \u2500\u2500 MASTHEAD LIVE UPDATE \u2500\u2500 */
 function initials(name) {
@@ -2216,9 +2219,8 @@ if (bModal) {
   bModal.addEventListener('input',  updateMasthead);
 }
 
-/* ── TABLA UNIDADES ── */
-var tablaBody = qs('#units-body');
-qs('#add-row').addEventListener('click', function() {
+const bAddRow = qs('#add-row');
+if (bAddRow) bAddRow.onclick = function() {
   if (!tablaBody) return;
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true" style="text-align:center;">1</td>'
@@ -2228,8 +2230,9 @@ qs('#add-row').addEventListener('click', function() {
     +'<td contenteditable="true">Diagnóstico · Parcial 1</td>'
     +'<td contenteditable="true" style="text-align:center;">30</td>';
   tablaBody.appendChild(tr);
-});
-qs('#clear-rows').addEventListener('click', function(){ if(tablaBody) tablaBody.innerHTML=''; });
+};
+const bClearRows = qs('#clear-rows');
+if (bClearRows) bClearRows.onclick = function(){ if(tablaBody) tablaBody.innerHTML=''; };
 
 /* \u2500\u2500 FICHAS \u2500\u2500 */
 var fichasContainer = qs('#fichas-container');
@@ -2250,14 +2253,16 @@ window.addFicha = function(pre) {
     var key = map[cls];
     if(pre[key]) el.querySelector('.'+cls).value = pre[key];
   });
-  node.querySelector('.btn-remove').addEventListener('click', function(ev){
+  const bRem = node.querySelector('.btn-remove');
+  if (bRem) bRem.onclick = function(ev){
     ev.target.closest('.ficha-card').remove();
     updateFichaNum();
-  });
+  };
   fichasContainer.appendChild(node);
   updateFichaNum();
 }
-qs('#add-ficha').addEventListener('click', function(){ window.addFicha(); });
+const bAddFicha = qs('#add-ficha');
+if (bAddFicha) bAddFicha.onclick = function(){ window.addFicha(); };
 
 function updateFichaNum() {
   qsa('#fichas-container .ficha-card').forEach(function(c,i){
@@ -2268,7 +2273,8 @@ function updateFichaNum() {
 
 /* ── CRONOGRAMA ── */
 var cronoBody = qs('#crono-body');
-qs('#add-crono').addEventListener('click', function(){
+const bAddCrono = qs('#add-crono');
+if (bAddCrono) bAddCrono.onclick = function(){
   if (!cronoBody) return;
   var tr = document.createElement('tr');
   tr.innerHTML = '<td contenteditable="true">Semana 1</td>'
@@ -2276,22 +2282,25 @@ qs('#add-crono').addEventListener('click', function(){
     +'<td contenteditable="true">Clase expositiva · Diagnóstico</td>'
     +'<td contenteditable="true">Evaluación diagnóstica</td>';
   cronoBody.appendChild(tr);
-});
-qs('#clear-crono').addEventListener('click', function(){ if(cronoBody) cronoBody.innerHTML=''; });
+};
+const bClearCrono = qs('#clear-crono');
+if (bClearCrono) bClearCrono.onclick = function(){ if(cronoBody) cronoBody.innerHTML=''; };
 
 /* \u2500\u2500 PP TOGGLE \u2500\u2500 */
-qs('#pp-toggle').addEventListener('change', function(e){
+const bPPTog = qs('#pp-toggle');
+if (bPPTog) bPPTog.onchange = function(e){
   qs('#pp-body').style.display = e.target.checked ? 'block' : 'none';
   qs('#sec-pp-card').style.opacity = e.target.checked ? '1' : '0.6';
-});
+};
 qs('#sec-pp-card').style.opacity = '0.6';
 
 /* \u2500\u2500 OPEN PLAN URL \u2500\u2500 */
-qs('#open-plan-url').addEventListener('click', function(){
+const bOpenPlan = qs('#open-plan-url');
+if (bOpenPlan) bOpenPlan.onclick = function(){
   var url = qs('#plan-url').value.trim();
   if(url) window.open(url,'_blank','noopener');
-  else alert('Primero ingres\u00E1 el enlace al plan de estudios.');
-});
+  else alert('Primero ingresá el enlace al plan de estudios.');
+};
 
 /* ── END FIELDS ── */
 
