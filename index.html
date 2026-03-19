@@ -1855,6 +1855,43 @@ import { getDatabase, ref, set, get, onValue }
 let db = null;
 let saveTimeout = null;
 
+function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function formToObject() {
+  var o = {};
+  FLAT_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
+  o['pp-activa'] = qs('#pp-toggle').checked ? 'si' : 'no';
+  PP_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
+  o.unidades = qsa('#units-body tr').map(function(tr){
+    var c = Array.from(tr.children);
+    return {unidad:c[0].textContent.trim(), titulo:c[1].textContent.trim(),
+            duracion:c[2].textContent.trim(), contenidos:c[3].textContent.trim(),
+            instancias:c[4].textContent.trim(), ponderacion:c[5].textContent.trim()};
+  });
+  o.fichas = qsa('#fichas-container .ficha-card').map(function(s){
+    return {
+      unidad:s.querySelector('.f-unidad').value||'',
+      titulo:s.querySelector('.f-titulo').value||'',
+      duracion:s.querySelector('.f-duracion').value||'',
+      objetivos:s.querySelector('.f-objetivos').value||'',
+      contenidos:s.querySelector('.f-contenidos').value||'',
+      actividades:s.querySelector('.f-actividades').value||'',
+      recursos:s.querySelector('.f-recursos').value||'',
+      estrategias:s.querySelector('.f-estrategias').value||'',
+      evidencias:s.querySelector('.f-evidencias').value||'',
+      fechas:s.querySelector('.f-fechas').value||'',
+      minimos:s.querySelector('.f-minimos').value||'',
+      adaptaciones:s.querySelector('.f-adaptaciones').value||''
+    };
+  });
+  o.cronograma = qsa('#crono-body tr').map(function(tr){
+    var c = Array.from(tr.children);
+    return {fecha:c[0].textContent.trim(), tema:c[1].textContent.trim(),
+            actividad:c[2].textContent.trim(), evaluacion:c[3].textContent.trim()};
+  });
+  return o;
+}
+
 // APP STATE
 let APP_MODE = 'HOME'; // HOME, CREATE, EDIT
 let ACTIVE_PLAN_ID = null;
@@ -2307,43 +2344,6 @@ if (bOpenPlan) bOpenPlan.onclick = function(){
 };
 
 /* ── END FIELDS ── */
-
-function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-function formToObject() {
-  var o = {};
-  FLAT_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
-  o['pp-activa'] = qs('#pp-toggle').checked ? 'si' : 'no';
-  PP_FIELDS.forEach(function(id){ o[id] = (qs('#'+id)||{}).value || ''; });
-  o.unidades = qsa('#units-body tr').map(function(tr){
-    var c = Array.from(tr.children);
-    return {unidad:c[0].textContent.trim(), titulo:c[1].textContent.trim(),
-            duracion:c[2].textContent.trim(), contenidos:c[3].textContent.trim(),
-            instancias:c[4].textContent.trim(), ponderacion:c[5].textContent.trim()};
-  });
-  o.fichas = qsa('#fichas-container .ficha-card').map(function(s){
-    return {
-      unidad:s.querySelector('.f-unidad').value||'',
-      titulo:s.querySelector('.f-titulo').value||'',
-      duracion:s.querySelector('.f-duracion').value||'',
-      objetivos:s.querySelector('.f-objetivos').value||'',
-      contenidos:s.querySelector('.f-contenidos').value||'',
-      actividades:s.querySelector('.f-actividades').value||'',
-      recursos:s.querySelector('.f-recursos').value||'',
-      estrategias:s.querySelector('.f-estrategias').value||'',
-      evidencias:s.querySelector('.f-evidencias').value||'',
-      fechas:s.querySelector('.f-fechas').value||'',
-      minimos:s.querySelector('.f-minimos').value||'',
-      adaptaciones:s.querySelector('.f-adaptaciones').value||''
-    };
-  });
-  o.cronograma = qsa('#crono-body tr').map(function(tr){
-    var c = Array.from(tr.children);
-    return {fecha:c[0].textContent.trim(), tema:c[1].textContent.trim(),
-            actividad:c[2].textContent.trim(), evaluacion:c[3].textContent.trim()};
-  });
-  return o;
-}
 
 /* ── CONTROLES FINAL ── */
 const btnSave = qs('#save-firebase'); if(btnSave) btnSave.onclick = window.saveToFirebase;
