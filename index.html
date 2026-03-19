@@ -554,7 +554,7 @@ button:hover { filter: brightness(.93); }
                 <span class="tt-eg">Ej.: 2026</span>
               </span></span>
             </label>
-            <input id="anio" type="number" placeholder="2026" />
+            <input id="anio" type="number" placeholder="2026" value="2026" />
           </div>
 
           <div class="field span-2">
@@ -569,7 +569,7 @@ button:hover { filter: brightness(.93); }
                 <span class="tt-eg">Ej. provincial: "Ministerio de Educación – Provincia de Santa Fe – DES" · Ej. nacional: "Ministerio de Educación de la Nación – INET · Secretaría de Educación Técnico Profesional"</span>
               </span></span>
             </label>
-            <input id="jurisdiccion" type="text" placeholder="Ministerio de Educación – Provincia de Santa Fe – DES" />
+            <input id="jurisdiccion" type="text" placeholder="Ministerio de Educación – Provincia de Santa Fe – DES" value="Ministerio de Educación - Provincia de Santa Fe - INET" />
           </div>
 
           <div class="field span-2">
@@ -584,22 +584,20 @@ button:hover { filter: brightness(.93); }
                 <span class="tt-eg">Ej.: Instituto Superior de Formación Docente y Técnica Nº 18 "Dr. Antenor Tello"</span>
               </span></span>
             </label>
-            <input id="instituto" type="text" placeholder="Instituto Superior …" />
+            <input id="instituto" type="text" placeholder="Instituto Superior …" value="Instituto Superior de Educación Técnica N° 57" />
           </div>
 
           <div class="field span-2">
             <label>
               Carrera
               <span class="norm">Plan de estudios aprobado</span>
-              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
-              <span class="tooltip-box">
-                <span class="tt-title">Denominación oficial de la carrera</span>
-                <span class="tt-norm">Coincide con el plan de estudios aprobado por resolución ministerial</span>
-                Escribir exactamente como figura en la resolución aprobatoria del plan de estudios, incluyendo nivel y orientación si corresponde.
-                <span class="tt-eg">Ej.: Tecnicatura Superior en Programación (Res. Prov. N° 2457/2019)</span>
-              </span></span>
             </label>
-            <input id="carrera" type="text" placeholder="Tecnicatura / Profesorado en …" />
+            <select id="carrera">
+              <option value="">Seleccione Carrera</option>
+              <option>Técnicas Digitales</option>
+              <option>Enfermería</option>
+              <option>Higiene y Seguridad</option>
+            </select>
           </div>
 
           <div class="field">
@@ -612,7 +610,7 @@ button:hover { filter: brightness(.93); }
                 <span class="tt-eg">Ej.: 1° Año · 2° Cuatrimestre</span>
               </span></span>
             </label>
-            <input id="anio-cursada" type="text" placeholder="1° Año · 2° Cuatrimestre" />
+            <input id="anio-cursada" type="text" placeholder="1° Año · 2° Cuatrimestre" value="Terciario - Anual" />
           </div>
 
         </div>
@@ -1813,8 +1811,9 @@ function updateMasthead() {
   qs('#masthead-siglas').textContent       = inst ? initials(inst) : '\u2013';
   qs('#masthead-sep2').style.display = (anioC && modal) ? '' : 'none';
 }
-['anio','jurisdiccion','instituto','carrera','materia','anio-cursada'].forEach(function(id){
+['anio','jurisdiccion','instituto','anio-cursada','carrera'].forEach(function(id){
   var el = qs('#'+id); if(el) el.addEventListener('input', updateMasthead);
+  if(el && el.tagName === 'SELECT') el.addEventListener('change', updateMasthead);
 });
 qs('#modalidad').addEventListener('change', updateMasthead);
 qs('#modalidad').addEventListener('input',  updateMasthead);
@@ -1973,7 +1972,16 @@ qs('#add-crono').click();
     el.addEventListener('input', () => {
       if (db) debounce(saveToFirebase, 2000)();
     });
+    if(el.tagName === 'SELECT') {
+      el.addEventListener('change', () => {
+        if (db) debounce(saveToFirebase, 2000)();
+      });
+    }
   });
+
+  // INITIAL DEFAULTS & UI UPDATE
+  qs('#anio').value = new Date().getFullYear();
+  updateMasthead();
 
   // INITIALIZE FIREBASE
   initFirebase();
