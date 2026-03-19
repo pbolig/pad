@@ -86,7 +86,91 @@ html, body {
   transform: translateX(-50%);
 }
 .sticky-controls .section-body { padding: 8px 20px; }
-.sticky-controls .controls-bar { margin: 0; justify-content: center; }
+.sticky-controls .controls-bar { margin: 0; justify-content: center; gap: 12px; }
+
+/* ── APP STATES ── */
+body.state-home .container, 
+body.state-home .sticky-controls .btn-plan-active { display: none !important; }
+body:not(.state-home) #home-screen,
+body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important; }
+
+/* ── HOME SCREEN ── */
+#home-screen {
+  max-width: 900px;
+  margin: 120px auto 40px;
+  text-align: center;
+  padding: 40px;
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--white);
+  box-shadow: var(--shadow-lg);
+}
+#home-screen h1 { font-family: var(--font-head); color: var(--sky-text); margin-bottom: 32px; font-size: 32px; }
+.home-actions { display: flex; justify-content: center; gap: 24px; margin-bottom: 40px; }
+.hero-btn {
+  padding: 24px 32px;
+  border-radius: var(--radius-lg);
+  border: none;
+  font-family: var(--font-head);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .2s, box-shadow .2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  min-width: 260px;
+}
+.hero-btn:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.hero-btn.create { background: var(--mint); color: var(--mint-text); }
+.hero-btn.edit   { background: var(--sky); color: var(--sky-text); }
+.hero-btn small { font-weight: 400; font-family: var(--font-body); opacity: .8; font-size: 13px; }
+
+.search-container { position: relative; max-width: 500px; margin: 0 auto; }
+.search-input {
+  width: 100%;
+  padding: 16px 20px 16px 48px;
+  border-radius: 30px;
+  border: 1.5px solid var(--neutral-200);
+  font-size: 16px;
+  outline: none;
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.search-icon { position: absolute; left: 18px; top: 16px; opacity: .4; pointer-events: none; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 3000;
+  display: none; /* JS control */
+  align-items: center; justify-content: center;
+}
+.modal-box {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  width: 90%; max-width: 600px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.modal-header h2 { font-family: var(--font-head); font-size: 22px; color: var(--neutral-900); }
+.close-modal { cursor: pointer; font-size: 24px; opacity: .5; }
+
+/* ── SUBJECT MANAGER CSS ── */
+.subject-row { display: flex; gap: 8px; align-items: center; }
+.btn-icon {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: .7; transition: opacity .2s;
+}
+.btn-icon:hover { opacity: 1; }
 
 /* ── CONTAINER ──────────────────────────────────────── */
 .container {
@@ -486,7 +570,65 @@ button:hover { filter: brightness(.93); }
 .norm-banner strong { color: #0d3352; }
 </style>
 </head>
-<body>
+<body class="state-home">
+
+<!-- ══ PANTALLA DE INICIO ══════════════════════════════ -->
+<div id="home-screen">
+  <h1>Bienvenido al Gestor PAD</h1>
+  <div class="home-actions">
+    <button class="hero-btn create" id="home-create-btn">
+      <span>📋 Crear nueva Planificación</span>
+      <small>Empezar una planilla de cero</small>
+    </button>
+    <button class="hero-btn edit" id="home-edit-btn">
+      <span>📂 Editar Planificación existente</span>
+      <small>Buscar y recuperar planillas guardadas</small>
+    </button>
+  </div>
+  
+  <div class="search-container">
+    <span class="search-icon">🔍</span>
+    <input type="text" class="search-input" id="smart-search" placeholder="Buscar por Docente o Asignatura..." />
+    <div id="search-results" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border-radius:12px; margin-top:8px; box-shadow:var(--shadow-lg); z-index:100; max-height:300px; overflow-y:auto; text-align:left;"></div>
+  </div>
+</div>
+
+<!-- ══ MODAL DE BÚSQUEDA / RECUPERACIÓN ══════════════════ -->
+<div class="modal-overlay" id="modal-recover">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>📂 Recuperar Planificación</h2>
+      <span class="close-modal" id="modal-close-btn">&times;</span>
+    </div>
+    <div class="grid g-2">
+      <div class="field">
+        <label>Año Lectivo</label>
+        <select id="filter-anio"></select>
+      </div>
+      <div class="field">
+        <label>Carrera</label>
+        <select id="filter-carrera"></select>
+      </div>
+      <div class="field span-full">
+        <label>Asignatura</label>
+        <select id="filter-materia"></select>
+      </div>
+      <div class="field">
+        <label>Comisión</label>
+        <select id="filter-comision"></select>
+      </div>
+      <div class="field">
+        <label>Docente</label>
+        <select id="filter-docente"></select>
+      </div>
+    </div>
+    <div style="margin-top:24px; display:flex; justify-content:flex-end; gap:12px;">
+      <button class="btn-danger" style="background:#eee; color:#333;" id="modal-cancel-btn">Cancelar</button>
+      <button class="btn-sky" id="modal-load-btn">Abrir Planificación</button>
+    </div>
+  </div>
+</div>
+
 <div class="container">
 
   <!-- MASTHEAD -->
@@ -510,16 +652,20 @@ button:hover { filter: brightness(.93); }
     </div>
   </div>
 
-  <!-- ══ CONTROLES (Header Fijo) ══════════════════════════ -->
   <div class="section-card no-print sticky-controls">
     <div class="section-body">
       <div class="controls-bar">
-        <button class="btn-mint" id="print-pdf">🖨 Imprimir / Guardar PDF</button>
-        <div class="divider"></div>
-        <button class="btn-sky" id="save-firebase">☁ Guardar Planificación Completa</button>
-        <button class="btn-lav" id="load-sample-btn">📋 Cargar Planilla de Ejemplo</button>
-        <div class="divider"></div>
-        <button class="btn-danger" id="reset-form">🗑 Limpiar todo</button>
+        <!-- Botones Modo Inicio -->
+        <button class="hero-btn create btn-plan-idle" id="hdr-create-btn" style="flex-direction:row; padding:8px 16px; font-size:14px; min-width:auto; border-radius:20px;">📋 Crear Nueva</button>
+        <button class="hero-btn edit btn-plan-idle" id="hdr-edit-btn" style="flex-direction:row; padding:8px 16px; font-size:14px; min-width:auto; border-radius:20px;">📂 Editar Existente</button>
+        
+        <!-- Botones Modo Activo -->
+        <button class="btn-mint btn-plan-active" id="print-pdf">🖨 Imprimir / PDF</button>
+        <div class="divider btn-plan-active"></div>
+        <button class="btn-sky btn-plan-active" id="save-firebase">☁ Guardar Planificación Completa</button>
+        <button class="btn-lav btn-plan-active" id="load-sample-btn">📋 Cargar Ejemplo</button>
+        <div class="divider btn-plan-active"></div>
+        <button class="btn-danger btn-plan-active" id="cancel-plan-btn">❌ Salir / Cancelar</button>
       </div>
     </div>
   </div>
@@ -589,15 +735,27 @@ button:hover { filter: brightness(.93); }
 
           <div class="field span-2">
             <label>
-              Carrera
-              <span class="norm">Plan de estudios aprobado</span>
+              Carrera / Tecnicatura
+              <span class="norm">Seleccione para filtrar materias</span>
             </label>
-            <select id="carrera">
+            <select id="carrera" class="main-field">
               <option value="">Seleccione Carrera</option>
               <option>Técnicas Digitales</option>
               <option>Enfermería</option>
               <option>Higiene y Seguridad</option>
             </select>
+          </div>
+
+          <div class="field span-2">
+            <label>Asignatura / Unidad Curricular</label>
+            <div class="subject-row">
+              <select id="materia" style="flex:1;">
+                <option value="">— Seleccione Materia —</option>
+              </select>
+              <button class="btn-icon" id="sub-add" title="Añadir materia" style="background:var(--mint); color:var(--mint-text);">➕</button>
+              <button class="btn-icon" id="sub-edit" title="Editar nombre" style="background:var(--sky); color:var(--sky-text);">✎</button>
+              <button class="btn-icon" id="sub-del" title="Eliminar materia" style="background:var(--rose); color:var(--rose-text);">🗑</button>
+            </div>
           </div>
 
           <div class="field">
@@ -1665,6 +1823,34 @@ import { getDatabase, ref, set, get, onValue }
 let db = null;
 let saveTimeout = null;
 
+// APP STATE
+let APP_MODE = 'HOME'; // HOME, CREATE, EDIT
+let ACTIVE_PLAN_ID = null;
+
+const setAppState = (mode) => {
+  APP_MODE = mode;
+  document.body.className = `state-${mode.toLowerCase()}`;
+  if (mode === 'HOME') {
+    ACTIVE_PLAN_ID = null;
+    resetForm();
+    qs('#smart-search').value = '';
+    qs('#search-results').style.display = 'none';
+  }
+};
+
+const resetForm = () => {
+  qsa('input,textarea,select').forEach(i => {
+    if (i.type !== 'file') i.value = '';
+  });
+  const t1 = qs('#tablaBody'); if(t1) t1.innerHTML = '';
+  const t2 = qs('#fichasContainer'); if(t2) t2.innerHTML = '';
+  const t3 = qs('#cronoBody'); if(t3) t3.innerHTML = '';
+  qs('#pp-toggle').checked = false;
+  qs('#pp-body').style.display = 'none';
+  qs('#sec-pp-card').style.opacity = '0.6';
+  updateMasthead();
+};
+
 const debounce = (fn, delay) => {
   return (...args) => {
     clearTimeout(saveTimeout);
@@ -1749,21 +1935,172 @@ function loadObjectToForm(o) {
   if (typeof updateMasthead === 'function') updateMasthead();
   
   // Real-time sync if initialized
-  if (db) debounce(saveToFirebase, 500)();
+  if (db) {
+    // We don't auto-save anymore, but we might want to sync if in active edit mode
+    // However, the user said "Eliminar el auto guardado cada x segundos"
+  }
+}
+
+// ── SUBJECT MANAGEMENT ──
+async function loadSubjects(career) {
+  if (!db || !career) return;
+  const snap = await get(ref(db, `materias/${career}`));
+  const list = snap.val() || [];
+  const sel = qs('#materia');
+  sel.innerHTML = '<option value="">— Seleccione Materia —</option>';
+  list.sort().forEach(m => {
+    const opt = document.createElement('option');
+    opt.textContent = m;
+    sel.appendChild(opt);
+  });
+}
+
+async function addSubject() {
+  const career = qs('#carrera').value;
+  if (!career) return alert("Primero seleccioná una carrera.");
+  const name = prompt("Nombre de la nueva materia:");
+  if (!name) return;
+  const snap = await get(ref(db, `materias/${career}`));
+  let list = snap.val() || [];
+  if (list.includes(name)) return alert("La materia ya existe.");
+  list.push(name);
+  await set(ref(db, `materias/${career}`), list);
+  loadSubjects(career);
+}
+
+async function editSubject() {
+  const career = qs('#carrera').value;
+  const oldName = qs('#materia').value;
+  if (!career || !oldName) return alert("Seleccioná una carrera y una materia.");
+  const newName = prompt("Nuevo nombre para la materia:", oldName);
+  if (!newName || newName === oldName) return;
+  const snap = await get(ref(db, `materias/${career}`));
+  let list = snap.val() || [];
+  const idx = list.indexOf(oldName);
+  if (idx > -1) {
+    list[idx] = newName;
+    await set(ref(db, `materias/${career}`), list);
+    loadSubjects(career);
+  }
+}
+
+async function delSubject() {
+  const career = qs('#carrera').value;
+  const name = qs('#materia').value;
+  if (!career || !name) return alert("Seleccioná carrera y materia.");
+  if (!confirm(`¿Eliminar la materia "${name}"?`)) return;
+  const snap = await get(ref(db, `materias/${career}`));
+  let list = snap.val() || [];
+  list = list.filter(m => m !== name);
+  await set(ref(db, `materias/${career}`), list);
+  loadSubjects(career);
+}
+
+// ── SMART SEARCH ──
+async function handleSmartSearch(q) {
+  if (!db || q.length < 3) {
+    qs('#search-results').style.display = 'none';
+    return;
+  }
+  const snap = await get(ref(db, 'planificaciones_index'));
+  const all = snap.val() || {};
+  const results = [];
+  const lowQ = q.toLowerCase();
+  
+  for (const id in all) {
+    const p = all[id];
+    if (p.docente.toLowerCase().includes(lowQ) || p.materia.toLowerCase().includes(lowQ)) {
+      results.push({ id, ...p });
+    }
+  }
+  
+  const resDiv = qs('#search-results');
+  resDiv.innerHTML = '';
+  if (results.length > 0) {
+    resDiv.style.display = 'block';
+    results.forEach(r => {
+      const item = document.createElement('div');
+      item.style.padding = '10px 15px';
+      item.style.borderBottom = '1px solid #eee';
+      item.style.cursor = 'pointer';
+      item.innerHTML = `<strong>${r.materia}</strong><br><small>${r.docente} (${r.anio})</small>`;
+      item.onclick = () => loadExistingPlan(r.id);
+      resDiv.appendChild(item);
+    });
+  } else {
+    resDiv.style.display = 'none';
+  }
+}
+
+async function loadExistingPlan(id) {
+  if (!db) return;
+  const snap = await get(ref(db, `planificaciones_data/${id}`));
+  if (snap.exists()) {
+    resetForm();
+    loadObjectToForm(snap.val());
+    ACTIVE_PLAN_ID = id;
+    setAppState('EDIT');
+    qs('#modal-recover').style.display = 'none';
+    // Important: check if career has subjects and load them
+    const career = qs('#carrera').value;
+    if (career) loadSubjects(career);
+  } else {
+    alert("No se encontró la planificación.");
+  }
+}
+
+async function populateFilters() {
+  if (!db) return;
+  const snap = await get(ref(db, 'planificaciones_index'));
+  const all = snap.val() || {};
+  const sets = { anio: new Set(), carrera: new Set(), materia: new Set(), comision: new Set(), docente: new Set() };
+  
+  for (const id in all) {
+    const p = all[id];
+    if (p.anio) sets.anio.add(p.anio);
+    if (p.carrera) sets.carrera.add(p.carrera);
+    if (p.materia) sets.materia.add(p.materia);
+    if (p.comision) sets.comision.add(p.comision);
+    if (p.docente) sets.docente.add(p.docente);
+  }
+  
+  for (const key in sets) {
+    const sel = qs(`#filter-${key}`);
+    if (!sel) continue;
+    sel.innerHTML = '<option value="">— Ver Todos —</option>';
+    Array.from(sets[key]).sort().forEach(val => {
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = val;
+      sel.appendChild(opt);
+    });
+  }
 }
 
 // Global functions for buttons
 window.saveToFirebase = async () => {
-  if (!db) {
-    alert("Firebase no está configurado. Editá FIREBASE_CFG en el código.");
-    return;
-  }
+  if (!db) return;
   try {
     const o = formToObject();
-    await set(ref(db, 'planificaciones/current'), o);
-    console.log("Planificación sincronizada con la nube.");
+    const id = ACTIVE_PLAN_ID || `plan_${Date.now()}`;
+    
+    // 1. Guardar Datos Completos
+    await set(ref(db, `planificaciones_data/${id}`), o);
+    
+    // 2. Actualizar Índice de Búsqueda
+    const indexData = {
+      docente: o.docente || 'Sin nombre',
+      materia: o.materia || 'Sin materia',
+      anio: o.anio || '2026',
+      carrera: o.carrera || '',
+      comision: o.comision || ''
+    };
+    await set(ref(db, `planificaciones_index/${id}`), indexData);
+    
+    ACTIVE_PLAN_ID = id;
+    alert("Planificación guardada correctamente.");
+    if (APP_MODE === 'CREATE') setAppState('EDIT');
   } catch (err) {
-    console.error("Error al sincronizar:", err);
+    alert("Error al guardar: " + err.message);
   }
 };
 
@@ -1967,24 +2304,75 @@ qs('#add-crono').click();
 
   updateFichaNum();
   
-  // Setup Auto-save for all inputs
-  qsa('input, textarea, select').forEach(el => {
-    el.addEventListener('input', () => {
-      if (db) debounce(saveToFirebase, 2000)();
-    });
-    if(el.tagName === 'SELECT') {
-      el.addEventListener('change', () => {
-        if (db) debounce(saveToFirebase, 2000)();
-      });
+  // APP STATE ACTIONS
+  qs('#home-create-btn').onclick = () => setAppState('CREATE');
+  qs('#hdr-create-btn').onclick = () => setAppState('CREATE');
+  
+  qs('#home-edit-btn').onclick = () => {
+    qs('#modal-recover').style.display = 'flex';
+    populateFilters();
+  };
+  qs('#hdr-edit-btn').onclick = () => {
+    qs('#modal-recover').style.display = 'flex';
+    populateFilters();
+  };
+  
+  qs('#modal-close-btn').onclick = () => qs('#modal-recover').style.display = 'none';
+  qs('#modal-cancel-btn').onclick = () => qs('#modal-recover').style.display = 'none';
+  
+  qs('#cancel-plan-btn').onclick = () => {
+    if (confirm("¿Estás seguro de salir? Se perderán los cambios no guardados.")) {
+      setAppState('HOME');
     }
-  });
+  };
 
-  // INITIAL DEFAULTS & UI UPDATE
-  qs('#anio').value = new Date().getFullYear();
-  updateMasthead();
+  qs('#smart-search').oninput = (e) => handleSmartSearch(e.target.value);
 
+  // SUBJECT MANAGER
+  qs('#carrera').onchange = (e) => loadSubjects(e.target.value);
+  qs('#sub-add').onclick = (e) => { e.preventDefault(); addSubject(); };
+  qs('#sub-edit').onclick = (e) => { e.preventDefault(); editSubject(); };
+  qs('#sub-del').onclick = (e) => { e.preventDefault(); delSubject(); };
+  
+  // MODAL FILTERS
+  qs('#modal-load-btn').onclick = async () => {
+    const filters = {
+      anio: qs('#filter-anio').value,
+      carrera: qs('#filter-carrera').value,
+      materia: qs('#filter-materia').value,
+      comision: qs('#filter-comision').value,
+      docente: qs('#filter-docente').value
+    };
+    
+    if (!filters.anio || !filters.carrera || !filters.materia) {
+      return alert("Por favor, seleccioná al menos Año, Carrera y Materia.");
+    }
+    
+    const snap = await get(ref(db, 'planificaciones_index'));
+    const all = snap.val() || {};
+    let foundId = null;
+    
+    for (const id in all) {
+      const p = all[id];
+      const match = (!filters.anio || p.anio === filters.anio) &&
+                    (!filters.carrera || p.carrera === filters.carrera) &&
+                    (!filters.materia || p.materia === filters.materia) &&
+                    (!filters.comision || p.comision === filters.comision) &&
+                    (!filters.docente || p.docente === filters.docente);
+      if (match) { foundId = id; break; }
+    }
+    
+    if (foundId) {
+      loadExistingPlan(foundId);
+    } else {
+      alert("No se encontró ninguna planificación que coincida con esos filtros.");
+    }
+  };
+  
   // INITIALIZE FIREBASE
   initFirebase();
+  
+  setAppState('HOME');
 
 }); // end DOMContentLoaded
 </script>
