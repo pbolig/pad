@@ -1067,15 +1067,9 @@ input.search-input {
           <div class="field span-2">
             <label>Asignatura / Unidad Curricular</label>
             <div class="subject-row">
-              <select id="materia" style="flex:1;">
+              <select id="materia" style="width:100%;">
                 <option value="">— Seleccione Materia —</option>
               </select>
-              <!-- Admin-only buttons hidden by default or handled via CSS -->
-              <div id="subject-admin-btns" style="display:none; gap:5px;">
-                <button class="btn-icon" id="sub-add" title="Añadir materia" style="background:var(--mint); color:var(--mint-text);">➕</button>
-                <button class="btn-icon" id="sub-edit" title="Editar nombre" style="background:var(--sky); color:var(--sky-text);">✎</button>
-                <button class="btn-icon" id="sub-del" title="Eliminar materia" style="background:var(--rose); color:var(--rose-text);">🗑</button>
-              </div>
             </div>
           </div>
 
@@ -2282,9 +2276,7 @@ const setAppState = (mode) => {
   const adminEnt = qs('#admin-entrance');
   if (adminEnt) adminEnt.style.display = (currentUser && currentUser.isAdmin && mode === 'HOME') ? 'block' : 'none';
 
-  // Toggle subject admin buttons
-  const subAdminBtns = qs('#subject-admin-btns');
-  if (subAdminBtns) subAdminBtns.style.display = (currentUser && currentUser.isAdmin && mode !== 'HOME') ? 'flex' : 'none';
+  // Toggle subject admin buttons is no longer needed
 
   const plansContainer = qs('#my-plans-container');
   if (plansContainer) {
@@ -2367,6 +2359,7 @@ async function initFirebase() {
         await set(ref(db, `users/${user.uid}/email`), user.email);
         if (isAdmin) await set(ref(db, `users/${user.uid}/role`), 'admin');
 
+        loadCarreras();
         setAppState('HOME');
       } else {
         console.log("No user logged in.");
@@ -2778,62 +2771,7 @@ function printReport() {
 }
 
 // ── QUICK SUBJECT ACTIONS (FOR MAIN FORM) ──
-window.addSubject = async () => {
-  const career = qs('#carrera').value;
-  if (!career) return alert("Primero seleccioná una carrera.");
-  const name = prompt("Nombre de la nueva materia para " + career + ":");
-  if (!name) return;
-  const code = prompt("Código Interno (opcional):") || '';
-  try {
-    const snap = await get(ref(db, `materias/${career}`));
-    const list = snap.val() || [];
-    if (list.some(m => ((typeof m === 'string') ? m : m.name) === name)) return alert("La materia ya existe.");
-    list.push({ name, code, correlatives: [] });
-    await set(ref(db, `materias/${career}`), list);
-    await loadSubjects(career);
-    qs('#materia').value = name;
-    updateMasthead();
-  } catch(e) { alert("Error: " + e.message); }
-};
-
-window.editSubject = async () => {
-  const career = qs('#carrera').value;
-  const oldName = qs('#materia').value;
-  if (!career || !oldName) return alert("Seleccioná carrera y materia a editar.");
-  const newName = prompt("Nuevo nombre para la materia:", oldName);
-  if (!newName || newName === oldName) return;
-  try {
-    const snap = await get(ref(db, `materias/${career}`));
-    let list = snap.val() || [];
-    const idx = list.findIndex(m => ((typeof m === 'string') ? m : m.name) === oldName);
-    if (idx !== -1) {
-      if (typeof list[idx] === 'string') {
-        list[idx] = { name: newName, code: '', correlatives: [] };
-      } else {
-        list[idx].name = newName;
-      }
-      await set(ref(db, `materias/${career}`), list);
-      await loadSubjects(career);
-      qs('#materia').value = newName;
-      updateMasthead();
-    }
-  } catch(e) { alert("Error: " + e.message); }
-};
-
-window.delSubject = async () => {
-  const career = qs('#carrera').value;
-  const name = qs('#materia').value;
-  if (!career || !name) return alert("Seleccioná carrera y materia a eliminar.");
-  if (!confirm(`¿Borrar materia "${name}"?`)) return;
-  try {
-    const snap = await get(ref(db, `materias/${career}`));
-    let list = snap.val() || [];
-    list = list.filter(m => ((typeof m === 'string') ? m : m.name) !== name);
-    await set(ref(db, `materias/${career}`), list);
-    await loadSubjects(career);
-    updateMasthead();
-  } catch(e) { alert("Error: " + e.message); }
-};
+// Quick actions moved to Admin Panel
 
 // ── DOCENTE MANAGEMENT ──
 let DOCENTES_CACHE = {};
@@ -3405,12 +3343,9 @@ addFicha({
   const adminCarSel = qs('#admin-materia-career-select');
   if (adminCarSel) adminCarSel.onchange = (e) => loadAdminMaterias(e.target.value);
 
-  // Load Initial Carreras
-  loadCarreras();
+  // Replaced by call in onAuthStateChanged
   
-  const bAdd = qs('#sub-add');  if(bAdd) bAdd.onclick = (e) => { e.preventDefault(); window.addSubject(); };
-  const bEdit = qs('#sub-edit'); if(bEdit) bEdit.onclick = (e) => { e.preventDefault(); window.editSubject(); };
-  const bDel = qs('#sub-del');  if(bDel) bDel.onclick = (e) => { e.preventDefault(); window.delSubject(); };
+  // Subject quick actions removed
 
   const mainMatSel = qs('#materia');
   if (mainMatSel) mainMatSel.onchange = handleSubjectChange;
