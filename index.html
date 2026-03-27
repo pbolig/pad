@@ -188,16 +188,20 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
 #auth-screen {
   max-width: 450px;
   margin: 100px auto;
-  padding: 40px;
-  background: var(--white);
+  padding: 50px 40px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   text-align: center;
+  border: 1px solid var(--white);
 }
-#auth-screen h2 { font-family: var(--font-head); color: var(--sky-text); margin-bottom: 24px; }
-#auth-screen .field { text-align: left; margin-bottom: 16px; }
-.auth-toggle { margin-top: 20px; font-size: 13px; color: var(--neutral-500); }
-.auth-toggle span { color: var(--sky-text); cursor: pointer; font-weight: 600; text-decoration: underline; }
+#auth-screen h2 { font-family: var(--font-head); color: var(--sky-text); margin-bottom: 32px; font-size: 28px; }
+#auth-screen .field { text-align: left; margin-bottom: 20px; }
+#auth-screen input { padding: 12px 16px; font-size: 15px; border-radius: var(--radius-md); }
+.auth-toggle { margin-top: 24px; font-size: 14px; color: var(--neutral-500); }
+.auth-toggle span { color: var(--sky-text); cursor: pointer; font-weight: 600; text-decoration: underline; transition: color 0.2s; }
+.auth-toggle span:hover { color: var(--sky-text); opacity: 0.8; }
 .user-info-header { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--neutral-700); }
 .user-info-header .logout-btn { color: var(--rose-text); cursor: pointer; font-weight: 600; font-size: 12px; }
 
@@ -395,6 +399,7 @@ label .norm {
 input[type="text"],
 input[type="number"],
 input[type="email"],
+input[type="password"],
 input[type="tel"],
 select,
 textarea {
