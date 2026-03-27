@@ -2396,11 +2396,18 @@ async function handleSmartSearch(q) {
       
       // Filter by User: Only show if it belongs to current user or matches user email (for existing data)
       const dProfile = DOCENTES_CACHE[normalizeKey(p.docente)];
+      const emailPrefix = normalizeKey(currentUser.email.split('@')[0]);
+      const docenteKey = normalizeKey(p.docente);
+      
       const isOwner = (p.uid && p.uid === currentUser.uid) || 
-                      (p.docenteEmail && p.docenteEmail === currentUser.email) ||
-                      (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase());
+                      (p.docenteEmail && p.docenteEmail.toLowerCase() === currentUser.email.toLowerCase()) ||
+                      (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase()) ||
+                      (!p.uid && !p.docenteEmail && docenteKey === emailPrefix);
 
-      if (!isOwner) continue;
+      if (!isOwner) {
+        // console.log("Skipping plan (not owner):", p.materia, "Docente:", p.docente);
+        continue;
+      }
 
       const matchText = [p.docente, p.materia, p.anio, p.carrera, p.comision, p.instituto]
         .filter(Boolean).join(' ').toLowerCase();
@@ -2475,9 +2482,13 @@ async function populateFilters() {
     
     // Filter by User
     const dProfile = DOCENTES_CACHE[normalizeKey(p.docente)];
+    const emailPrefix = normalizeKey(currentUser.email.split('@')[0]);
+    const docenteKey = normalizeKey(p.docente);
+    
     const isOwner = (p.uid && p.uid === currentUser.uid) || 
-                    (p.docenteEmail && p.docenteEmail === currentUser.email) ||
-                    (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase());
+                    (p.docenteEmail && p.docenteEmail.toLowerCase() === currentUser.email.toLowerCase()) ||
+                    (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase()) ||
+                    (!p.uid && !p.docenteEmail && docenteKey === emailPrefix);
     if (!isOwner) continue;
 
     if (p.anio) sets.anio.add(p.anio);
