@@ -1060,10 +1060,7 @@ input.search-input {
               <span class="norm">Seleccione para filtrar materias</span>
             </label>
             <select id="carrera" class="main-field">
-              <option value="">Seleccione Carrera</option>
-              <option>Técnicas Digitales</option>
-              <option>Enfermería</option>
-              <option>Higiene y Seguridad</option>
+              <option value="">Cargando carreras...</option>
             </select>
           </div>
 
@@ -2310,10 +2307,11 @@ const setAppState = (mode) => {
 };
 
 const resetForm = () => {
+  CURRENT_SUBJECTS = [];
   qsa('input,textarea,select').forEach(i => {
     if (i.id === 'anio') i.value = new Date().getFullYear().toString();
     else if (i.id === 'jurisdiccion') i.value = "Ministerio de Educación – Provincia de Santa Fe – Dirección de Educación Superior (DES)";
-    else if (i.id === 'instituto') i.value = "Instituto Superior de Educación y Técnica Nº 57 – Rosario";
+    else if (i.id === 'instituto') i.value = "Instituto Superior de Educación y Técnica N° 57 – Rosario";
     else if (i.id === 'anio-cursada') i.value = "Terciario - Anual";
     else if (i.type !== 'file') i.value = '';
   });
@@ -2453,6 +2451,8 @@ function loadObjectToForm(o) {
 }
 
 // ── SUBJECT MANAGEMENT ──
+let CURRENT_SUBJECTS = [];
+
 async function loadSubjects(career) {
   if (!db || !career) return;
   try {
@@ -2463,8 +2463,8 @@ async function loadSubjects(career) {
     if (!sel) return;
     sel.innerHTML = '<option value="">— Seleccione Materia —</option>';
     
-    const items = Array.isArray(list) ? list : Object.values(list);
-    items.sort((a,b) => {
+    CURRENT_SUBJECTS = Array.isArray(list) ? list : Object.values(list);
+    CURRENT_SUBJECTS.sort((a,b) => {
       const ca = (typeof a === 'string') ? '' : (a.code || '');
       const cb = (typeof b === 'string') ? '' : (b.code || '');
       const na = (typeof a === 'string') ? a : (a.name || '');
@@ -2475,11 +2475,28 @@ async function loadSubjects(career) {
       const name = (typeof item === 'string') ? item : item.name;
       const opt = document.createElement('option');
       opt.textContent = name;
+      opt.value = name;
       sel.appendChild(opt);
     });
   } finally {
     setLoading(false);
   }
+}
+
+function handleSubjectChange() {
+  const name = qs('#materia').value;
+  const match = CURRENT_SUBJECTS.find(m => ((typeof m === 'string') ? m : m.name) === name);
+  if (match && typeof match === 'object') {
+    if (match.year) {
+      const elY = qs('#anio-cursada');
+      if (elY) elY.value = match.year + "° Año";
+    }
+    if (match.hours) {
+      const elH = qs('#carga');
+      if (elH) elH.value = match.hours;
+    }
+  }
+  updateMasthead();
 }
 
 // ── ADMIN MANAGEMENT ──
@@ -2949,46 +2966,7 @@ function handleDocenteInput(e) {
 }
 
 
-async function addSubject() {
-  const career = qs('#carrera').value;
-  if (!career) return alert("Primero seleccioná una carrera.");
-  const name = prompt("Nombre de la nueva materia:");
-  if (!name) return;
-  const snap = await get(ref(db, `materias/${career}`));
-  let list = snap.val() || [];
-  if (list.includes(name)) return alert("La materia ya existe.");
-  list.push(name);
-  await set(ref(db, `materias/${career}`), list);
-  loadSubjects(career);
-}
-
-async function editSubject() {
-  const career = qs('#carrera').value;
-  const oldName = qs('#materia').value;
-  if (!career || !oldName) return alert("Seleccioná una carrera y una materia.");
-  const newName = prompt("Nuevo nombre para la materia:", oldName);
-  if (!newName || newName === oldName) return;
-  const snap = await get(ref(db, `materias/${career}`));
-  let list = snap.val() || [];
-  const idx = list.indexOf(oldName);
-  if (idx > -1) {
-    list[idx] = newName;
-    await set(ref(db, `materias/${career}`), list);
-    loadSubjects(career);
-  }
-}
-
-async function delSubject() {
-  const career = qs('#carrera').value;
-  const name = qs('#materia').value;
-  if (!career || !name) return alert("Seleccioná carrera y materia.");
-  if (!confirm(`¿Eliminar la materia "${name}"?`)) return;
-  const snap = await get(ref(db, `materias/${career}`));
-  let list = snap.val() || [];
-  list = list.filter(m => m !== name);
-  await set(ref(db, `materias/${career}`), list);
-  loadSubjects(career);
-}
+// Functions addSubject, editSubject, delSubject are handled via window. equivalents above
 
 // ── SMART SEARCH ──
 async function loadMyPlans() {
@@ -3430,9 +3408,12 @@ addFicha({
   // Load Initial Carreras
   loadCarreras();
   
-  const bAdd = qs('#sub-add');  if(bAdd) bAdd.onclick = (e) => { e.preventDefault(); addSubject(); };
-  const bEdit = qs('#sub-edit'); if(bEdit) bEdit.onclick = (e) => { e.preventDefault(); editSubject(); };
-  const bDel = qs('#sub-del');  if(bDel) bDel.onclick = (e) => { e.preventDefault(); delSubject(); };
+  const bAdd = qs('#sub-add');  if(bAdd) bAdd.onclick = (e) => { e.preventDefault(); window.addSubject(); };
+  const bEdit = qs('#sub-edit'); if(bEdit) bEdit.onclick = (e) => { e.preventDefault(); window.editSubject(); };
+  const bDel = qs('#sub-del');  if(bDel) bDel.onclick = (e) => { e.preventDefault(); window.delSubject(); };
+
+  const mainMatSel = qs('#materia');
+  if (mainMatSel) mainMatSel.onchange = handleSubjectChange;
   
   // MODAL FILTERS
   const bModLoad = qs('#modal-load-btn');
