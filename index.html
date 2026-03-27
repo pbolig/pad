@@ -1245,34 +1245,19 @@ input.search-input {
         <div class="subsection-title">D · Correlatividades y Plan de Estudios</div>
         <div class="grid g-3">
 
-          <div class="field">
+          <div class="field span-2">
             <label>
-              Correlativas para <strong>cursar</strong> esta materia
+              Correlativas para <strong>cursar o rendir final</strong> esta materia
               <span class="norm">Plan de estudios – tabla de correlatividades</span>
               <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
               <span class="tooltip-box">
-                <span class="tt-title">Requisitos para cursar (inscribirse)</span>
-                <span class="tt-norm">Tabla de correlatividades del plan de estudios aprobado por resolución ministerial</span>
-                Listar las materias que el estudiante debe tener <em>aprobadas o regularizadas</em> para poder inscribirse y cursar esta asignatura. Indicar si se exige aprobación (examen final rendido) o sólo regularización (cursado aprobado).
-                <span class="tt-eg">Ej.: "Matemática I (regular) · Introducción a la Programación (aprobada)"</span>
+                <span class="tt-title">Requisitos previos</span>
+                <span class="tt-norm">Tabla de correlatividades del plan de estudios aprobado</span>
+                Listar las materias que el estudiante debe tener aprobadas o regularizadas según corresponda para cursar o rendir el final de esta asignatura.
+                <span class="tt-eg">Ej.: "Matemática I (aprobada) · Programación I (regular)"</span>
               </span></span>
             </label>
-            <textarea id="correl-cursar" style="min-height:70px;" placeholder="• Materia X (aprobada)&#10;• Materia Y (regularizada)&#10;• Sin correlativas previas"></textarea>
-          </div>
-
-          <div class="field">
-            <label>
-              Correlativas para <strong>rendir el examen final</strong>
-              <span class="norm">Plan de estudios – tabla de correlatividades</span>
-              <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
-              <span class="tooltip-box">
-                <span class="tt-title">Requisitos para presentarse al examen final</span>
-                <span class="tt-norm">Tabla de correlatividades del plan de estudios – columna "Para rendir"</span>
-                Listar las materias que el estudiante debe tener <em>aprobadas con examen final</em> antes de poder presentarse a rendir el examen final de esta asignatura. Este requisito es independiente del de cursado.
-                <span class="tt-eg">Ej.: "Matemática I (final aprobado) · Programación I (final aprobado)"</span>
-              </span></span>
-            </label>
-            <textarea id="correl-final" style="min-height:70px;" placeholder="• Materia X (examen final aprobado)&#10;• Sin correlativas para el final"></textarea>
+            <textarea id="correl-cursar-rendir" style="min-height:70px;" placeholder="• Materia X (aprobada/regular)&#10;• Sin correlativas previas"></textarea>
           </div>
 
           <div class="field">
@@ -1281,10 +1266,10 @@ input.search-input {
               <span class="norm">Plan de estudios</span>
               <span class="hint-wrap"><span class="hint-btn" tabindex="0">i</span>
               <span class="tooltip-box">
-                <span class="tt-title">Co-requisitos – cursado simultáneo obligatorio</span>
-                <span class="tt-norm">Plan de estudios – materias que deben cursarse en el mismo período</span>
-                Listar las asignaturas que, según el plan de estudios, deben cursarse de manera simultánea con esta materia (co-requisitos). No confundir con correlativas previas.
-                <span class="tt-eg">Ej.: "Laboratorio de Programación (mismo cuatrimestre) · Sin co-requisitos"</span>
+                <span class="tt-title">Co-requisitos – cursado simultáneo</span>
+                <span class="tt-norm">Materias que deben cursarse en el mismo ciclo lectivo</span>
+                Listar las asignaturas que deben cursarse de manera simultánea con esta materia.
+                <span class="tt-eg">Ej.: "Laboratorio de Programación (simultánea)"</span>
               </span></span>
             </label>
             <textarea id="correl-simult" style="min-height:70px;" placeholder="• Materia Z (simultánea)&#10;• Sin co-requisitos"></textarea>
@@ -2036,7 +2021,7 @@ const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
 const FLAT_FIELDS = [
   'anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision',
   'docente', 'email-docente', 'tel-docente', 'carga', 'modalidad', 'ram', 'aprob',
-  'correl-cursar','correl-final','correl-simult','plan-url',
+  'correl-cursar-rendir', 'correl-simult','plan-url',
   'objgen','competencias','perfil','metodologia',
   'criterios','instrumentos','ponderaciones',
   'biblio-ob','biblio-comp','firma-doc','firma-coord'
@@ -2074,9 +2059,8 @@ const SAMPLE_DATA = {
     modalidad: "Presencial",
     ram: "Decreto N° 4199/2015 – Art. 28 (Condiciones de acreditación) · Art. 32 (Asistencia mínima 75%) · Art. 35 (Examen final) · Art. 38 (Régimen de regularidad)",
     aprob: "Aprobada CD el 11/03/2026 – Acta N° 02/2026 – Expte. N° 0055-S-2026",
-    "correl-cursar": "• Programación I (regularizada – cursado aprobado)\n• Matemática Discreta (regularizada – cursado aprobado)\n• Introducción a los Sistemas de Información (aprobada con examen final)",
-    "correl-final": "• Programación I (examen final aprobado)\n• Matemática Discreta (examen final aprobado)\nNOTA: el estudiante debe tener ambas materias con examen final rendido y aprobado antes de presentarse al examen final de Base de Datos I, independientemente de haber cursado y regularizado la presente.",
-    "correl-simult": "• Programación II (puede cursarse en el mismo cuatrimestre, no es co-requisito estricto)\n• Sin co-requisitos formales obligatorios según plan de estudios Res. 2457/19",
+    "correl-cursar-rendir": "• Programación I (regularizada para cursar, aprobada para el final)\n• Matemática Discreta (regularizada para cursar, aprobada para el final)\n• Introducción a los Sistemas de Información (aprobada con examen final)",
+    "correl-simult": "• Programación II (puede cursarse en el mismo cuatrimestre)\n• Sin co-requisitos formales obligatorios",
     "plan-url": "https://drive.google.com/file/d/1EjEmploPlanEstudiosBD1_TSP/view?usp=sharing",
     objgen: "• Comprender los fundamentos teóricos del modelo relacional y los principios del diseño de bases de datos...\n• Aplicar técnicas de modelado entidad-relación y normalización...",
     competencias: "Competencia 1 – Análisis de requerimientos...\nCompetencia 2 – Diseño e implementación...\nCompetencia 3 – Uso de herramientas y lenguajes...\nCompetencia 5 – Comunicación técnica escrita...",
@@ -2106,8 +2090,7 @@ const SAMPLE_DATA = {
     modalidad: "Mixta (presencial + contexto real)",
     ram: "Decreto Provincial N° 1559/17 – Reglamento de Práctica Profesionalizante",
     aprob: "Aprobada CD el 09/03/2026 – Acta N° 01/2026",
-    "correl-cursar": "• Programación II (aprobada con examen final)\n• Base de Datos I (aprobada con examen final)\n• Ingeniería de Software I (regularizada)\n• Práctica Profesionalizante II (aprobada)",
-    "correl-final": "• Programación II (examen final aprobado)\n• Base de Datos I (examen final aprobado)\n• Ingeniería de Software I (examen final aprobado)",
+    "correl-cursar-rendir": "• Programación II (aprobada con examen final)\n• Base de Datos I (aprobada con examen final)\n• Ingeniería de Software I (regularizada)\n• Práctica Profesionalizante II (aprobada)",
     "correl-simult": "• Proyecto de Software (cursado simultáneo articulado)",
     "plan-url": "https://drive.google.com/file/d/1EjEmploPlanEstudiosPP3_TSP/view?usp=sharing",
     objgen: "• Desarrollar un sistema de software completo en contexto organizacional real...\n• Gestionar el ciclo completo de desarrollo de software...",
@@ -2390,6 +2373,11 @@ function loadObjectToForm(o) {
   qs('#fichas-container').innerHTML = '';
   qs('#crono-body').innerHTML = '';
 
+  // Fallback for old correlativities keys
+  if (!o['correl-cursar-rendir'] && (o['correl-cursar'] || o['correl-final'])) {
+    o['correl-cursar-rendir'] = ((o['correl-cursar'] || '') + '\n' + (o['correl-final'] || '')).trim();
+  }
+
   FLAT_FIELDS.forEach(id => {
     const el = qs('#' + id);
     if (el) el.value = o[id] || '';
@@ -2487,6 +2475,18 @@ function handleSubjectChange() {
     if (match.hours) {
       const elH = qs('#carga');
       if (elH) elH.value = match.hours;
+    }
+    // Auto-populate correlativities
+    if (match.correlatives && Array.isArray(match.correlatives)) {
+      const listStr = match.correlatives.length > 0 
+        ? match.correlatives.map(m => `• ${m}`).join('\n') 
+        : '• Sin correlativas previas';
+      
+      const elCR = qs('#correl-cursar-rendir');
+      if (elCR) elCR.value = listStr;
+      
+      const elCS = qs('#correl-simult');
+      if (elCS) elCS.value = listStr;
     }
   }
   updateMasthead();
