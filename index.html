@@ -184,6 +184,34 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+/* ── AUTH SCREEN ── */
+#auth-screen {
+  max-width: 450px;
+  margin: 100px auto;
+  padding: 40px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+#auth-screen h2 { font-family: var(--font-head); color: var(--sky-text); margin-bottom: 24px; }
+#auth-screen .field { text-align: left; margin-bottom: 16px; }
+.auth-toggle { margin-top: 20px; font-size: 13px; color: var(--neutral-500); }
+.auth-toggle span { color: var(--sky-text); cursor: pointer; font-weight: 600; text-decoration: underline; }
+.user-info-header { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--neutral-700); }
+.user-info-header .logout-btn { color: var(--rose-text); cursor: pointer; font-weight: 600; font-size: 12px; }
+
+/* ── APP STATES ── */
+body.state-login .container, 
+body.state-login .sticky-controls,
+body.state-login #home-screen { display: none !important; }
+body:not(.state-login) #auth-screen { display: none !important; }
+
+body.state-home .container, 
+body.state-home .sticky-controls .btn-plan-active { display: none !important; }
+body:not(.state-home) #home-screen,
+body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important; }
+
 /* ── CONTAINER ──────────────────────────────────────── */
 .container {
   max-width: 1220px;
@@ -627,6 +655,23 @@ input.search-input {
 <!-- ── SPINNER DE CARGA ── -->
 <div id="loader"><div class="spinner"></div></div>
 
+<!-- ══ PANTALLA DE AUTENTICACIÓN ═══════════════════════ -->
+<div id="auth-screen">
+  <h2 id="auth-title">Iniciar Sesión</h2>
+  <div class="field">
+    <label>Correo electrónico</label>
+    <input type="email" id="auth-email" placeholder="ejemplo@correo.com">
+  </div>
+  <div class="field">
+    <label>Contraseña</label>
+    <input type="password" id="auth-pass" placeholder="••••••••">
+  </div>
+  <button class="btn-sky" id="auth-submit-btn" style="width:100%; margin-top:10px; padding:12px;">Ingresar</button>
+  <div class="auth-toggle" id="auth-toggle-msg">
+    ¿No tienes cuenta? <span id="auth-switch-link">Regístrate aquí</span>
+  </div>
+</div>
+
 <!-- ══ PANTALLA DE INICIO ══════════════════════════════ -->
 <div id="home-screen">
   <h1>PAD - Planificación Anual Docente</h1>
@@ -725,6 +770,10 @@ input.search-input {
         <div class="divider btn-plan-active"></div>
         <button class="btn-danger btn-plan-active" id="cancel-plan-btn">❌ Salir / Cancelar</button>
         <div id="fb-status-nav" style="margin-left:auto; font-size:12px; opacity:0.7; display:flex; align-items:center;"></div>
+        <div class="user-info-header" id="user-info-header" style="display:none;">
+          <span id="user-email-display"></span>
+          <span class="logout-btn" id="logout-btn">Salir</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1881,10 +1930,14 @@ const SAMPLE_DATA = {
 };
 
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, set, get, onValue }
+import { getDatabase, ref, set, get, onValue, remove }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 let db = null;
+let auth = null;
+let currentUser = null;
 let saveTimeout = null;
 
 function esc(s){ return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -2001,6 +2054,13 @@ const setAppState = (mode) => {
   console.log("Setting App State:", mode);
   APP_MODE = mode;
   document.body.className = `state-${mode.toLowerCase()}`;
+  
+  // Show/hide user info based on auth
+  const userInfo = qs('#user-info-header');
+  if (userInfo) userInfo.style.display = currentUser ? 'flex' : 'none';
+  const userEmail = qs('#user-email-display');
+  if (userEmail) userEmail.textContent = currentUser ? currentUser.email : '';
+
   if (mode === 'HOME') {
     ACTIVE_PLAN_ID = null;
     resetForm();
@@ -2046,6 +2106,20 @@ async function initFirebase() {
   try {
     const app = initializeApp(FIREBASE_CFG, 'pad-app');
     db = getDatabase(app);
+    auth = getAuth(app);
+    
+    // Auth Listener
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      if (user) {
+        console.log("User logged in:", user.email);
+        setAppState('HOME');
+      } else {
+        console.log("No user logged in.");
+        setAppState('LOGIN');
+      }
+    });
+
     updateStatus('<span style="color:var(--mint-text)">✅ Conectado</span>');
     return true;
   } catch (err) {
@@ -2319,6 +2393,15 @@ async function handleSmartSearch(q) {
     
     for (const id in all) {
       const p = all[id];
+      
+      // Filter by User: Only show if it belongs to current user or matches user email (for existing data)
+      const dProfile = DOCENTES_CACHE[normalizeKey(p.docente)];
+      const isOwner = (p.uid && p.uid === currentUser.uid) || 
+                      (p.docenteEmail && p.docenteEmail === currentUser.email) ||
+                      (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase());
+
+      if (!isOwner) continue;
+
       const matchText = [p.docente, p.materia, p.anio, p.carrera, p.comision, p.instituto]
         .filter(Boolean).join(' ').toLowerCase();
       
@@ -2389,6 +2472,14 @@ async function populateFilters() {
   
   for (const id in all) {
     const p = all[id];
+    
+    // Filter by User
+    const dProfile = DOCENTES_CACHE[normalizeKey(p.docente)];
+    const isOwner = (p.uid && p.uid === currentUser.uid) || 
+                    (p.docenteEmail && p.docenteEmail === currentUser.email) ||
+                    (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase());
+    if (!isOwner) continue;
+
     if (p.anio) sets.anio.add(p.anio);
     if (p.carrera) sets.carrera.add(p.carrera);
     if (p.materia) sets.materia.add(p.materia);
@@ -2427,7 +2518,9 @@ window.saveToFirebase = async () => {
       anio: o.anio || '2026',
       instituto: o.instituto || '',
       carrera: o.carrera || '',
-      comision: o.comision || ''
+      comision: o.comision || '',
+      uid: currentUser.uid,
+      docenteEmail: currentUser.email
     };
     await set(ref(db, `planificaciones_index/${id}`), indexData);
     
@@ -2657,9 +2750,52 @@ addFicha({
   (async () => {
     const ok = await initFirebase();
     if (ok) await cleanupDocentes();
-    setAppState('HOME');
-    console.log("App initialized. Mode: HOME. Firebase OK:", ok);
+    // setAppState('HOME'); // Now handled by onAuthStateChanged
+    console.log("App initialized. Firebase OK:", ok);
   })();
+
+  // AUTH ACTIONS
+  let isRegisterMode = false;
+  const bAuthSwitch = qs('#auth-switch-link');
+  if (bAuthSwitch) bAuthSwitch.onclick = () => {
+    isRegisterMode = !isRegisterMode;
+    qs('#auth-title').textContent = isRegisterMode ? 'Registrarse' : 'Iniciar Sesión';
+    qs('#auth-submit-btn').textContent = isRegisterMode ? 'Crear Cuenta' : 'Ingresar';
+    qs('#auth-toggle-msg').innerHTML = isRegisterMode ? 
+      '¿Ya tienes cuenta? <span id="auth-switch-link">Inicia sesión aquí</span>' : 
+      '¿No tienes cuenta? <span id="auth-switch-link">Regístrate aquí</span>';
+    // Re-bind link since innerHTML changed
+    qs('#auth-switch-link').onclick = bAuthSwitch.onclick;
+  };
+
+  const bAuthSubmit = qs('#auth-submit-btn');
+  if (bAuthSubmit) bAuthSubmit.onclick = async () => {
+    const email = qs('#auth-email').value.trim();
+    const pass = qs('#auth-pass').value.trim();
+    if (!email || !pass) return alert("Por favor completa todos los campos.");
+    setLoading(true);
+    try {
+      if (isRegisterMode) {
+        await createUserWithEmailAndPassword(auth, email, pass);
+        alert("Cuenta creada con éxito.");
+      } else {
+        await signInWithEmailAndPassword(auth, email, pass);
+      }
+    } catch (err) {
+      let msg = "Error: " + err.message;
+      if (err.code === 'auth/invalid-credential') msg = "Credenciales inválidas.";
+      if (err.code === 'auth/email-already-in-use') msg = "El correo ya está en uso.";
+      if (err.code === 'auth/weak-password') msg = "La contraseña es muy débil.";
+      alert(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const bLogout = qs('#logout-btn');
+  if (bLogout) bLogout.onclick = () => {
+    if (confirm("¿Cerrar sesión?")) signOut(auth);
+  };
 
 }); // end DOMContentLoaded
 </script>
