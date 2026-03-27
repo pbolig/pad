@@ -684,6 +684,16 @@ input.search-input {
 #my-plans-container h2 { font-family: var(--font-head); color: var(--neutral-700); font-size: 20px; margin-bottom: 20px; }
 .no-plans-msg { padding: 40px; color: var(--neutral-500); font-style: italic; }
 
+/* ── ADMIN MODAL ── */
+#modal-admin .modal-box { max-width: 900px; width: 95%; max-height: 90vh; overflow-y: auto; }
+.admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--neutral-100); padding-bottom: 10px; }
+.admin-tab { padding: 8px 16px; cursor: pointer; border-radius: 8px; font-weight: 600; color: var(--neutral-500); }
+.admin-tab.active { background: var(--sky); color: var(--sky-text); }
+.admin-panel-content { display: none; }
+.admin-panel-content.active { display: block; }
+.admin-list-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--neutral-50); }
+.admin-list-item:hover { background: var(--neutral-50); }
+
 </style>
 </head>
 <body class="state-home">
@@ -739,8 +749,57 @@ input.search-input {
     Conectado como: <strong id="user-email-home"></strong> | <span class="logout-btn" id="logout-btn-home" style="color:var(--rose-text); cursor:pointer; font-weight:600; text-decoration:underline;">Cerrar Sesión</span>
   </div>
 
+  <div id="admin-entrance" style="display:none; margin-top:15px;">
+    <button class="btn-ghost" id="btn-open-admin" style="border-color:var(--sky-dark); color:var(--sky-text); padding:10px 24px; border-radius:20px; font-size:14px;">⚙️ Panel de Administración</button>
+  </div>
+
   <div id="fb-status" style="margin-top:10px; font-size:13px; opacity:0.8;">
     <span style="color:var(--sky-text)">Conectando...</span>
+  </div>
+</div>
+
+<!-- ══ MODAL: ADMIN ══ -->
+<div id="modal-admin" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h2>⚙️ Panel de Administración</h2>
+      <span class="close-modal" id="close-admin" style="cursor:pointer; font-size:24px;">&times;</span>
+    </div>
+    <div class="modal-body">
+      <div class="admin-tabs">
+        <div class="admin-tab active" data-tab="admin-carreras">Carreras</div>
+        <div class="admin-tab" data-tab="admin-materias">Materias</div>
+        <div class="admin-tab" data-tab="admin-users">Usuarios</div>
+      </div>
+
+      <!-- Tab: Carreras -->
+      <div id="admin-carreras" class="admin-panel-content active">
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+          <input type="text" id="new-carrera-name" placeholder="Nombre de la nueva carrera" style="flex:1;">
+          <button class="btn-mint" id="btn-add-carrera">Añadir Carrera</button>
+        </div>
+        <div id="admin-carreras-list" style="border:1px solid var(--neutral-100); border-radius:8px;"></div>
+      </div>
+
+      <!-- Tab: Materias -->
+      <div id="admin-materias" class="admin-panel-content">
+        <div class="field">
+          <label>Seleccionar Carrera para gestionar materias</label>
+          <select id="admin-materia-career-select" style="width:100%;"></select>
+        </div>
+        <div style="display:flex; gap:10px; margin-bottom:15px; margin-top:15px;">
+          <input type="text" id="new-materia-name" placeholder="Nombre de la materia" style="flex:1;">
+          <button class="btn-sky" id="btn-add-materia">Añadir Materia</button>
+        </div>
+        <div id="admin-materias-list" style="border:1px solid var(--neutral-100); border-radius:8px; max-height:300px; overflow-y:auto;"></div>
+      </div>
+
+      <!-- Tab: Usuarios -->
+      <div id="admin-users" class="admin-panel-content">
+        <p style="font-size:12px; color:var(--neutral-500); margin-bottom:15px;">Lista de usuarios registrados.</p>
+        <div id="admin-users-list" style="border:1px solid var(--neutral-100); border-radius:8px;"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -908,9 +967,12 @@ input.search-input {
               <select id="materia" style="flex:1;">
                 <option value="">— Seleccione Materia —</option>
               </select>
-              <button class="btn-icon" id="sub-add" title="Añadir materia" style="background:var(--mint); color:var(--mint-text);">➕</button>
-              <button class="btn-icon" id="sub-edit" title="Editar nombre" style="background:var(--sky); color:var(--sky-text);">✎</button>
-              <button class="btn-icon" id="sub-del" title="Eliminar materia" style="background:var(--rose); color:var(--rose-text);">🗑</button>
+              <!-- Admin-only buttons hidden by default or handled via CSS -->
+              <div id="subject-admin-btns" style="display:none; gap:5px;">
+                <button class="btn-icon" id="sub-add" title="Añadir materia" style="background:var(--mint); color:var(--mint-text);">➕</button>
+                <button class="btn-icon" id="sub-edit" title="Editar nombre" style="background:var(--sky); color:var(--sky-text);">✎</button>
+                <button class="btn-icon" id="sub-del" title="Eliminar materia" style="background:var(--rose); color:var(--rose-text);">🗑</button>
+              </div>
             </div>
           </div>
 
@@ -2114,6 +2176,13 @@ const setAppState = (mode) => {
   const userEmailHome = qs('#user-email-home');
   if (userEmailHome) userEmailHome.textContent = currentUser ? currentUser.email : '';
 
+  const adminEnt = qs('#admin-entrance');
+  if (adminEnt) adminEnt.style.display = (currentUser && currentUser.isAdmin && mode === 'HOME') ? 'block' : 'none';
+
+  // Toggle subject admin buttons
+  const subAdminBtns = qs('#subject-admin-btns');
+  if (subAdminBtns) subAdminBtns.style.display = (currentUser && currentUser.isAdmin && mode !== 'HOME') ? 'flex' : 'none';
+
   const plansContainer = qs('#my-plans-container');
   if (plansContainer) {
     plansContainer.style.display = (currentUser && mode === 'HOME') ? 'block' : 'none';
@@ -2177,6 +2246,23 @@ async function initFirebase() {
       if (user) {
         console.log("User logged in:", user.email);
         await loadDocentes();
+        
+        // Check Admin Status
+        const adminEmail = 'pedro.bolig@gmail.com';
+        let isAdmin = user.email.toLowerCase() === adminEmail;
+        
+        // Also check DB for admin role
+        try {
+          const roleSnap = await get(ref(db, `users/${user.uid}/role`));
+          if (roleSnap.exists() && roleSnap.val() === 'admin') isAdmin = true;
+        } catch(e) {}
+        
+        currentUser.isAdmin = isAdmin;
+        
+        // Ensure user exists in users table for management
+        await set(ref(db, `users/${user.uid}/email`), user.email);
+        if (isAdmin) await set(ref(db, `users/${user.uid}/role`), 'admin');
+
         setAppState('HOME');
       } else {
         console.log("No user logged in.");
@@ -2185,6 +2271,15 @@ async function initFirebase() {
     });
 
     updateStatus('<span style="color:var(--mint-text)">✅ Conectado</span>');
+    
+    // Seed careers if empty (for initial setup)
+    const carSnap = await get(ref(db, 'carreras'));
+    if (!carSnap.exists()) {
+      const initialCarreras = ["Tecnicatura Superior en Programación", "Enfermería", "Higiene y Seguridad en el Trabajo"];
+      await set(ref(db, 'carreras'), initialCarreras);
+      loadCarreras();
+    }
+
     return true;
   } catch (err) {
     updateStatus('<span style="color:var(--rose-text)">❌ Error de conexión</span>');
@@ -2261,7 +2356,11 @@ async function loadSubjects(career) {
     const sel = qs('#materia');
     if (!sel) return;
     sel.innerHTML = '<option value="">— Seleccione Materia —</option>';
-    list.sort().forEach(m => {
+    
+    // Convert to array if it's an object (unlikely but safe)
+    const items = Array.isArray(list) ? list : Object.values(list);
+    
+    items.sort().forEach(m => {
       const opt = document.createElement('option');
       opt.textContent = m;
       sel.appendChild(opt);
@@ -2270,6 +2369,166 @@ async function loadSubjects(career) {
     setLoading(false);
   }
 }
+
+// ── ADMIN MANAGEMENT ──
+async function loadCarreras() {
+  if (!db) return;
+  try {
+    const snap = await get(ref(db, 'carreras'));
+    const all = snap.val() || [];
+    const items = Array.isArray(all) ? all : Object.values(all);
+    
+    // Update main dropdown
+    const carSel = qs('#carrera');
+    const filterCarSel = qs('#filter-carrera');
+    const adminCarSel = qs('#admin-materia-career-select');
+    
+    const html = '<option value="">Seleccione Carrera</option>' + 
+                 items.sort().map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    
+    if (carSel) carSel.innerHTML = html;
+    if (filterCarSel) filterCarSel.innerHTML = html;
+    if (adminCarSel) adminCarSel.innerHTML = html;
+    
+    // Update Admin List
+    const listDiv = qs('#admin-carreras-list');
+    if (listDiv) {
+      listDiv.innerHTML = items.length ? '' : '<div style="padding:20px; color:#999;">No hay carreras.</div>';
+      items.sort().forEach(c => {
+        const row = document.createElement('div');
+        row.className = 'admin-list-item';
+        row.innerHTML = `<span>${esc(c)}</span> <button class="btn-icon" onclick="deleteCarrera('${esc(c)}')">🗑</button>`;
+        listDiv.appendChild(row);
+      });
+    }
+  } catch(e) { console.error("Error loading carreras:", e); }
+}
+
+window.deleteCarrera = async (name) => {
+  if (!confirm(`¿Borrar carrera "${name}"? Se mantendrán las materias en la DB pero no serán accesibles fácilmente.`)) return;
+  try {
+    const snap = await get(ref(db, 'carreras'));
+    let all = snap.val() || [];
+    all = all.filter(c => c !== name);
+    await set(ref(db, 'carreras'), all);
+    loadCarreras();
+  } catch(e) { alert("Error: " + e.message); }
+};
+
+async function loadAdminMaterias(career) {
+  if (!career) {
+    qs('#admin-materias-list').innerHTML = '<div style="padding:20px; color:#999;">Selecciona una carrera arriba.</div>';
+    return;
+  }
+  const snap = await get(ref(db, `materias/${career}`));
+  const list = snap.val() || [];
+  const listDiv = qs('#admin-materias-list');
+  listDiv.innerHTML = list.length ? '' : '<div style="padding:20px; color:#999;">No hay materias en esta carrera.</div>';
+  list.sort().forEach(m => {
+    const row = document.createElement('div');
+    row.className = 'admin-list-item';
+    row.innerHTML = `<span>${esc(m)}</span> <button class="btn-icon" onclick="deleteAdminMateria('${esc(career)}','${esc(m)}')">🗑</button>`;
+    listDiv.appendChild(row);
+  });
+}
+
+window.deleteAdminMateria = async (career, name) => {
+  if (!confirm(`¿Borrar materia "${name}"?`)) return;
+  try {
+    const snap = await get(ref(db, `materias/${career}`));
+    let list = snap.val() || [];
+    list = list.filter(m => m !== name);
+    await set(ref(db, `materias/${career}`), list);
+    loadAdminMaterias(career);
+    if (qs('#carrera').value === career) loadSubjects(career);
+  } catch(e) { alert("Error: " + e.message); }
+};
+
+async function loadAdminUsers() {
+  const snap = await get(ref(db, 'users'));
+  const all = snap.val() || {};
+  const listDiv = qs('#admin-users-list');
+  listDiv.innerHTML = '';
+  Object.keys(all).forEach(uid => {
+    const u = all[uid];
+    const row = document.createElement('div');
+    row.className = 'admin-list-item';
+    const role = u.role === 'admin' ? 'Admin' : 'Docente';
+    row.innerHTML = `
+      <div style="flex:1;">
+        <strong>${esc(u.email)}</strong><br>
+        <small style="opacity:0.6;">UID: ${uid}</small>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:12px; padding:2px 8px; border-radius:4px; background:${u.role==='admin'?'var(--sky)':'var(--neutral-100)'}">${role}</span>
+        <button class="btn-ghost" onclick="toggleUserRole('${uid}', '${u.role}')" style="font-size:11px; padding:4px 8px;">Cambiar Rol</button>
+      </div>
+    `;
+    listDiv.appendChild(row);
+  });
+}
+
+window.toggleUserRole = async (uid, oldRole) => {
+  const newRole = oldRole === 'admin' ? 'docente' : 'admin';
+  if (!confirm(`¿Cambiar rol a ${newRole}?`)) return;
+  try {
+    await set(ref(db, `users/${uid}/role`), newRole);
+    loadAdminUsers();
+  } catch(e) { alert("Error: " + e.message); }
+};
+
+// ── QUICK SUBJECT ACTIONS (FOR MAIN FORM) ──
+window.addSubject = async () => {
+  const career = qs('#carrera').value;
+  if (!career) return alert("Primero seleccioná una carrera.");
+  const name = prompt("Nombre de la nueva materia para " + career + ":");
+  if (!name) return;
+  try {
+    const snap = await get(ref(db, `materias/${career}`));
+    const list = snap.val() || [];
+    if (list.includes(name)) return alert("La materia ya existe.");
+    list.push(name);
+    await set(ref(db, `materias/${career}`), list);
+    await loadSubjects(career);
+    qs('#materia').value = name;
+    updateMasthead();
+  } catch(e) { alert("Error: " + e.message); }
+};
+
+window.editSubject = async () => {
+  const career = qs('#carrera').value;
+  const oldName = qs('#materia').value;
+  if (!career || !oldName) return alert("Seleccioná carrera y materia a editar.");
+  const newName = prompt("Nuevo nombre para la materia:", oldName);
+  if (!newName || newName === oldName) return;
+  try {
+    const snap = await get(ref(db, `materias/${career}`));
+    let list = snap.val() || [];
+    const idx = list.indexOf(oldName);
+    if (idx !== -1) {
+      list[idx] = newName;
+      await set(ref(db, `materias/${career}`), list);
+      await loadSubjects(career);
+      qs('#materia').value = newName;
+      updateMasthead();
+    }
+  } catch(e) { alert("Error: " + e.message); }
+};
+
+window.delSubject = async () => {
+  const career = qs('#carrera').value;
+  const name = qs('#materia').value;
+  if (!career || !name) return alert("Seleccioná carrera y materia a eliminar.");
+  if (!confirm(`¿Borrar materia "${name}"?`)) return;
+  try {
+    const snap = await get(ref(db, `materias/${career}`));
+    let list = snap.val() || [];
+    list = list.filter(m => m !== name);
+    await set(ref(db, `materias/${career}`), list);
+    await loadSubjects(career);
+    updateMasthead();
+  } catch(e) { alert("Error: " + e.message); }
+};
 
 // ── DOCENTE MANAGEMENT ──
 let DOCENTES_CACHE = {};
@@ -2839,8 +3098,34 @@ addFicha({
   if (ss) ss.oninput = (e) => handleSmartSearch(e.target.value);
 
   // SUBJECT MANAGER
-  const carSel = qs('#carrera');
-  if (carSel) carSel.onchange = (e) => loadSubjects(e.target.value);
+  const mainCarSel = qs('#carrera');
+  if (mainCarSel) mainCarSel.onchange = (e) => loadSubjects(e.target.value);
+
+  const filterCarSel = qs('#filter-carrera');
+  if (filterCarSel) filterCarSel.onchange = (e) => {
+    // For the recovery modal, we'll need to filter subjects too
+    const career = e.target.value;
+    const matSel = qs('#filter-materia');
+    if (matSel) {
+      matSel.innerHTML = '<option value="">Cargando...</option>';
+      get(ref(db, `materias/${career}`)).then(snap => {
+        const list = snap.val() || [];
+        matSel.innerHTML = '<option value="">— Ver Todos —</option>';
+        list.sort().forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = opt.textContent = m;
+          matSel.appendChild(opt);
+        });
+      });
+    }
+  };
+
+  // Populate Admin Career Select
+  const adminCarSel = qs('#admin-materia-career-select');
+  if (adminCarSel) adminCarSel.onchange = (e) => loadAdminMaterias(e.target.value);
+
+  // Load Initial Carreras
+  loadCarreras();
   
   const bAdd = qs('#sub-add');  if(bAdd) bAdd.onclick = (e) => { e.preventDefault(); addSubject(); };
   const bEdit = qs('#sub-edit'); if(bEdit) bEdit.onclick = (e) => { e.preventDefault(); editSubject(); };
@@ -2934,6 +3219,62 @@ addFicha({
   const bLogoutHome = qs('#logout-btn-home');
   if (bLogoutHome) bLogoutHome.onclick = () => {
     if (confirm("¿Cerrar sesión?")) signOut(auth);
+  };
+
+  // ADMIN MODAL ACTIONS
+  const bOpenAdmin = qs('#btn-open-admin');
+  if (bOpenAdmin) bOpenAdmin.onclick = () => {
+    qs('#modal-admin').style.display = 'flex';
+    loadCarreras();
+    loadAdminUsers();
+  };
+  const bCloseAdmin = qs('#close-admin');
+  if (bCloseAdmin) bCloseAdmin.onclick = () => qs('#modal-admin').style.display = 'none';
+
+  // Admin Tab Switching
+  qsa('.admin-tab').forEach(tab => {
+    tab.onclick = () => {
+      qsa('.admin-tab').forEach(t => t.classList.remove('active'));
+      qsa('.admin-panel-content').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      const targetId = tab.getAttribute('data-tab');
+      const targetPanel = qs('#' + targetId);
+      if (targetPanel) targetPanel.classList.add('active');
+    };
+  });
+
+  // Admin: Add Carrera
+  const bAddCar = qs('#btn-add-carrera');
+  if (bAddCar) bAddCar.onclick = async () => {
+    const name = qs('#new-carrera-name').value.trim();
+    if (!name) return;
+    try {
+      const snap = await get(ref(db, 'carreras'));
+      const list = snap.val() || [];
+      if (list.includes(name)) return alert("La carrera ya existe.");
+      list.push(name);
+      await set(ref(db, 'carreras'), list);
+      qs('#new-carrera-name').value = '';
+      loadCarreras();
+    } catch(e) { alert("Error: " + e.message); }
+  };
+
+  // Admin: Add Materia
+  const bAddMat = qs('#btn-add-materia');
+  if (bAddMat) bAddMat.onclick = async () => {
+    const career = qs('#admin-materia-career-select').value;
+    const name = qs('#new-materia-name').value.trim();
+    if (!career || !name) return alert("Seleccioná carrera e ingresá nombre de materia.");
+    try {
+      const snap = await get(ref(db, `materias/${career}`));
+      const list = snap.val() || [];
+      if (list.includes(name)) return alert("La materia ya existe en esta carrera.");
+      list.push(name);
+      await set(ref(db, `materias/${career}`), list);
+      qs('#new-materia-name').value = '';
+      loadAdminMaterias(career);
+      if (qs('#carrera').value === career) loadSubjects(career);
+    } catch(e) { alert("Error: " + e.message); }
   };
 
 }); // end DOMContentLoaded
