@@ -787,11 +787,24 @@ input.search-input {
           <label>Seleccionar Carrera para gestionar materias</label>
           <select id="admin-materia-career-select" style="width:100%;"></select>
         </div>
-        <div style="display:flex; gap:10px; margin-bottom:15px; margin-top:15px;">
-          <input type="text" id="new-materia-name" placeholder="Nombre de la materia" style="flex:1;">
-          <button class="btn-sky" id="btn-add-materia">Añadir Materia</button>
+        <div class="grid g-2" style="margin-top:15px; gap:10px;">
+          <div class="field">
+            <label>Nombre de la materia</label>
+            <input type="text" id="new-materia-name" placeholder="Nombre de la materia">
+          </div>
+          <div class="field">
+            <label>Código Interno</label>
+            <input type="text" id="new-materia-code" placeholder="Cód. Alfanumérico">
+          </div>
         </div>
-        <div id="admin-materias-list" style="border:1px solid var(--neutral-100); border-radius:8px; max-height:300px; overflow-y:auto;"></div>
+        <div class="field" style="margin-top:10px;">
+          <label>Correlatividades (Materias previas requeridas)</label>
+          <div id="new-materia-corr-list" style="border:1px solid var(--neutral-100); border-radius:8px; max-height:120px; overflow-y:auto; padding:10px; background:var(--neutral-50); display: flex; flex-direction: column; gap: 5px;">
+            <p style="color:var(--neutral-400); font-size:12px;">Selecciona una carrera para ver opciones.</p>
+          </div>
+        </div>
+        <button class="btn-sky" id="btn-add-materia" style="width:100%; margin-top:15px;">Añadir Materia</button>
+        <div id="admin-materias-list" style="border:1px solid var(--neutral-100); border-radius:8px; max-height:300px; overflow-y:auto; margin-top:20px;"></div>
       </div>
 
       <!-- Tab: Usuarios -->
@@ -2357,12 +2370,15 @@ async function loadSubjects(career) {
     if (!sel) return;
     sel.innerHTML = '<option value="">— Seleccione Materia —</option>';
     
-    // Convert to array if it's an object (unlikely but safe)
     const items = Array.isArray(list) ? list : Object.values(list);
-    
-    items.sort().forEach(m => {
+    items.sort((a,b) => {
+      const na = (typeof a === 'string') ? a : a.name;
+      const nb = (typeof b === 'string') ? b : b.name;
+      return na.localeCompare(nb);
+    }).forEach(item => {
+      const name = (typeof item === 'string') ? item : item.name;
       const opt = document.createElement('option');
-      opt.textContent = m;
+      opt.textContent = name;
       sel.appendChild(opt);
     });
   } finally {
@@ -2418,17 +2434,47 @@ window.deleteCarrera = async (name) => {
 async function loadAdminMaterias(career) {
   if (!career) {
     qs('#admin-materias-list').innerHTML = '<div style="padding:20px; color:#999;">Selecciona una carrera arriba.</div>';
+    qs('#new-materia-corr-list').innerHTML = '<p style="color:var(--neutral-400); font-size:12px;">Selecciona una carrera para ver opciones.</p>';
     return;
   }
   const snap = await get(ref(db, `materias/${career}`));
   const list = snap.val() || [];
+  const items = Array.isArray(list) ? list : Object.values(list);
+
   const listDiv = qs('#admin-materias-list');
-  listDiv.innerHTML = list.length ? '' : '<div style="padding:20px; color:#999;">No hay materias en esta carrera.</div>';
-  list.sort().forEach(m => {
+  listDiv.innerHTML = items.length ? '' : '<div style="padding:20px; color:#999;">No hay materias en esta carrera.</div>';
+  
+  const corrDiv = qs('#new-materia-corr-list');
+  corrDiv.innerHTML = '';
+
+  items.sort((a,b) => {
+    const na = (typeof a === 'string') ? a : a.name;
+    const nb = (typeof b === 'string') ? b : b.name;
+    return na.localeCompare(nb);
+  }).forEach(item => {
+    const name = (typeof item === 'string') ? item : item.name;
+    const code = (typeof item === 'string') ? '' : (item.code || '');
+    const corrs = (typeof item === 'string') ? [] : (item.correlatives || []);
+
     const row = document.createElement('div');
     row.className = 'admin-list-item';
-    row.innerHTML = `<span>${esc(m)}</span> <button class="btn-icon" onclick="deleteAdminMateria('${esc(career)}','${esc(m)}')">🗑</button>`;
+    row.innerHTML = `
+      <div style="flex:1;">
+        <strong>${esc(name)}</strong> ${code ? `<small style="background:var(--neutral-100); padding:2px 6px; border-radius:4px; margin-left:8px; font-weight:600;">${esc(code)}</small>` : ''}
+        ${corrs.length ? `<br><small style="color:var(--neutral-500); font-size:11px;">Correlativas: ${corrs.join(', ')}</small>` : ''}
+      </div>
+      <button class="btn-icon" onclick="deleteAdminMateria('${esc(career)}','${esc(name)}')">🗑</button>
+    `;
     listDiv.appendChild(row);
+
+    const lbl = document.createElement('label');
+    lbl.style.display = 'flex';
+    lbl.style.alignItems = 'center';
+    lbl.style.gap = '8px';
+    lbl.style.fontSize = '12px';
+    lbl.style.cursor = 'pointer';
+    lbl.innerHTML = `<input type="checkbox" class="corr-item" value="${esc(name)}"> ${esc(name)}`;
+    corrDiv.appendChild(lbl);
   });
 }
 
@@ -2437,7 +2483,10 @@ window.deleteAdminMateria = async (career, name) => {
   try {
     const snap = await get(ref(db, `materias/${career}`));
     let list = snap.val() || [];
-    list = list.filter(m => m !== name);
+    list = list.filter(m => {
+      const mName = (typeof m === 'string') ? m : m.name;
+      return mName !== name;
+    });
     await set(ref(db, `materias/${career}`), list);
     loadAdminMaterias(career);
     if (qs('#carrera').value === career) loadSubjects(career);
@@ -2483,11 +2532,12 @@ window.addSubject = async () => {
   if (!career) return alert("Primero seleccioná una carrera.");
   const name = prompt("Nombre de la nueva materia para " + career + ":");
   if (!name) return;
+  const code = prompt("Código Interno (opcional):") || '';
   try {
     const snap = await get(ref(db, `materias/${career}`));
     const list = snap.val() || [];
-    if (list.includes(name)) return alert("La materia ya existe.");
-    list.push(name);
+    if (list.some(m => ((typeof m === 'string') ? m : m.name) === name)) return alert("La materia ya existe.");
+    list.push({ name, code, correlatives: [] });
     await set(ref(db, `materias/${career}`), list);
     await loadSubjects(career);
     qs('#materia').value = name;
@@ -2504,9 +2554,13 @@ window.editSubject = async () => {
   try {
     const snap = await get(ref(db, `materias/${career}`));
     let list = snap.val() || [];
-    const idx = list.indexOf(oldName);
+    const idx = list.findIndex(m => ((typeof m === 'string') ? m : m.name) === oldName);
     if (idx !== -1) {
-      list[idx] = newName;
+      if (typeof list[idx] === 'string') {
+        list[idx] = { name: newName, code: '', correlatives: [] };
+      } else {
+        list[idx].name = newName;
+      }
       await set(ref(db, `materias/${career}`), list);
       await loadSubjects(career);
       qs('#materia').value = newName;
@@ -2523,7 +2577,7 @@ window.delSubject = async () => {
   try {
     const snap = await get(ref(db, `materias/${career}`));
     let list = snap.val() || [];
-    list = list.filter(m => m !== name);
+    list = list.filter(m => ((typeof m === 'string') ? m : m.name) !== name);
     await set(ref(db, `materias/${career}`), list);
     await loadSubjects(career);
     updateMasthead();
@@ -3264,14 +3318,23 @@ addFicha({
   if (bAddMat) bAddMat.onclick = async () => {
     const career = qs('#admin-materia-career-select').value;
     const name = qs('#new-materia-name').value.trim();
+    const code = qs('#new-materia-code').value.trim();
+    const checkedCorrs = qsa('.corr-item:checked').map(cb => cb.value);
+
     if (!career || !name) return alert("Seleccioná carrera e ingresá nombre de materia.");
     try {
       const snap = await get(ref(db, `materias/${career}`));
       const list = snap.val() || [];
-      if (list.includes(name)) return alert("La materia ya existe en esta carrera.");
-      list.push(name);
+      if (list.some(m => ((typeof m === 'string') ? m : m.name) === name)) {
+        return alert("La materia ya existe en esta carrera.");
+      }
+      list.push({ name, code, correlatives: checkedCorrs });
       await set(ref(db, `materias/${career}`), list);
+      
       qs('#new-materia-name').value = '';
+      qs('#new-materia-code').value = '';
+      qsa('.corr-item:checked').forEach(cb => cb.checked = false);
+      
       loadAdminMaterias(career);
       if (qs('#carrera').value === career) loadSubjects(career);
     } catch(e) { alert("Error: " + e.message); }
