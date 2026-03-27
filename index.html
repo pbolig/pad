@@ -702,18 +702,39 @@ input.search-input {
 
 @media print {
   body.printing-report .container, 
+  body.printing-report #home-screen,
+  body.printing-report #auth-screen,
   body.printing-report .modal-overlay:not(#modal-admin),
-  body.printing-report #loader { display: none !important; }
-  body.printing-report #modal-admin { display: block !important; position: static; background: white; }
-  body.printing-report #modal-admin .modal-box { box-shadow: none; max-width: 100%; width: 100%; margin: 0; padding: 0; border: none; }
+  body.printing-report #loader,
+  body.printing-report #fb-status,
+  body.printing-report #admin-entrance { display: none !important; }
+
+  body.printing-report #modal-admin { 
+    display: block !important; 
+    position: static !important; 
+    background: white !important; 
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+  body.printing-report #modal-admin .modal-box { 
+    box-shadow: none !important; 
+    max-width: 100% !important; 
+    width: 100% !important; 
+    margin: 0 !important; 
+    padding: 0 !important; 
+    border: none !important;
+  }
   body.printing-report .modal-header, 
   body.printing-report .admin-tabs, 
   body.printing-report .admin-panel-content:not(.active),
+  body.printing-report .field,
   body.printing-report #btn-gen-report,
-  body.printing-report #btn-print-report,
-  body.printing-report .field label,
-  body.printing-report select { display: none !important; }
-  body.printing-report .report-table { font-size: 11pt; }
+  body.printing-report #btn-print-report { display: none !important; }
+  
+  body.printing-report .admin-panel-content.active { display: block !important; }
+  body.printing-report #report-container { display: block !important; margin: 0 !important; padding: 0 !important; }
+  body.printing-report .report-table { font-size: 10pt; width: 100% !important; border-collapse: collapse !important; }
 }
 
 </style>
