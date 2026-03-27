@@ -878,7 +878,10 @@ input.search-input {
             <p style="color:var(--neutral-400); font-size:12px;">Selecciona una carrera para ver opciones.</p>
           </div>
         </div>
-        <button class="btn-sky" id="btn-add-materia" style="width:100%; margin-top:15px;">Añadir Materia</button>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+          <button class="btn-sky" id="btn-add-materia" style="flex:2;">Añadir Materia</button>
+          <button class="btn-ghost" id="btn-cancel-edit-materia" style="flex:1; display:none;">Cancelar Edición</button>
+        </div>
         <div id="admin-materias-list" style="border:1px solid var(--neutral-100); border-radius:8px; max-height:300px; overflow-y:auto; margin-top:20px;"></div>
       </div>
 
@@ -2522,6 +2525,8 @@ window.deleteCarrera = async (name) => {
   } catch(e) { alert("Error: " + e.message); }
 };
 
+let editingMateriaName = null;
+
 async function loadAdminMaterias(career) {
   if (!career) {
     qs('#admin-materias-list').innerHTML = '<div style="padding:20px; color:#999;">Selecciona una carrera arriba.</div>';
@@ -2560,13 +2565,16 @@ async function loadAdminMaterias(career) {
     const row = document.createElement('div');
     row.className = 'admin-list-item';
     row.innerHTML = `
-      <div style="flex:1;">
+      <div style="flex:1; padding-right:10px;">
         <strong>${esc(name)}</strong> ${code ? `<small style="background:var(--neutral-100); padding:2px 6px; border-radius:4px; margin-left:8px; font-weight:600;">${esc(code)}</small>` : ''}
         ${year ? `<small style="color:var(--sky-text); margin-left:8px; font-weight:600;">${year}</small>` : ''}
         ${hours ? `<small style="color:var(--neutral-500); margin-left:8px;">${hours}</small>` : ''}
         ${corrs.length ? `<br><small style="color:var(--neutral-500); font-size:11px;">Correlativas: ${corrs.join(', ')}</small>` : ''}
       </div>
-      <button class="btn-icon" onclick="deleteAdminMateria('${esc(career)}','${esc(name)}')">🗑</button>
+      <div style="display:flex; gap:4px;">
+        <button class="btn-icon" onclick="prepareEditMateria('${esc(career)}','${esc(name)}')" title="Editar">✎</button>
+        <button class="btn-icon" onclick="deleteAdminMateria('${esc(career)}','${esc(name)}')" title="Eliminar">🗑</button>
+      </div>
     `;
     listDiv.appendChild(row);
 
@@ -2580,6 +2588,41 @@ async function loadAdminMaterias(career) {
     corrDiv.appendChild(lbl);
   });
 }
+
+window.prepareEditMateria = async (career, name) => {
+  try {
+    const snap = await get(ref(db, `materias/${career}`));
+    const list = snap.val() || [];
+    const item = list.find(m => ((typeof m === 'string') ? m : m.name) === name);
+    if (!item) return;
+
+    editingMateriaName = name;
+    qs('#new-materia-name').value = (typeof item === 'string') ? item : item.name;
+    qs('#new-materia-code').value = (typeof item === 'string') ? '' : (item.code || '');
+    qs('#new-materia-year').value = (typeof item === 'string') ? '1' : (item.year || '1');
+    qs('#new-materia-hours').value = (typeof item === 'string') ? '' : (item.hours || '');
+    
+    const corrs = (typeof item === 'string') ? [] : (item.correlatives || []);
+    qsa('.corr-item').forEach(cb => {
+      cb.checked = corrs.includes(cb.value);
+    });
+
+    qs('#btn-add-materia').textContent = 'Actualizar Materia';
+    qs('#btn-cancel-edit-materia').style.display = 'block';
+    qs('#admin-materias').scrollTo({ top: 0, behavior: 'smooth' });
+  } catch(e) { alert("Error: " + e.message); }
+};
+
+window.cancelEditMateria = () => {
+  editingMateriaName = null;
+  qs('#new-materia-name').value = '';
+  qs('#new-materia-code').value = '';
+  qs('#new-materia-hours').value = '';
+  qs('#new-materia-year').value = '1';
+  qsa('.corr-item:checked').forEach(cb => cb.checked = false);
+  qs('#btn-add-materia').textContent = 'Añadir Materia';
+  qs('#btn-cancel-edit-materia').style.display = 'none';
+};
 
 window.deleteAdminMateria = async (career, name) => {
   if (!confirm(`¿Borrar materia "${name}"?`)) return;
@@ -2979,18 +3022,21 @@ async function loadMyPlans() {
       return;
     }
     
-    // Sort by year desc
     myPlans.sort((a,b) => (b.anio||'').localeCompare(a.anio||''));
     
     myPlans.forEach(p => {
       const card = document.createElement('div');
       card.className = 'plan-card';
       card.innerHTML = `
-        <h3>${p.materia || 'Sin materia'}</h3>
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+          <h3 style="margin:0; font-family:var(--font-head); font-size:17px; color:var(--sky-text);">${esc(p.materia || 'Sin materia')}</h3>
+          <button class="btn-icon" onclick="deletePlanRecord(event, '${p.id}')" title="Eliminar" style="background:#fff0f3; color:var(--rose-text); width:28px; height:28px; border-radius:6px; flex-shrink:0;">🗑</button>
+        </div>
         <div class="carrera">${p.carrera || 'Carrera no especificada'}</div>
-        <div class="meta">
+        <div class="meta" style="margin-top:auto; padding-top:10px; border-top:1px solid #eee;">
           <span>${p.comision || ''}</span>
           <span class="badge-year">${p.anio || '-'}</span>
+          <button class="btn-ghost" style="font-size:10px; padding:3px 8px; margin-left:auto;">Editar ✎</button>
         </div>
       `;
       card.onclick = () => loadExistingPlan(p.id);
@@ -3000,6 +3046,18 @@ async function loadMyPlans() {
     grid.innerHTML = `<div style="grid-column: 1/-1; color:var(--rose-text);">Error al cargar: ${err.message}</div>`;
   }
 }
+
+window.deletePlanRecord = async (event, id) => {
+  if (event) event.stopPropagation();
+  if (!confirm("¿Deseas eliminar permanentemente esta planificación?")) return;
+  try {
+    setLoading(true);
+    await remove(ref(db, `planificaciones_index/${id}`));
+    await remove(ref(db, `planificaciones_data/${id}`));
+    loadMyPlans();
+  } catch(e) { alert("Error al eliminar: " + e.message); }
+  finally { setLoading(false); }
+};
 
 async function handleSmartSearch(q) {
   if (!db || q.length < 3) {
@@ -3504,7 +3562,7 @@ addFicha({
     } catch(e) { alert("Error: " + e.message); }
   };
 
-  // Admin: Add Materia
+  // Admin: Add/Update Materia
   const bAddMat = qs('#btn-add-materia');
   if (bAddMat) bAddMat.onclick = async () => {
     const career = qs('#admin-materia-career-select').value;
@@ -3517,23 +3575,33 @@ addFicha({
     if (!career || !name) return alert("Seleccioná carrera e ingresá nombre de materia.");
     try {
       const snap = await get(ref(db, `materias/${career}`));
-      const list = snap.val() || [];
-      if (list.some(m => ((typeof m === 'string') ? m : m.name) === name)) {
-        return alert("La materia ya existe en esta carrera.");
+      let list = snap.val() || [];
+      
+      const materiaObj = { name, code, year, hours, correlatives: checkedCorrs };
+
+      if (editingMateriaName) {
+        // Find index of the the one we are editing
+        const idx = list.findIndex(m => ((typeof m === 'string') ? m : m.name) === editingMateriaName);
+        if (idx !== -1) {
+          list[idx] = materiaObj;
+        }
+      } else {
+        // Add new
+        if (list.some(m => ((typeof m === 'string') ? m : m.name) === name)) {
+          return alert("La materia ya existe en esta carrera.");
+        }
+        list.push(materiaObj);
       }
-      list.push({ name, code, year, hours, correlatives: checkedCorrs });
+
       await set(ref(db, `materias/${career}`), list);
-      
-      qs('#new-materia-name').value = '';
-      qs('#new-materia-code').value = '';
-      qs('#new-materia-hours').value = '';
-      qs('#new-materia-year').value = '1';
-      qsa('.corr-item:checked').forEach(cb => cb.checked = false);
-      
+      cancelEditMateria();
       loadAdminMaterias(career);
       if (qs('#carrera').value === career) loadSubjects(career);
     } catch(e) { alert("Error: " + e.message); }
   };
+
+  const bCancelEditMat = qs('#btn-cancel-edit-materia');
+  if (bCancelEditMat) bCancelEditMat.onclick = cancelEditMateria;
 
   // ADMIN REPORT ACTIONS
   const bGenRep = qs('#btn-gen-report');
