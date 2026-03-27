@@ -379,7 +379,8 @@ body:not(.state-home) .sticky-controls .btn-plan-idle { display: none !important
 }
 
 /* ── FIELDS ─────────────────────────────────────────── */
-.field { display: flex; flex-direction: column; gap: 5px; position: relative; }
+.field { display: flex; flex-direction: column; gap: 5px; position: relative; height: 100%; }
+.field > *:last-child { margin-top: auto; }
 label {
   font-size: 12px;
   font-weight: 700;
@@ -816,6 +817,19 @@ input.search-input {
   </div>
 </div>
 
+<!-- Modal: Auto-Logout Warning -->
+<div id="modal-logout-warning" class="modal-overlay" style="z-index: 11000; display: none;">
+  <div class="modal-card" style="max-width:400px; text-align:center; padding:30px;">
+    <div style="font-size:40px; margin-bottom:15px;">⏳</div>
+    <h3 style="margin-bottom:10px; color:var(--rose-text);">¿Sigues ahí?</h3>
+    <p style="font-size:14px; color:var(--neutral-600); margin-bottom:20px;">
+      Tu sesión está a punto de cerrarse por inactividad administrativa por motivos de seguridad.
+    </p>
+    <div id="logout-timer-display" style="font-size:24px; font-weight:700; color:var(--sky-text); margin-bottom:25px;">60</div>
+    <button class="btn-sky" onclick="resetInactivityTimer()" style="width:100%;">Mantener sesión abierta</button>
+  </div>
+</div>
+
 <!-- ══ MODAL: ADMIN ══ -->
 <div id="modal-admin" class="modal-overlay" style="display:none;">
   <div class="modal-box">
@@ -907,7 +921,6 @@ input.search-input {
       </div>
     </div>
   </div>
-</div>
 
 <!-- ══ MODAL DE BÚSQUEDA / RECUPERACIÓN ══════════════════ -->
 <div class="modal-overlay" id="modal-recover">
@@ -2477,17 +2490,16 @@ function handleSubjectChange() {
       if (elH) elH.value = match.hours;
     }
     // Auto-populate correlativities
-    if (match.correlatives && Array.isArray(match.correlatives)) {
-      const listStr = match.correlatives.length > 0 
-        ? match.correlatives.map(m => `• ${m}`).join('\n') 
-        : '• Sin correlativas previas';
-      
-      const elCR = qs('#correl-cursar-rendir');
-      if (elCR) elCR.value = listStr;
-      
-      const elCS = qs('#correl-simult');
-      if (elCS) elCS.value = listStr;
-    }
+    const corrs = (match.correlatives && Array.isArray(match.correlatives)) ? match.correlatives : [];
+    const listStr = corrs.length > 0 
+      ? corrs.map(m => `• ${m}`).join('\n') 
+      : '• Sin correlativas previas';
+    
+    const elCR = qs('#correl-cursar-rendir');
+    if (elCR) elCR.value = listStr;
+    
+    const elCS = qs('#correl-simult');
+    if (elCS) elCS.value = listStr;
   }
   updateMasthead();
 }
@@ -3526,6 +3538,68 @@ addFicha({
   if (bPriRep) bPriRep.onclick = printReport;
 
 }); // end DOMContentLoaded
+
+  // ── INACTIVITY AUTO-LOGOUT ──
+  let lastActivity = Date.now();
+  const INACTIVITY_LIMIT = 3 * 60 * 60 * 1000; // 3 hours
+  const WARNING_TIME = 60 * 1000; // 1 minute warning
+  let logoutInterval = null;
+  let warningCountdownInterval = null;
+
+  window.resetInactivityTimer = function() {
+    lastActivity = Date.now();
+    qs('#modal-logout-warning').style.display = 'none';
+    clearInterval(warningCountdownInterval);
+  };
+
+  function updateActivity() {
+    if (qs('#modal-logout-warning').style.display !== 'flex') {
+      lastActivity = Date.now();
+    }
+  }
+
+  function checkInactivity() {
+    if (!currentUser) return;
+    const now = Date.now();
+    const elapsed = now - lastActivity;
+
+    if (elapsed >= INACTIVITY_LIMIT) {
+      console.log("Inactivity limit reached. Logging out...");
+      signOut(auth);
+      location.reload();
+    } else if (elapsed >= (INACTIVITY_LIMIT - WARNING_TIME)) {
+      showLogoutWarning(INACTIVITY_LIMIT - elapsed);
+    }
+  }
+
+  function showLogoutWarning(remainingMs) {
+    const modal = qs('#modal-logout-warning');
+    if (modal.style.display === 'flex') return;
+    
+    modal.style.display = 'flex';
+    let secondsLeft = Math.round(remainingMs / 1000);
+    const display = qs('#logout-timer-display');
+    
+    clearInterval(warningCountdownInterval);
+    warningCountdownInterval = setInterval(() => {
+      secondsLeft--;
+      if (display) display.textContent = secondsLeft;
+      if (secondsLeft <= 0) {
+        clearInterval(warningCountdownInterval);
+        signOut(auth);
+        location.reload();
+      }
+    }, 1000);
+  }
+
+  // Activity listeners
+  ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(ev => {
+    window.addEventListener(ev, updateActivity, { passive: true });
+  });
+
+  // Check every 10 seconds
+  setInterval(checkInactivity, 10000);
+
 </script>
 </body>
 </html>
