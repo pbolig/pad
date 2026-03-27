@@ -709,22 +709,26 @@ input.search-input {
   body.printing-report #fb-status,
   body.printing-report #admin-entrance { display: none !important; }
 
-  body.printing-report #modal-admin { 
-    display: block !important; 
-    position: static !important; 
-    background: white !important; 
-    width: 100% !important;
+  html, body { height: auto !important; overflow: visible !important; }
+
+  body.printing-report #modal-admin,
+  body.printing-report #modal-admin .modal-box,
+  body.printing-report #modal-admin .modal-body,
+  body.printing-report .admin-panel-content.active,
+  body.printing-report #report-container {
+    display: block !important;
+    position: static !important;
     height: auto !important;
+    width: 100% !important;
+    overflow: visible !important;
+    max-height: none !important;
+    margin: 0 !important;
     padding: 0 !important;
-  }
-  body.printing-report #modal-admin .modal-box { 
-    box-shadow: none !important; 
-    max-width: 100% !important; 
-    width: 100% !important; 
-    margin: 0 !important; 
-    padding: 0 !important; 
     border: none !important;
+    box-shadow: none !important;
+    background: white !important;
   }
+
   body.printing-report .modal-header, 
   body.printing-report .admin-tabs, 
   body.printing-report .admin-panel-content:not(.active),
@@ -732,9 +736,20 @@ input.search-input {
   body.printing-report #btn-gen-report,
   body.printing-report #btn-print-report { display: none !important; }
   
-  body.printing-report .admin-panel-content.active { display: block !important; }
-  body.printing-report #report-container { display: block !important; margin: 0 !important; padding: 0 !important; }
-  body.printing-report .report-table { font-size: 10pt; width: 100% !important; border-collapse: collapse !important; }
+  body.printing-report .report-table { 
+    font-size: 10pt; 
+    width: 100% !important; 
+    border-collapse: collapse !important; 
+    page-break-inside: auto;
+  }
+  body.printing-report .report-table tr { 
+    page-break-inside: avoid; 
+    page-break-after: auto; 
+  }
+  body.printing-report .report-table th, 
+  body.printing-report .report-table td { 
+    word-wrap: break-word;
+  }
 }
 
 </style>
