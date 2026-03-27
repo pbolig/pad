@@ -691,6 +691,11 @@ input.search-input {
     <input type="text" class="search-input" id="smart-search" placeholder="Buscar por Docente o Asignatura..." />
     <div id="search-results" style="display:none; position:absolute; top:100%; left:0; right:0; background:white; border-radius:12px; margin-top:8px; box-shadow:var(--shadow-lg); z-index:100; max-height:300px; overflow-y:auto; text-align:left;"></div>
   </div>
+  
+  <div id="user-info-home" style="margin-top:20px; display:none; font-size:14px; color:var(--neutral-700);">
+    Conectado como: <strong id="user-email-home"></strong> | <span class="logout-btn" id="logout-btn-home" style="color:var(--rose-text); cursor:pointer; font-weight:600; text-decoration:underline;">Cerrar Sesión</span>
+  </div>
+
   <div id="fb-status" style="margin-top:10px; font-size:13px; opacity:0.8;">
     <span style="color:var(--sky-text)">Conectando...</span>
   </div>
@@ -2061,6 +2066,11 @@ const setAppState = (mode) => {
   const userEmail = qs('#user-email-display');
   if (userEmail) userEmail.textContent = currentUser ? currentUser.email : '';
 
+  const userInfoHome = qs('#user-info-home');
+  if (userInfoHome) userInfoHome.style.display = (currentUser && mode === 'HOME') ? 'block' : 'none';
+  const userEmailHome = qs('#user-email-home');
+  if (userEmailHome) userEmailHome.textContent = currentUser ? currentUser.email : '';
+
   if (mode === 'HOME') {
     ACTIVE_PLAN_ID = null;
     resetForm();
@@ -2402,7 +2412,7 @@ async function handleSmartSearch(q) {
       const isOwner = (p.uid && p.uid === currentUser.uid) || 
                       (p.docenteEmail && p.docenteEmail.toLowerCase() === currentUser.email.toLowerCase()) ||
                       (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase()) ||
-                      (!p.uid && !p.docenteEmail && docenteKey === emailPrefix);
+                      (!p.uid && !p.docenteEmail && (docenteKey.includes(emailPrefix) || emailPrefix.includes(docenteKey)));
 
       if (!isOwner) {
         // console.log("Skipping plan (not owner):", p.materia, "Docente:", p.docente);
@@ -2488,7 +2498,7 @@ async function populateFilters() {
     const isOwner = (p.uid && p.uid === currentUser.uid) || 
                     (p.docenteEmail && p.docenteEmail.toLowerCase() === currentUser.email.toLowerCase()) ||
                     (dProfile && dProfile.email && dProfile.email.toLowerCase() === currentUser.email.toLowerCase()) ||
-                    (!p.uid && !p.docenteEmail && docenteKey === emailPrefix);
+                    (!p.uid && !p.docenteEmail && (docenteKey.includes(emailPrefix) || emailPrefix.includes(docenteKey)));
     if (!isOwner) continue;
 
     if (p.anio) sets.anio.add(p.anio);
@@ -2805,6 +2815,11 @@ addFicha({
 
   const bLogout = qs('#logout-btn');
   if (bLogout) bLogout.onclick = () => {
+    if (confirm("¿Cerrar sesión?")) signOut(auth);
+  };
+
+  const bLogoutHome = qs('#logout-btn-home');
+  if (bLogoutHome) bLogoutHome.onclick = () => {
     if (confirm("¿Cerrar sesión?")) signOut(auth);
   };
 
