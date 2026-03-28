@@ -846,12 +846,23 @@ input.search-input {
       </div>
 
       <!-- Tab: Carreras -->
-      <div id="admin-carreras" class="admin-panel-content active">
         <div style="display:flex; gap:10px; margin-bottom:15px;">
           <input type="text" id="new-carrera-name" placeholder="Nombre de la nueva carrera" style="flex:1;">
           <button class="btn-mint" id="btn-add-carrera">Añadir Carrera</button>
         </div>
-        <div id="admin-carreras-list" style="border:1px solid var(--neutral-100); border-radius:8px;"></div>
+        <div id="admin-carreras-list" style="border:1px solid var(--neutral-100); border-radius:8px; margin-bottom:20px;"></div>
+        
+        <!-- Sub-section: Commissions per Year -->
+        <div id="admin-carrera-commissions" style="display:none; padding:15px; background:var(--sky); border-radius:12px; border:1px solid var(--sky-dark);">
+          <h4 style="margin-bottom:10px; color:var(--sky-text);">Comisiones por Año: <span id="admin-comm-career-name" style="font-weight:700;"></span></h4>
+          <div class="grid g-1" id="admin-year-comm-list" style="gap:8px;">
+            <!-- Rows per year -->
+          </div>
+          <div style="margin-top:15px; text-align:right;">
+            <button class="btn-sky" id="btn-save-career-comms">Guardar Comisiones</button>
+            <button class="btn-ghost" onclick="qs('#admin-carrera-commissions').style.display='none'">Cerrar</button>
+          </div>
+        </div>
       </div>
 
       <!-- Tab: Materias -->
@@ -890,6 +901,14 @@ input.search-input {
           <label>Correlatividades (Materias previas requeridas)</label>
           <div id="new-materia-corr-list" style="border:1px solid var(--neutral-100); border-radius:8px; max-height:120px; overflow-y:auto; padding:10px; background:var(--neutral-50); display: flex; flex-direction: column; gap: 5px;">
             <p style="color:var(--neutral-400); font-size:12px;">Selecciona una carrera para ver opciones.</p>
+          </div>
+        </div>
+
+        <!-- Sub-section: Teachers per Commission -->
+        <div id="admin-materia-teachers" style="margin-top:15px; padding:12px; background:var(--peach); border-radius:10px; border:1px solid var(--peach-dark); display:none;">
+          <h4 style="font-size:13px; margin-bottom:10px; color:var(--peach-text);">Asignación de Docentes por Comisión</h4>
+          <div id="admin-materia-comm-list" style="display:flex; flex-direction:column; gap:8px;">
+            <!-- Commission rows -->
           </div>
         </div>
         <div style="display:flex; gap:10px; margin-top:15px;">
@@ -1133,7 +1152,9 @@ input.search-input {
                 <span class="tt-eg">Ej.: Comisión A · Turno Noche</span>
               </span></span>
             </label>
-            <input id="comision" type="text" placeholder="Comisión A – Turno …" />
+            <select id="comision">
+              <option value="">— Seleccione Comisión —</option>
+            </select>
           </div>
 
           <div class="field span-2">
@@ -2480,11 +2501,16 @@ async function loadSubjects(career) {
 
 function handleSubjectChange() {
   const name = qs('#materia').value;
+  const career = qs('#carrera').value;
   const match = CURRENT_SUBJECTS.find(m => ((typeof m === 'string') ? m : m.name) === name);
+  
   if (match && typeof match === 'object') {
     if (match.year) {
       const elY = qs('#anio-cursada');
       if (elY) elY.value = match.year + "° Año";
+      
+      // Load commissions for Career + Year
+      loadCommissionsForSubject(career, match.year);
     }
     if (match.hours) {
       const elH = qs('#carga');
@@ -2503,6 +2529,43 @@ function handleSubjectChange() {
     if (elCS) elCS.value = listStr;
   }
   updateMasthead();
+}
+
+async function loadCommissionsForSubject(career, year) {
+  const commSel = qs('#comision');
+  if (!commSel) return;
+  commSel.innerHTML = '<option value="">Cargando...</option>';
+  try {
+    const snap = await get(ref(db, `carreras_metadata/${career}/comisiones/${year}`));
+    const comms = snap.val() || [];
+    commSel.innerHTML = '<option value="">— Seleccione Comisión —</option>';
+    comms.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = opt.textContent = c;
+      commSel.appendChild(opt);
+    });
+  } catch(e) { commSel.innerHTML = '<option value="">Error al cargar</option>'; }
+}
+
+function handleCommissionChange() {
+  const commName = qs('#comision').value;
+  const matName = qs('#materia').value;
+  const match = CURRENT_SUBJECTS.find(m => ((typeof m === 'string') ? m : m.name) === matName);
+  
+  if (match && typeof match === 'object' && match.docentes_por_comision) {
+    const docName = match.docentes_por_comision[commName];
+    if (docName) {
+      qs('#docente').value = docName;
+      // Also look up email/tel from cache
+      const nKey = normalizeKey(docName);
+      const d = DOCENTES_CACHE[nKey];
+      if (d) {
+        qs('#email-docente').value = d.email || '';
+        qs('#tel-docente').value = d.tel || '';
+      }
+      if (window.updateMasthead) window.updateMasthead();
+    }
+  }
 }
 
 // ── ADMIN MANAGEMENT ──
@@ -2530,7 +2593,13 @@ async function loadCarreras() {
       items.sort().forEach(c => {
         const row = document.createElement('div');
         row.className = 'admin-list-item';
-        row.innerHTML = `<span>${esc(c)}</span> <button class="btn-icon" onclick="deleteCarrera('${esc(c)}')">🗑</button>`;
+        row.innerHTML = `
+          <span>${esc(c)}</span> 
+          <div style="display:flex; gap:4px;">
+            <button class="btn-icon" onclick="manageCareerCommissions('${esc(c)}')" title="Comisiones" style="background:var(--sky); color:var(--sky-text);">👥</button>
+            <button class="btn-icon" onclick="deleteCarrera('${esc(c)}')" title="Eliminar">🗑</button>
+          </div>
+        `;
         listDiv.appendChild(row);
       });
     }
@@ -2547,6 +2616,35 @@ window.deleteCarrera = async (name) => {
     loadCarreras();
   } catch(e) { alert("Error: " + e.message); }
 };
+
+window.manageCareerCommissions = (careerName) => {
+  qs('#admin-carrera-commissions').style.display = 'block';
+  qs('#admin-comm-career-name').textContent = careerName;
+  loadAdminCarreraCommissions(careerName);
+};
+
+async function loadAdminCarreraCommissions(careerName) {
+  const container = qs('#admin-year-comm-list');
+  container.innerHTML = 'Cargando...';
+  try {
+    const snap = await get(ref(db, `carreras_metadata/${careerName}/comisiones`));
+    const data = snap.val() || {};
+    container.innerHTML = '';
+    
+    for (let year = 1; year <= 5; year++) {
+      const comms = data[year] || [];
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '10px';
+      row.innerHTML = `
+        <label style="min-width:60px; margin:0;">${year}° Año:</label>
+        <input type="text" class="year-comm-input" data-year="${year}" value="${comms.join(', ')}" placeholder="Ej: A, B, C" style="flex:1; padding:6px 10px; font-size:13px; border-radius:6px; border:1px solid var(--neutral-200);">
+      `;
+      container.appendChild(row);
+    }
+  } catch(e) { container.innerHTML = 'Error: ' + e.message; }
+}
 
 let editingMateriaName = null;
 
@@ -2565,6 +2663,10 @@ async function loadAdminMaterias(career) {
   
   const corrDiv = qs('#new-materia-corr-list');
   corrDiv.innerHTML = '';
+  
+  // Reset teachers section
+  qs('#admin-materia-teachers').style.display = 'none';
+  qs('#admin-materia-comm-list').innerHTML = '';
 
   items.sort((a,b) => {
     const ya = parseInt((typeof a === 'string') ? 0 : (a.year || 0));
@@ -2630,11 +2732,55 @@ window.prepareEditMateria = async (career, name) => {
       cb.checked = corrs.includes(cb.value);
     });
 
+    // Load Teacher Assignment UI
+    loadMateriaTeacherUI(career, item.year || '1', item.docentes_por_comision || {});
+
     qs('#btn-add-materia').textContent = 'Actualizar Materia';
     qs('#btn-cancel-edit-materia').style.display = 'block';
     qs('#admin-materias').scrollTo({ top: 0, behavior: 'smooth' });
   } catch(e) { alert("Error: " + e.message); }
 };
+
+async function loadMateriaTeacherUI(career, year, currentAssignments) {
+  const container = qs('#admin-materia-comm-list');
+  const section = qs('#admin-materia-teachers');
+  if (!container || !section) return;
+  container.innerHTML = 'Cargando comisiones...';
+  section.style.display = 'block';
+  
+  try {
+    const snap = await get(ref(db, `carreras_metadata/${career}/comisiones/${year}`));
+    const comms = snap.val() || [];
+    container.innerHTML = '';
+    
+    if (!comms || comms.length === 0) {
+      container.innerHTML = '<p style="font-size:11px; opacity:0.6;">No hay comisiones definidas para este año en esta carrera.</p>';
+      return;
+    }
+
+    // Prepare teacher options
+    const teacherOpts = Object.values(DOCENTES_CACHE).sort((a,b) => a.name.localeCompare(b.name))
+        .map(d => `<option value="${esc(d.name)}">${esc(d.name)}</option>`).join('');
+
+    comms.forEach(c => {
+      const row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '10px';
+      const assigned = currentAssignments[c] || '';
+      row.innerHTML = `
+        <span style="font-weight:600; min-width:60px; font-size:12px;">Com. ${esc(c)}:</span>
+        <select class="comm-teacher-select" data-comm="${esc(c)}" style="flex:1; padding:4px; font-size:12px; border-radius:4px; border:1px solid var(--peach-dark);">
+          <option value="">— Sin docente —</option>
+          ${teacherOpts}
+        </select>
+      `;
+      container.appendChild(row);
+      const sel = row.querySelector('select');
+      if (sel) sel.value = assigned;
+    });
+  } catch(e) { container.innerHTML = 'Error: ' + e.message; }
+}
 
 window.cancelEditMateria = () => {
   editingMateriaName = null;
@@ -3362,6 +3508,34 @@ addFicha({
 
   const mainMatSel = qs('#materia');
   if (mainMatSel) mainMatSel.onchange = handleSubjectChange;
+
+  const mainCommSel = qs('#comision');
+  if (mainCommSel) mainCommSel.onchange = handleCommissionChange;
+
+  // Admin Year Change
+  const adminYearSel = qs('#new-materia-year');
+  if (adminYearSel) adminYearSel.onchange = (e) => {
+    const career = qs('#admin-materia-career-select').value;
+    if (career) loadMateriaTeacherUI(career, e.target.value, {});
+  };
+
+  // Save Career Comms
+  const bSaveCareerComms = qs('#btn-save-career-comms');
+  if (bSaveCareerComms) bSaveCareerComms.onclick = async () => {
+    const careerName = qs('#admin-comm-career-name').textContent;
+    const data = {};
+    qsa('.year-comm-input').forEach(input => {
+        const year = input.getAttribute('data-year');
+        const comms = input.value.split(',').map(s => s.trim()).filter(Boolean);
+        data[year] = comms;
+    });
+    try {
+        setLoading(true);
+        await set(ref(db, `carreras_metadata/${careerName}/comisiones`), data);
+        alert("Comisiones guardadas con éxito.");
+    } catch(e) { alert("Error: " + e.message); }
+    finally { setLoading(false); }
+  };
   
   // MODAL FILTERS
   const bModLoad = qs('#modal-load-btn');
@@ -3506,7 +3680,17 @@ addFicha({
       const snap = await get(ref(db, `materias/${career}`));
       let list = snap.val() || [];
       
-      const materiaObj = { name, code, year, hours, correlatives: checkedCorrs };
+      const materiaObj = { 
+        name, code, year, hours, 
+        correlatives: checkedCorrs,
+        docentes_por_comision: {}
+      };
+      
+      // Collect teacher assignments
+      qsa('.comm-teacher-select').forEach(sel => {
+        const comm = sel.getAttribute('data-comm');
+        if (sel.value) materiaObj.docentes_por_comision[comm] = sel.value;
+      });
 
       if (editingMateriaName) {
         // Find index of the the one we are editing
