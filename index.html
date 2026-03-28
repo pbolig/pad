@@ -2050,8 +2050,8 @@ input.search-input {
 </template>
 
 <script type="module">
-const qs  = (s, ctx=document) => ctx.querySelector(s);
-const qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+window.qs  = (s, ctx=document) => ctx.querySelector(s);
+window.qsa = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
 
 const FLAT_FIELDS = [
   'anio','jurisdiccion','instituto','anio-cursada','carrera','materia','comision',
