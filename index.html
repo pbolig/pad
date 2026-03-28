@@ -2882,11 +2882,12 @@ async function generateCareerReport() {
       <table class="report-table">
         <thead>
           <tr>
-            <th style="width:15%">Cód.</th>
-            <th style="width:10%">Año</th>
-            <th style="width:40%">Asignatura / Materia</th>
-            <th style="width:10%">Carga</th>
-            <th style="width:25%">Correlatividades</th>
+            <th style="width:8%">Cód.</th>
+            <th style="width:7%">Año</th>
+            <th style="width:25%">Asignatura / Materia</th>
+            <th style="width:30%">Comisiones / Docentes</th>
+            <th style="width:7%">Carga</th>
+            <th style="width:23%">Correlatividades</th>
           </tr>
         </thead>
         <tbody>
@@ -2899,11 +2900,15 @@ async function generateCareerReport() {
       const hours = (typeof m === 'string') ? '-' : (m.hours || '-');
       const corrs = (typeof m === 'string') ? '-' : (m.correlatives && m.correlatives.length ? m.correlatives.join(', ') : '-');
 
+      const dpc = (typeof m === 'string') ? {} : (m.docentes_por_comision || {});
+      const commStr = Object.keys(dpc).sort().map(k => `<strong>${esc(k)}:</strong> ${esc(dpc[k])}`).join('<br>') || '-';
+
       html += `
         <tr>
           <td style="font-weight:700; color:var(--neutral-700);">${esc(code)}</td>
           <td style="text-align:center; font-weight:600;">${esc(year)}</td>
           <td><strong style="color:var(--sky-dark);">${esc(name)}</strong></td>
+          <td style="font-size:11px; line-height:1.4;">${commStr}</td>
           <td style="text-align:center;">${hours} hs</td>
           <td style="font-size:11px; color:#555; font-style:italic;">${esc(corrs)}</td>
         </tr>
