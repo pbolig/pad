@@ -936,12 +936,8 @@ input.search-input {
           </div>
           <span style="font-size:11px; color:var(--neutral-500); margin-top:4px;">La columna Comisión/Docente cruza la asignación manual con las planificaciones (PAD) efectivamente cargadas por cada docente para el año lectivo seleccionado.</span>
         </div>
-        <div style="margin-top:14px; padding-top:14px; border-top:1px dashed var(--neutral-200);">
-          <button class="btn-peach" id="btn-gen-pendientes" style="width:100%;">📋 Ver Pendientes y Desactualizadas (todas las carreras)</button>
-          <span style="font-size:11px; color:var(--neutral-500); display:block; margin-top:4px;">Lista, de una sola vez, todas las comisiones sin planificación cargada o con una planificación de un año lectivo anterior al actual, en todas las carreras.</span>
-        </div>
         <div id="report-container" style="margin-top:20px;">
-          <p style="color:var(--neutral-400); font-size:14px; text-align:center; padding:40px;">Selecciona una carrera y presiona "Generar Reporte", o mirá el listado de pendientes.</p>
+          <p style="color:var(--neutral-400); font-size:14px; text-align:center; padding:40px;">Selecciona una carrera y presiona "Generar Reporte".</p>
         </div>
       </div>
     </div>
@@ -3005,141 +3001,7 @@ async function generateCareerReport() {
   }
 }
 
-// ── REPORTE CONSOLIDADO: pendientes y desactualizadas, todas las carreras ──
-async function generatePendientesReport() {
-  const currentYear = new Date().getFullYear().toString();
-  const reportDiv = qs('#report-container');
-  reportDiv.innerHTML = '<p style="text-align:center; padding:30px;">Analizando todas las carreras...</p>';
-  qs('#btn-print-report').style.display = 'none';
-
-  try {
-    setLoading(true);
-
-    const carrerasSnap = await get(ref(db, 'carreras'));
-    const carrerasVal = carrerasSnap.val() || [];
-    const carreras = Array.isArray(carrerasVal) ? carrerasVal : Object.values(carrerasVal);
-
-    // Última planificación cargada por materia+comisión+carrera, sin importar el año
-    const planSnap = await get(ref(db, 'planificaciones_index'));
-    const allPlans = planSnap.val() || {};
-    const latestMap = {}; // key: carrera|||materia|||comision -> {anio, id, docente}
-    Object.entries(allPlans).forEach(([planId, p]) => {
-      if (!p || !p.carrera || !p.materia || !p.comision) return;
-      const key = `${p.carrera}|||${p.materia}|||${p.comision}`;
-      const anio = p.anio || '0';
-      if (!latestMap[key] || anio > latestMap[key].anio) {
-        latestMap[key] = { anio, id: planId, docente: p.docente || '(sin nombre)' };
-      }
-    });
-
-    const rows = [];
-    for (const carrera of carreras) {
-      const [matSnap, comSnap] = await Promise.all([
-        get(ref(db, `materias/${carrera}`)),
-        get(ref(db, `carreras_metadata/${carrera}/comisiones`))
-      ]);
-      const materiasVal = matSnap.val() || [];
-      const materiasItems = Array.isArray(materiasVal) ? materiasVal : Object.values(materiasVal);
-      const comisionesPorAnio = comSnap.val() || {};
-
-      materiasItems.forEach(m => {
-        const isStr = typeof m === 'string';
-        const nombre = isStr ? m : m.name;
-        if (!nombre) return;
-        const matYear = isStr ? '' : (m.year || '');
-        const dpc = isStr ? {} : (m.docentes_por_comision || {});
-        const comisiones = (comisionesPorAnio[matYear] && comisionesPorAnio[matYear].length)
-          ? comisionesPorAnio[matYear]
-          : Object.keys(dpc);
-
-        if (!comisiones.length) return; // sin comisiones configuradas, no hay nada que chequear
-
-        comisiones.forEach(comm => {
-          const key = `${carrera}|||${nombre}|||${comm}`;
-          const latest = latestMap[key];
-          const manual = dpc[comm] || null;
-
-          if (!latest) {
-            rows.push({ carrera, materia: nombre, anioCursada: matYear, comision: comm, estado: 'faltante', manual, planId: null, planAnio: null, docente: null });
-          } else if (latest.anio !== currentYear) {
-            rows.push({ carrera, materia: nombre, anioCursada: matYear, comision: comm, estado: 'desactualizada', manual, planId: latest.id, planAnio: latest.anio, docente: latest.docente });
-          }
-          // si latest.anio === currentYear, está al día: no se lista
-        });
-      });
-    }
-
-    rows.sort((a, b) =>
-      a.carrera.localeCompare(b.carrera) ||
-      (a.anioCursada || '').localeCompare(b.anioCursada || '') ||
-      a.materia.localeCompare(b.materia) ||
-      a.comision.localeCompare(b.comision)
-    );
-
-    if (!rows.length) {
-      reportDiv.innerHTML = `<p style="text-align:center; padding:40px; color:var(--mint-text); font-weight:700; font-size:15px;">✅ Todas las comisiones, en todas las carreras, tienen su Planificación Anual ${esc(currentYear)} cargada.</p>`;
-      return;
-    }
-
-    const faltantes = rows.filter(r => r.estado === 'faltante').length;
-    const desactualizadas = rows.filter(r => r.estado === 'desactualizada').length;
-
-    let html = `
-      <div style="text-align:center; margin-bottom:20px; border-bottom:2px solid var(--neutral-800); padding-bottom:15px;" class="report-header">
-        <h2 style="margin:0; color:var(--neutral-800); text-transform:uppercase; letter-spacing:1px;">Pendientes y Desactualizadas — Todas las Carreras</h2>
-        <p style="margin:8px 0; color:var(--neutral-600); font-weight:700; font-size:16px;">AÑO LECTIVO DE REFERENCIA: ${esc(currentYear)}</p>
-        <p style="margin:0; font-size:12px; opacity:0.7;">Fecha de emisión: ${new Date().toLocaleDateString()} · ${faltantes} sin cargar · ${desactualizadas} desactualizadas</p>
-      </div>
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th style="width:20%">Carrera</th>
-            <th style="width:6%">Año</th>
-            <th style="width:26%">Materia</th>
-            <th style="width:8%">Com.</th>
-            <th style="width:20%">Estado</th>
-            <th style="width:20%">Docente</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
-
-    rows.forEach(r => {
-      let estadoHtml;
-      if (r.estado === 'faltante') {
-        estadoHtml = `<span class="pill" style="background:#fde2e4; color:var(--rose-text);">Sin planificación</span>`;
-      } else {
-        estadoHtml = `<span class="pill pill-sky" title="Última planificación cargada, año anterior al actual">Última: ${esc(r.planAnio)}</span>` +
-          (r.planId ? ` <a href="#" onclick="viewPlanAsAdmin('${esc(r.planId)}'); return false;" style="font-size:11px; color:var(--sky-text); text-decoration:underline;">ver</a>` : '');
-      }
-      const docenteCol = r.docente
-        ? esc(r.docente)
-        : (r.manual ? `${esc(r.manual)} <span style="opacity:0.6; font-size:10px;">(asignación manual)</span>` : '<span style="opacity:0.45;">—</span>');
-
-      html += `
-        <tr>
-          <td>${esc(r.carrera)}</td>
-          <td style="text-align:center;">${esc(r.anioCursada || '-')}°</td>
-          <td><strong>${esc(r.materia)}</strong></td>
-          <td style="text-align:center;">${esc(r.comision)}</td>
-          <td>${estadoHtml}</td>
-          <td style="font-size:12px;">${docenteCol}</td>
-        </tr>
-      `;
-    });
-
-    html += '</tbody></table>';
-    html += `<div style="margin-top:14px; font-size:11px; color:var(--neutral-500);">Total de comisiones pendientes o desactualizadas: ${rows.length}</div>`;
-    html += `<div style="margin-top:20px; font-size:11px; font-style:italic; opacity:0.6;" class="report-footer">PAD - Sistema de Planificación Anual Docente</div>`;
-
-    reportDiv.innerHTML = html;
-    qs('#btn-print-report').style.display = 'block';
-  } catch (e) {
-    reportDiv.innerHTML = `<p style="color:var(--rose-text); text-align:center; padding:30px;">Error al generar el listado: ${esc(e.message)}</p>`;
-  } finally {
-    setLoading(false);
-  }
-}
+function printReport() {
   document.body.classList.add('printing-report');
   window.print();
   // We use a slight delay before removing class to ensure print dialog finishes cleanly in some browsers
@@ -3987,8 +3849,6 @@ addFicha({
   if (bGenRep) bGenRep.onclick = generateCareerReport;
   const bPriRep = qs('#btn-print-report');
   if (bPriRep) bPriRep.onclick = printReport;
-  const bGenPend = qs('#btn-gen-pendientes');
-  if (bGenPend) bGenPend.onclick = generatePendientesReport;
 
 }); // end DOMContentLoaded
 
