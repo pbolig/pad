@@ -3140,6 +3140,8 @@ async function generatePendientesReport() {
     setLoading(false);
   }
 }
+
+function printReport() {
   document.body.classList.add('printing-report');
   window.print();
   // We use a slight delay before removing class to ensure print dialog finishes cleanly in some browsers
