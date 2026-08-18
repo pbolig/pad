@@ -937,8 +937,8 @@ input.search-input {
           <span style="font-size:11px; color:var(--neutral-500); margin-top:4px;">La columna Comisión/Docente cruza la asignación manual con las planificaciones (PAD) efectivamente cargadas por cada docente para el año lectivo seleccionado.</span>
         </div>
         <div style="margin-top:14px; padding-top:14px; border-top:1px dashed var(--neutral-200);">
-          <button class="btn-peach" id="btn-gen-pendientes" style="width:100%;">📋 Ver Pendientes y Desactualizadas (todas las carreras)</button>
-          <span style="font-size:11px; color:var(--neutral-500); display:block; margin-top:4px;">Lista, de una sola vez, todas las comisiones sin planificación cargada o con una planificación de un año lectivo anterior al actual, en todas las carreras.</span>
+          <button class="btn-peach" id="btn-gen-pendientes" style="width:100%;">📋 Ver Estado de Planificaciones (al día / desactualizadas / faltantes)</button>
+          <span style="font-size:11px; color:var(--neutral-500); display:block; margin-top:4px;">Si elegís una carrera arriba, lista solo esa; si dejás el combo sin seleccionar, recorre todas las carreras. Muestra las tres situaciones: al día, desactualizadas y sin cargar.</span>
         </div>
         <div id="report-container" style="margin-top:20px;">
           <p style="color:var(--neutral-400); font-size:14px; text-align:center; padding:40px;">Selecciona una carrera y presiona "Generar Reporte", o mirá el listado de pendientes.</p>
@@ -3005,19 +3005,27 @@ async function generateCareerReport() {
   }
 }
 
-// ── REPORTE CONSOLIDADO: pendientes y desactualizadas, todas las carreras ──
+// ── REPORTE CONSOLIDADO: estado de todas las comisiones (al día / desactualizadas / faltantes) ──
+// Respeta la carrera elegida en #report-career-select: si hay una seleccionada, filtra solo esa;
+// si no hay ninguna seleccionada, recorre todas las carreras.
 async function generatePendientesReport() {
   const currentYear = new Date().getFullYear().toString();
+  const carreraFiltro = qs('#report-career-select').value || '';
   const reportDiv = qs('#report-container');
-  reportDiv.innerHTML = '<p style="text-align:center; padding:30px;">Analizando todas las carreras...</p>';
+  reportDiv.innerHTML = `<p style="text-align:center; padding:30px;">Analizando ${carreraFiltro ? esc(carreraFiltro) : 'todas las carreras'}...</p>`;
   qs('#btn-print-report').style.display = 'none';
 
   try {
     setLoading(true);
 
-    const carrerasSnap = await get(ref(db, 'carreras'));
-    const carrerasVal = carrerasSnap.val() || [];
-    const carreras = Array.isArray(carrerasVal) ? carrerasVal : Object.values(carrerasVal);
+    let carreras;
+    if (carreraFiltro) {
+      carreras = [carreraFiltro];
+    } else {
+      const carrerasSnap = await get(ref(db, 'carreras'));
+      const carrerasVal = carrerasSnap.val() || [];
+      carreras = Array.isArray(carrerasVal) ? carrerasVal : Object.values(carrerasVal);
+    }
 
     // Última planificación cargada por materia+comisión+carrera, sin importar el año
     const planSnap = await get(ref(db, 'planificaciones_index'));
@@ -3063,8 +3071,9 @@ async function generatePendientesReport() {
             rows.push({ carrera, materia: nombre, anioCursada: matYear, comision: comm, estado: 'faltante', manual, planId: null, planAnio: null, docente: null });
           } else if (latest.anio !== currentYear) {
             rows.push({ carrera, materia: nombre, anioCursada: matYear, comision: comm, estado: 'desactualizada', manual, planId: latest.id, planAnio: latest.anio, docente: latest.docente });
+          } else {
+            rows.push({ carrera, materia: nombre, anioCursada: matYear, comision: comm, estado: 'al-dia', manual, planId: latest.id, planAnio: latest.anio, docente: latest.docente });
           }
-          // si latest.anio === currentYear, está al día: no se lista
         });
       });
     }
@@ -3077,18 +3086,19 @@ async function generatePendientesReport() {
     );
 
     if (!rows.length) {
-      reportDiv.innerHTML = `<p style="text-align:center; padding:40px; color:var(--mint-text); font-weight:700; font-size:15px;">✅ Todas las comisiones, en todas las carreras, tienen su Planificación Anual ${esc(currentYear)} cargada.</p>`;
+      reportDiv.innerHTML = `<p style="text-align:center; padding:40px; color:var(--neutral-400); font-size:14px;">No hay materias con comisiones configuradas ${carreraFiltro ? `para "${esc(carreraFiltro)}"` : ''}.</p>`;
       return;
     }
 
     const faltantes = rows.filter(r => r.estado === 'faltante').length;
     const desactualizadas = rows.filter(r => r.estado === 'desactualizada').length;
+    const alDia = rows.filter(r => r.estado === 'al-dia').length;
 
     let html = `
       <div style="text-align:center; margin-bottom:20px; border-bottom:2px solid var(--neutral-800); padding-bottom:15px;" class="report-header">
-        <h2 style="margin:0; color:var(--neutral-800); text-transform:uppercase; letter-spacing:1px;">Pendientes y Desactualizadas — Todas las Carreras</h2>
+        <h2 style="margin:0; color:var(--neutral-800); text-transform:uppercase; letter-spacing:1px;">Estado de Planificaciones ${carreraFiltro ? `— ${esc(carreraFiltro)}` : '— Todas las Carreras'}</h2>
         <p style="margin:8px 0; color:var(--neutral-600); font-weight:700; font-size:16px;">AÑO LECTIVO DE REFERENCIA: ${esc(currentYear)}</p>
-        <p style="margin:0; font-size:12px; opacity:0.7;">Fecha de emisión: ${new Date().toLocaleDateString()} · ${faltantes} sin cargar · ${desactualizadas} desactualizadas</p>
+        <p style="margin:0; font-size:12px; opacity:0.7;">Fecha de emisión: ${new Date().toLocaleDateString()} · ${alDia} al día · ${desactualizadas} desactualizadas · ${faltantes} sin cargar</p>
       </div>
       <table class="report-table">
         <thead>
@@ -3108,8 +3118,11 @@ async function generatePendientesReport() {
       let estadoHtml;
       if (r.estado === 'faltante') {
         estadoHtml = `<span class="pill" style="background:#fde2e4; color:var(--rose-text);">Sin planificación</span>`;
-      } else {
+      } else if (r.estado === 'desactualizada') {
         estadoHtml = `<span class="pill pill-sky" title="Última planificación cargada, año anterior al actual">Última: ${esc(r.planAnio)}</span>` +
+          (r.planId ? ` <a href="#" onclick="viewPlanAsAdmin('${esc(r.planId)}'); return false;" style="font-size:11px; color:var(--sky-text); text-decoration:underline;">ver</a>` : '');
+      } else {
+        estadoHtml = `<span class="pill pill-mint" title="Planificación del año lectivo actual, al día">PAD ${esc(currentYear)} ✓</span>` +
           (r.planId ? ` <a href="#" onclick="viewPlanAsAdmin('${esc(r.planId)}'); return false;" style="font-size:11px; color:var(--sky-text); text-decoration:underline;">ver</a>` : '');
       }
       const docenteCol = r.docente
@@ -3129,7 +3142,14 @@ async function generatePendientesReport() {
     });
 
     html += '</tbody></table>';
-    html += `<div style="margin-top:14px; font-size:11px; color:var(--neutral-500);">Total de comisiones pendientes o desactualizadas: ${rows.length}</div>`;
+    html += `
+      <div style="margin-top:14px; font-size:11px; display:flex; gap:16px; flex-wrap:wrap;" class="report-legend">
+        <span><span class="pill pill-mint">PAD ${esc(currentYear)} ✓</span> Al día</span>
+        <span><span class="pill pill-sky">Última: AAAA</span> Desactualizada (año anterior)</span>
+        <span style="color:var(--rose-text); font-style:italic;">Sin planificación — nunca se cargó</span>
+      </div>
+    `;
+    html += `<div style="margin-top:8px; font-size:11px; color:var(--neutral-500);">Total de comisiones relevadas: ${rows.length}</div>`;
     html += `<div style="margin-top:20px; font-size:11px; font-style:italic; opacity:0.6;" class="report-footer">PAD - Sistema de Planificación Anual Docente</div>`;
 
     reportDiv.innerHTML = html;
