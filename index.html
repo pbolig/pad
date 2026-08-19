@@ -772,6 +772,9 @@ input.search-input {
     <input type="password" id="auth-pass" placeholder="••••••••">
   </div>
   <button class="btn-sky" id="auth-submit-btn" style="width:100%; margin-top:10px; padding:12px;">Ingresar</button>
+  <div class="auth-toggle" id="auth-forgot-msg" style="margin-top:14px;">
+    <span id="auth-forgot-link" style="color:var(--sky-text); cursor:pointer; text-decoration:underline; font-size:13px;">¿Olvidaste tu contraseña?</span>
+  </div>
   <div class="auth-toggle" id="auth-toggle-msg">
     ¿No tienes cuenta? <span id="auth-switch-link">Regístrate aquí</span>
   </div>
@@ -920,7 +923,8 @@ input.search-input {
 
       <!-- Tab: Usuarios -->
       <div id="admin-users" class="admin-panel-content">
-        <p style="font-size:12px; color:var(--neutral-500); margin-bottom:15px;">Lista de usuarios registrados.</p>
+        <p style="font-size:12px; color:var(--neutral-500); margin-bottom:10px;">Lista de usuarios registrados. El rol "Admin" da acceso a este panel.</p>
+        <input type="text" id="admin-users-search" placeholder="🔍 Buscar por correo..." style="width:100%; padding:8px 12px; margin-bottom:12px; border-radius:8px; border:1px solid var(--neutral-200); font-size:13px;">
         <div id="admin-users-list" style="border:1px solid var(--neutral-100); border-radius:8px;"></div>
       </div>
 
@@ -2169,7 +2173,7 @@ const SAMPLE_DATA = {
 import { initializeApp }   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, set, get, onValue, remove }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut }
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 let db = null;
@@ -2369,6 +2373,7 @@ async function initFirebase() {
     const app = initializeApp(FIREBASE_CFG, 'pad-app');
     db = getDatabase(app);
     auth = getAuth(app);
+    auth.languageCode = 'es';
     
     // Auth Listener
     onAuthStateChanged(auth, async (user) => {
@@ -2824,38 +2829,66 @@ window.deleteAdminMateria = async (career, name) => {
   } catch(e) { alert("Error: " + e.message); }
 };
 
+let ADMIN_USERS_CACHE = {}; // uid -> {email, role}
+
 async function loadAdminUsers() {
   const snap = await get(ref(db, 'users'));
-  const all = snap.val() || {};
+  ADMIN_USERS_CACHE = snap.val() || {};
+  renderAdminUsersList(qs('#admin-users-search') ? qs('#admin-users-search').value.trim().toLowerCase() : '');
+}
+
+function renderAdminUsersList(filterText) {
   const listDiv = qs('#admin-users-list');
+  if (!listDiv) return;
   listDiv.innerHTML = '';
-  Object.keys(all).forEach(uid => {
-    const u = all[uid];
+
+  const entries = Object.entries(ADMIN_USERS_CACHE)
+    .filter(([uid, u]) => !filterText || (u.email || '').toLowerCase().includes(filterText))
+    .sort((a, b) => (a[1].email || '').localeCompare(b[1].email || ''));
+
+  if (!entries.length) {
+    listDiv.innerHTML = `<div style="padding:20px; color:#999; text-align:center;">${filterText ? 'Sin resultados para esa búsqueda.' : 'No hay usuarios registrados.'}</div>`;
+    return;
+  }
+
+  entries.forEach(([uid, u]) => {
+    const isAdminUser = u.role === 'admin';
+    const isSelf = currentUser && uid === currentUser.uid;
+    const role = isAdminUser ? 'Admin' : 'Docente';
+
     const row = document.createElement('div');
     row.className = 'admin-list-item';
-    const role = u.role === 'admin' ? 'Admin' : 'Docente';
     row.innerHTML = `
       <div style="flex:1;">
-        <strong>${esc(u.email)}</strong><br>
-        <small style="opacity:0.6;">UID: ${uid}</small>
+        <strong>${esc(u.email)}</strong> ${isSelf ? '<span style="font-size:10px; opacity:0.6;">(vos)</span>' : ''}<br>
+        <small style="opacity:0.6;">UID: ${esc(uid)}</small>
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
-        <span style="font-size:12px; padding:2px 8px; border-radius:4px; background:${u.role==='admin'?'var(--sky)':'var(--neutral-100)'}">${role}</span>
-        <button class="btn-ghost" onclick="toggleUserRole('${uid}', '${u.role}')" style="font-size:11px; padding:4px 8px;">Cambiar Rol</button>
+        <span style="font-size:12px; padding:2px 8px; border-radius:4px; background:${isAdminUser ? 'var(--sky)' : 'var(--neutral-100)'}">${role}</span>
+        ${isSelf
+          ? `<span style="font-size:11px; color:var(--neutral-400); font-style:italic;" title="No podés modificar tu propio rol">No editable</span>`
+          : (isAdminUser
+              ? `<button class="btn-ghost" onclick="setUserRole('${esc(uid)}', 'docente')" style="font-size:11px; padding:4px 8px; color:var(--rose-text);">Quitar Admin</button>`
+              : `<button class="btn-ghost" onclick="setUserRole('${esc(uid)}', 'admin')" style="font-size:11px; padding:4px 8px;">Hacer Admin</button>`)
+        }
       </div>
     `;
     listDiv.appendChild(row);
   });
 }
 
-window.toggleUserRole = async (uid, oldRole) => {
-  const newRole = oldRole === 'admin' ? 'docente' : 'admin';
-  if (!confirm(`¿Cambiar rol a ${newRole}?`)) return;
+window.setUserRole = async (uid, newRole) => {
+  if (currentUser && uid === currentUser.uid) {
+    alert("No podés modificar tu propio rol.");
+    return;
+  }
+  const label = newRole === 'admin' ? 'Administrador' : 'Docente';
+  if (!confirm(`¿Asignarle el rol de ${label} a este usuario?`)) return;
   try {
     await set(ref(db, `users/${uid}/role`), newRole);
     loadAdminUsers();
-  } catch(e) { alert("Error: " + e.message); }
-}
+  } catch (e) { alert("Error: " + e.message); }
+};
 
 // ── REPORTS: poblar selector de año lectivo ──
 async function loadReportAnios() {
@@ -3909,6 +3942,27 @@ addFicha({
     if (confirm("¿Cerrar sesión?")) signOut(auth);
   };
 
+  const bAuthForgot = qs('#auth-forgot-link');
+  if (bAuthForgot) bAuthForgot.onclick = async () => {
+    let email = qs('#auth-email').value.trim();
+    if (!email) {
+      email = (prompt("Ingresá tu correo electrónico para recibir el link de recuperación:") || '').trim();
+    }
+    if (!email) return;
+    try {
+      setLoading(true);
+      await sendPasswordResetEmail(auth, email);
+      alert(`Te enviamos un correo a ${email} con instrucciones para restablecer tu contraseña. Revisá también la carpeta de spam.`);
+    } catch (err) {
+      let msg = "No pudimos enviar el correo: " + err.message;
+      if (err.code === 'auth/invalid-email') msg = "El correo ingresado no es válido.";
+      if (err.code === 'auth/user-not-found') msg = "No encontramos una cuenta con ese correo.";
+      alert(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const bLogoutHome = qs('#logout-btn-home');
   if (bLogoutHome) bLogoutHome.onclick = () => {
     if (confirm("¿Cerrar sesión?")) signOut(auth);
@@ -4011,6 +4065,11 @@ addFicha({
   if (bPriRep) bPriRep.onclick = printReport;
   const bGenPend = qs('#btn-gen-pendientes');
   if (bGenPend) bGenPend.onclick = generatePendientesReport;
+
+  const bUsersSearch = qs('#admin-users-search');
+  if (bUsersSearch) bUsersSearch.oninput = debounce(() => {
+    renderAdminUsersList(bUsersSearch.value.trim().toLowerCase());
+  }, 200);
 
 }); // end DOMContentLoaded
 
